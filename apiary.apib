@@ -1,0 +1,989 @@
+FORMAT: 1A
+HOST: https://www.hlidacstatu.cz/api/v1
+
+# Hlídač Státu API
+
+> Popis API neustále doplňujeme, v některých detailech nemusí být přesný. V případě nejasnosti piš na michal@michalblaha.cz.
+> Předem díky za upozornění na chyby, nepřesnosti a nejasný popis.
+---
+## Verze a změny
+`verze 1.0.1, poslední změna 5.10.2018`
+
+* Změny 5.10.2018
+    * doplněn endpoint DatasetSendNotifications
+
+
+## Autorizace
+
+Autorizace je prováděna pomocí autentifikačního tokenu, který je Vám přidělen. Autorizační token je nutno odesílat v hlavičce každého požadavku na API.
+Autorizační token: `docela1dlouhy2token3pro4tohle5api`
+Příklad k použití:
+```
+curl -X GET https://www.hlidacstatu.cz/Api/v1/Detail/204737 -H 'Authorization: Token docela1dlouhy2token3pro4tohle5api'
+```
+
+Svůj API token najdeš https://www.hlidacstatu.cz/api. 
+
+> Všechna volání API jsou monitorována a ukládána.
+
+## Licence
+
+Data můžete zdarma stahovat, zpracovávat a dále publikovat pouze v souladu s 
+licencí CC BY 3.0. Licence je jednoduchá a její pravidla také. 
+
+Nejdůležitější, nikoliv jediná pravidla licence:
+
+1. Dílo a obsah smíš stáhnout, sdílet a libovolně upravit.
+2. Musíš vždy a bezpodmínečně uvést původ dat a autorství zdrojových dat (na internetu plný, funkční internetový odkaz na Hlídač státu)
+3. Nesmíš přidat žádná další technická či právní omezení nad rámec této licence.
+4. Pokud ti tato licence nevyhovuje, napiš na api@hlidacstatu.cz
+
+[Přečti si ji prosím](https://www.hlidacstatu.cz/texty/licence/).
+
+## Group Smlouvy
+
+
+### Smlouvy [/detail]
+
+API pro získání smluv z Hlídače smluv v JSON formátu
+
+
+#### Jednotlivá smlouva [GET /detail/{id_smlouvy}?nice={nice}&json=1]
+
+Příklad: `https://www.hlidacstatu.cz/Api/v1/Detail/204737?json=1&nice=1`
+
++ Parameters
+    + id_smlouvy: 204737 (string, required)
+    + nice: 1 (int) - pokud je =1, vrátíme zformátovaný JSON, jinak maximálně zkomprimovaný.
+
+
++ Request (application/json)
+ + Headers
+ 
+            Authorization: Token <najdes na hlidacstatu.cz/api/v1>
+
+
++ Response 200 (application/json)
+
+
+
+#### Hledání smluv [GET /search?query={query}&page={page}&order={order}]
+
+Příklad: `https://www.hlidacstatu.cz/Api/v1/Detail/204737?json=1&nice=1`
+
++ Parameters
+    + query: autobus (string, required) - dotaz dle [syntaxe](https://www.hlidacstatu.cz/napoveda).
+    + page: 1 (int) - stránka, max. hodnota je 250.
+    + order: 1 (int) - pořadí výsledků.
+        * 0: podle relevance
+        * 1: nově zveřejněné první
+        * 2: nově zveřejněné poslední
+        * 3: nejlevnější první 
+        * 4: nejdražší první 
+        * 5: nově uzavřené první 
+        * 6: nově uzavřené poslední 
+        * 7: nejvíce chybové první 
+        * 8: podle odběratele 
+        * 9: podle dodavatele 
+    
+
++ Request (application/json)
+ + Headers
+ 
+            Authorization: Token <najdes na hlidacstatu.cz/api/v1>
+
+
++ Response 200 (application/json)
+
+
+#### Dump smluv [GET /dumps]
+Seznam dostupných denních a měsíčních dumpů v JSON
+
++ Request (application/json)
+ + Headers
+ 
+            Authorization: Token <najdes na hlidacstatu.cz/api/v1>
+
+
++ Response 200 (application/json)
+
+        [  
+           {  
+              "url":"https://www.hlidacstatu.cz/api/v1/Dump", //URL dumpu
+              "date":"\/Date(1503584641162)\/",               //datum, ke kteremu se vztahuje
+              "size":34670034,                                //velikost souboru
+              "fulldump":true,                                //pokud true, pak je to dump vsech smluv, jinak denni dump
+              "created":"\/Date(1503584641162)\/"             //datum vytvoreni dumpu
+           },
+         .....
+        ]
+
+
+## Group Datasety - rozšířené datové sady Hlídače státu
+
+Datová sada (dataset) je strukturovaná sada záznamů, která je dostupná 
+- a pokud je to možné - provázaná s dalšími datovými sadami Hlídače státu.
+
+Vytvoření a správa datových sad je zdarma, volně dostupné a prakticky neomezené.
+Preferujeme vytváření datových sad s daty státu, samosprávy, státních úřadů a firem, které mají či mohou mít informační hodnotu pro širší veřejnost
+anebo vhodně doplňují informace poskytované Hlídačem státu.
+
+Konkrétní příklad použití včetně registrace Datasetu, nastavení templatů, parsování obsahu a uložení dat najdeš na https://github.com/HlidacStatu/Datasety/tree/master/Dataset-RozhodnutiUOHS-ukazka.
+Ukázka je v C#, ale snadno čitelná.
+ 
+### Zobrazení dat na webu
+
+Dostupné a zpřístupněné datasety (tzn. ty co nejsou v betaverzi) jsou k nalezení na 
+https://www.hlidacstatu.cz/data
+
+### Datasety [/Datasets]
+
+Registrace a správa datových sad. Před vkládaním dat je potřeba datovou sadu. 
+
+
+
+### Registrace nové datové sady [POST /Datasets]
+
+Registraci nové datové sady je potřeba udělat před prvním vkládáním dat do systému.
+Vrácený identifikátor datové sady se používá v dalších API
+
+Povinnou součástí registrace je JSON schema jednoho zaznamu (objektu).
+Očekáváme datové schéma ve formátu JSON Schema Draft 7. Každý vkládaný object je proti tomuto schématu validován 
+a nevalidní záznam není uložen.
+
+> **POZOR** - po registraci není možné provést změnu JSON Schematu `jsonSchema`. Pokud potřebujete změnit JSON schema datové sady,
+musíte datovou sadu smazat, a zaregistrovat znovu. Smazáním datové sady se smažou i všechna data z datové sady.
+
+> **POZOR** - po registraci není možné provést změnu `datasetId`. Pokud ho potřebujete ,
+musíte datovou sadu smazat, a zaregistrovat znovu. Smazáním datové sady se smažou i všechna data z datové sady.
+
+#### Popis struktury registrace datové sady
+
+```
+{
+              "name": "Rozhodnuti UOHS",
+              "datasetId": "rozhodnutiUOHS",
+              "origUrl": "http://www.uohs.cz/cs/verejne-zakazky/sbirky-rozhodnuti/",
+              "sourcecodeUrl": null,
+              "description": null,
+              "betaversion" : false,
+              "allowWriteAccess" : false,              
+              "jsonSchema": {
+                "definitions": {
+                  "Ucastnik": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "properties": {
+                      "Jmeno": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "ICO": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      }
+                    }
+                  }
+                },
+                "type": "object",
+                "properties": {
+                  "Id": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "Url": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "Cj": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "Ucastnici": {
+                    "type": [
+                      "array",
+                      "null"
+                    ],
+                    "items": {
+                      "$ref": "#/definitions/Ucastnik"
+                    }
+                  },
+                        //ZKRÁCENO!!
+                  "Vec": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  }
+                }
+              },
+              "searchResultTemplate": {
+                "properties": ["Id","Cj","Rok","Vec"]
+              },
+              "detailTemplate": {
+                "header": "<h3>@(item.Vec)</h3>",
+                "item": "<table><tr><td>Čj</td><td>@(item.Cj)</td><tr>.....<table>",
+                "footer": "",
+                "properties": null
+              }
+            }
+```
+
+* `datasetId` - unikátní jméno datové sady. Má pouze několik omezení 
+    1. musí být alespoň 5 znaků a max. 125 znaků dlouhé
+    2. nesmí obsahovat znaky `#`, `\`, `/`, `*`, `?`, `"`, `<`, `>`, `|`, `[`, `]`
+    3. pokud některé z těchto pravidel nedodrží, je automaticky upraveno při registraci
+    4. vrácené `datasetId` při registraci se může lišit od požadované hodnoty
+    5. pokud není uvedeno, je odvozeno z `name`
+    
+* `name` - je povinné
+
+* `betaversion` - pokud je true, pak se nezobrazuje v seznamu datových zdrojů na https://www.hlidacstatu.cz/data.
+    > pokud zavoláš s parametrem https://www.hlidacstatu.cz/data?**beta=1**, pak se seznam zobrazí.
+    
+* `allowWriteAccess` : pokud je `true`, pak data v datasetu může kdokoliv přepsat nebo smazat. Stejně tak údaje v registraci.
+            Pokud je `false`, pak kdokoliv může data přidat, ale nemůže je přepsat či smazat. Nemůže také měnit parametry registrace datasetu.
+
+* `jsonSchema` - je povinné. Struktura vkládaných dat (a popsaná tímto JSON schéma) musí splňovat pár pravidel:
+    1. vlastnost `Id` v rootu objektu - unikátní identifikátor objektu. **Musí být** součástí JSON Schematu i vkládaného objektu, ve formátu `string`.
+    2. rezervované názvy vlastností, nepoužívejte je v jsonSchema ani objektech:
+        - `DbCreated`:  obsahuje datum vložení objektu do db.
+        - `DbCreatedBy`:  obsahuje info o uživateli, který objekt do db vložil. Tento údaj není poskytován veřejně.
+    3. vlastnost `ICO` kdekoliv (i ve vložených objektech) - pokud je typu `string`, pak Hlídač státu předpokládá, že se jedná IČ subjektu a může se snažit
+    4. vlastnost `OsobaId` kdekoliv (i ve vložených objektech) - pokud jde o string, pak Hlídač Státu předpokládá, že se jedná o identifikátor osoby z databáze Hlídače státu.
+    5. vlastnost `Url` v rootu objektu - pokud dává smysl, měl by odkazovat na zdrojový záznam.
+
+* `searchResultTemplate` - HTML template či seznam vlastností objektu, které se mají zobrazovat ve výsledku hledání. Podrobnější popis o kousek dál.
+
+* `detailTemplate` - HTML template či seznam vlastností objektu, které se mají zobrazovat na stránce s detailem objektu. Podrobnější popis o kousek dál.
+
++ Request (application/json)
+ + Headers
+ 
+            Authorization: Token <najdes na hlidacstatu.cz/api/v1>
+
+ + Body
+
+            {
+              "name": "Rozhodnuti UOHS",
+              "datasetId": "rozhodnuti-uohs",
+              "origUrl": "http://www.uohs.cz/cs/verejne-zakazky/sbirky-rozhodnuti/",
+              "sourcecodeUrl": null,
+              "description": null,
+              "jsonSchema": {
+                "definitions": {
+                  "Ucastnik": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "properties": {
+                      "Jmeno": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "ICO": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      }
+                    }
+                  }
+                },
+                "type": "object",
+                "properties": {
+                  "Id": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "Url": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "Cj": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "Ucastnici": {
+                    "type": [
+                      "array",
+                      "null"
+                    ],
+                    "items": {
+                      "$ref": "#/definitions/Ucastnik"
+                    }
+                  },
+                        //ZKRÁCENO!!
+                  "Vec": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  }
+                }
+              },
+              "searchResultTemplate": {
+                "properties": ["Id","Cj","Rok","Vec"]
+              },
+              "detailTemplate": {
+                "header": "<h3>{Vec}</h3>",
+                "item": "<table><tr><td>Čj</td><td>{Cj}</td><tr>.....<table>",
+                "footer": "",
+                "properties": null
+              }
+            }
+
++ Response 200 (application/json)
+
+            {
+                    "datasetId": "rozhodnuti-uohs"
+            }
+            
++ Response 200 (application/json)
+
+            {
+                "valid": false,
+                "error" : {
+                    "number" : -1,
+                    "description" : "dataset is already registered."
+                }
+            }
+            
+### Úprava registrace datové sady [PUT /Datasets/{datasetId}]
+Zde platí totéž jako u **registrace datové sady**, s jednou podstatnou vyjímkou.
+
+Není možné změnit hodnoty `jsonSchema` a `datasetId`. 
+Pokud je potřebuješ změnit, musíš datovou sadu smazat a zaregistrovat znovu.
+
++ Request (application/json)
+ + Headers
+ 
+            Authorization: Token <najdes na hlidacstatu.cz/api/v1>
+
+
+
++ Response 200 (application/json)
+
+            {
+                "valid": true
+            }
+
++ Response 200 (application/json)
+
+            {
+                "valid": false,
+                "error" : {
+                    "number" : -2,
+                    "description" : "datasource not found"
+                }
+            }
+
+
+### Smazání datové sady [DELETE /Datasets/{datasetId}]
+
+Smazání datového zdroje. Smazat datový zdroj může pouze uživatel, který ho založil.
+Operace je nevratná. 
+
+Smazat datovou sadu může pouze ten, kdo ji založil, anebo administrátor.
+
++ Request (application/json)
+ + Headers
+ 
+            Authorization: Token <najdes na hlidacstatu.cz/api/v1>
+
+
++ Parameters
+    + datasetId: rozhodnuti-uohs (string, required)
+
+
++ Response 200 (application/json)
+        
+            {
+                "valid": true
+            }
+
++ Response 200 (application/json)
+
+            {
+                "valid": false,
+                "error" : {
+                    "number" : -2,
+                    "description" : "datasource not found"
+                }
+            }
+
++ Response 200 (application/json)
+
+            {
+                "valid": false,
+                "error" : {
+                    "number" : -3,
+                    "description" : "You don't have permissions for this operation."
+                }
+            }
+
+        
+### Všechny datové sady [GET]
+
+Přehled datových sad se základními údaji. Vrací pouze vlastnosti name, datasetId a description.
+
++ Request (application/json)
+ + Headers
+ 
+            Authorization: Token <najdes na hlidacstatu.cz/api/v1>
+
+
++ Response 200 (application/json)
+
+        [
+            {
+                "name": "Rozhodnutí ÚOHS",
+                "datasetId": "UOHS",
+                "description" : "Sbírky rozhodnutí Úřadu pro ochranu hospodářské soutěže"
+            },
+            {...},
+            {...}            
+        ]
+        
+### Vypsat detaily datové sady [GET /Datasets/{datasetId}]
+
+Vypsat podrobnosti konkrétní datové sady.
+
++ Request (application/json)
+ + Headers
+ 
+            Authorization: Token <najdes na hlidacstatu.cz/api/v1>
+
++ Parameters
+    + datasetId: rozhodnuti-uohs (string, required)
+
+        
++ Response 200 (application/json)
+
+        {
+         "name": "Rozhodnuti UOHS",
+          "datasetId": "rozhodnuti-uohs",
+          "origUrl": "http://www.uohs.cz/cs/verejne-zakazky/sbirky-rozhodnuti/",
+          "sourcecodeUrl": null,
+          "description": null,
+          "jsonSchema": {...},
+          "searchResultTemplate": {
+            "properties": ["Id","Cj","Rok","Vec"]
+          },
+          "detailTemplate": {
+            "header": "<h3>{Vec}</h3>",
+            "item": "<table><tr><td>Čj</td><td>{Cj}</td><tr>.....<table>",
+            "footer": "",
+            "properties": null
+          }
+        }
+
+
+
+### Přidat data do datového zdroje [POST /DatasetItem/{datasetId}/{dataId}]
+
+Vložení dat do datového zdroje. Vkládaná data jsou kontrolována na validitu proti JSON Schematu, které bylo vloženo při registraci datového zdroje.
+Vkládaný záznam musí obsahovat vlastnost `Id`. 
+Pokud již v db záznam se stejným `Id` existuje, je přepsán novým záznamem.
+
++ Request (application/json)
+ + Headers
+ 
+            Authorization: Token <najdes na hlidacstatu.cz/api/v1>
+
++ Parameters
+    + datasetId: rozhodnuti-uohs (string, required) - datasource Id
+    + dataId: 22 (string, required) - ID datového záznamu
+
+
++ Request (application/json)
+
+        {
+            //json data, validni s JSON Schema datasource
+        }
+
++ Response 200 (application/json)
+
+            {
+                "valid": true,
+                "id" : "saved record Id"
+            }
+
++ Response 200 (application/json)
+
+            {
+                "valid": false,
+                "error" : {
+                    "number" : -11,
+                    "description" : "Json schema validation failed",
+                    "detail" : "error msg from json validator"
+                }
+            }
+
+
+### Získaní záznamu z datového zdroje [GET /DatasetItem/{datasetId}/{dataid}]
+
+Získání záznamu z datového zdroje
+
++ Request (application/json)
+ + Headers
+ 
+            Authorization: Token <najdes na hlidacstatu.cz/api/v1>
+
++ Parameters
+    + datasetId: rozhodnuti-uohs (string, required) - ID datasetu
+    + dataid: "123" (string, required) - ID požadovaného záznamu
+
+
++ Request (application/json)
+
++ Response 200 (application/json)
+
+        {
+            //pozadovany zaznam
+        }
+
++ Response 200 (application/json)
+
+            null // vratí null, pokud záznam neexistuje
+
++ Response 200 (application/json)
+
+            {
+                "valid": false,
+                "error" : {
+                    "number" : -2,
+                    "description" : "dataset not found"
+                }
+            }
+
+
+### Smazání záznamu z datového zdroje [DELETE /DatasetItem/{datasetId}/{dataid}]
+
+Smazat záznam z datového zdroje může pouze ten, kdo datovou sadu založil, anebo administrátor.
+Pozor, není důležité, kdo záznam do DB vložil.
+
++ Request (application/json)
+ + Headers
+ 
+            Authorization: Token <najdes na hlidacstatu.cz/api/v1>
+
++ Parameters
+    + datasetId: rozhodnuti-uohs (string, required) - ID datasetu
+    + dataid: "123" (string, required) - ID mazaného záznamu
+
+
++ Request (application/json)
+
++ Response 200 (application/json)
+
+            {
+                "valid" : true
+            }
+
++ Response 200 (application/json)
+
+            {
+                "valid": false,
+                "error" : {
+                    "number" : -2,
+                    "description" : "dataset not found"
+                }
+            }
+
++ Response 200 (application/json)
+
+            {
+                "valid": false,
+                "error" : {
+                    "number" : -12,
+                    "description" : "dataset Item not found"
+                }
+            }
+
+### Hledání záznamů z datového zdroje [GET /DatasetSearch/{datasetId}?q={q}&page={page}]
+
+Získání záznamu z datového zdroje
+
++ Request (application/json)
+ + Headers
+ 
+            Authorization: Token <najdes na hlidacstatu.cz/api/v1>
+
++ Parameters
+    + datasetId: "rozhodnuti-uohs" (string, required) - ID datasetu
+    + q: "obec" (string, required) - dotaz
+    + page: 1 (int, required) - stránka výsledků. Max. hodnota je 200.
+
+
++ Request (application/json)
+
++ Response 200 (application/json)
+
+            {
+                "total": 1025,
+                "page": 1,
+                "results": [{
+                    "Id": "11556",
+                    "Url": "http://www.uohs.cz/cs/verejne-zakazky/sbirky-rozhodnuti/detail-11556.html",
+                    "Cj": "ÚOHS-S368/2013/VZ-18644/2013/512/IHl",
+                    "Instance": "I.",
+                    "Ucastnici": [{
+                            "Jmeno": "obec Kunčice pod Ondřejníkem",
+                            "ICO": "00296856"
+                        },
+                        {
+                            "Jmeno": "van Gansewinkel, a.s.",
+                            "ICO": "25848577"
+                        },
+                        {
+                            "Jmeno": ".A.S.A., spol. s r.o.",
+                            "ICO": "00546054"
+                        }
+                    ],
+                    "Typ_spravniho_rizeni": "Veřejná zakázka",
+                    "Typ_rozhodnuti": "§ 66 odst. 1 písm. g) zák. č. 500/2004 Sb. - zastaveno",
+                    "Rok": "2013",
+                    "PravniMoc": "2014-06-13T00:00:00+02:00",
+                    "SouvisejiciUrl": null,
+                    "Rozhodnuti": {
+                        "Url": "http://www.uohs.cz",
+                        "Html": null,
+                        "PlainText": "Č. j.:ÚOHS-S368/2013/VZ-18644/2013/512/IHl,......."
+                    },
+                    "Uverejneno": null,
+                    "Vec": "Svoz odpadů v obci Kunčice pod Ondřejníkem 18/2012"
+                }, {
+                    "Id": "1502",
+                    "Url": "http://www.uohs.cz/cs/verejne-zakazky/sbirky-rozhodnuti/detail-1502.html",
+                    "Cj": "ÚOHS-VZ/S073/01",
+                    "Instance": "I.",
+                    "Ucastnici": [{
+                        "Jmeno": "obec Dobronín, PSČ 588 12 Dobronín, ",
+                        "ICO": null
+                    }],
+                    "Typ_spravniho_rizeni": "Veřejná zakázka",
+                    "Typ_rozhodnuti": "§ 59 písm. a) - nový výběr",
+                    "Rok": "2001",
+                    "PravniMoc": "2001-06-06T00:00:00+02:00",
+                    "SouvisejiciUrl": null,
+                    "Rozhodnuti": {
+                        "Url": "http://www.uohs.cz",
+                        "Html": null,
+                        "PlainText": "Č. j. S 73/01-151/1958/01-če V Brně dne 18. května 2001....."
+                    },
+                    "Uverejneno": null,
+                    "Vec": "ČOV Dobronín"
+                }]
+            }
+
+
++ Response 200 (application/json)
+
+            null // vratí null, pokud záznam neexistuje
+
++ Response 200 (application/json)
+
+            {
+                "valid": false,
+                "error" : {
+                    "number" : -2,
+                    "description" : "dataset not found"
+                }
+            }
+
+
+### Poslat notifikace o nově přidaných záznamech [GET /DatasetSendNotifications/{datasetId}]
+
+Hlídač státu sám zajistí zaslání notifikací o nových záznamech každé ráno. 
+Ve výjimečných případech je možné vyvolat odeslání notifikací mimo obvyklou dobu. 
+V každém případě nikdy nebudou uživatelů zaslány notifikace častěji, než mají nastaveno (obvykle jednou za 24 hodin)
+
++ Request (application/json)
+ + Headers
+ 
+            Authorization: Token <najdes na hlidacstatu.cz/api/v1>
+
++ Parameters
+    + datasetId: "rozhodnuti-uohs" (string, required) - ID datasetu
+
+
++ Request (application/json)
+
++ Response 200 (application/json)
+
+            {
+                "valid" : true
+            }
+
+
+
+### Dohledání IČO subjektu podle jména [GET /CompanyId?companyName={companyName}]
+
+Podle jména subjektu dohledá IČO a dostupné datové schránky. Pokud není subjekt nalezen, vrátí se prázdný JSON.
+Tento endpoint preferuje přesnost, proto je nutné uvést jméno subjektu přesně.
+
+>IČO je pro Hlídač Státu primární identifikátor pro provázaní subjektů. 
+Pokud zpracováváte datový zdroj, který pracuje s firmami, ale neuvádí jejich IČO, dohledejte ho - před vložením záznamu do datasetu - pomocí tohoto API. 
+Výrazně tím zlepšíte kvalitu dat v Datasetu.
+
+Upozornění: data nejsou 100% synchronizovaná s obchodním rejstříkem a dalšími rejstříky státu, a zejména změny za poslední měsíc se zde nemusí projevit.
+
+
++ Request (application/json)
+ + Headers
+ 
+            Authorization: Token <najdes na hlidacstatu.cz/api/v1>
+
++ Parameters
+    + companyName: Metrostav%20a.s. (string, required) - plné jméno společnosti, samozřejmě URL encodovaná.
+
+
++ Response 200 (application/json)
+
+            {
+                "ICO" : "00014915",
+                "Jmeno" : "Metrostav a.s.",
+                "DatovaSchranka" : ["bnpcf46"]
+            }
+
++ Response 200 (application/json)
+
+            {
+            }
+
+
+
+
+## Group HTML Teplate - syntaxe, funkce
+
+### HTML template pro searchResultTemplate a detailTemplate 
+
+>    *__!!Pozor, jedná se o experimentální funkcionalitu, která nemusí fungovat. Při nejasnosti piš na michal@michalblaha.cz.!!__*
+
+Template je možné definovat dvěma způsoby:
+
+1. pomocí seznamu vlastností - v takovém případě do `properties` dáš textové pole, které obsahuje seznam vlastností, které se mají vypsat.
+O vhodný způsob zobrazení se postará Hlídač státu. To je snadná a jednoduchá cesta pro rychlý výpis údajů. Je to vhodné pro testování.
+Doporučujeme v takovém případě nastavit v registraci datového zdroje `betaversion = true`. 
+Hodnoty `header`, `body` a `footer` musí být `null`.
+    ```
+    {
+        "header": null,
+        "body": null,
+        "footer": null,
+        "properties": ["Id","Cj","Rok","Vec"]
+    }
+    ```
+
+2. velmi detailně pomocí HTML. K tomu slouží vlastnosti `header`,`body` a `footer`. Pouze `item` je povinný.
+    ```
+    {
+        "header": "<h3>{Vec}</h3>",
+        "body": "<table><tr><td>Čj</td><td>{item.Cj}</td><tr>.....<table>",
+        "footer": "",
+        "properties": null
+    }
+    ```
+    Pokud jsou `item` i `properties` nastaveny, `properties` se ignorují. Pokud jsou obě `null`, zobrazí se chyba při renderování stránky.
+
+### Syntaxe HTML Template - Razor Engine
+
+Jedná se o fragmenty HTML. HTML v `header` a `footer` se vždy renderují pouze jednou.
+
+HTML v `body` se
+* ve vyhledávání renderuje opakovaně pro každý nalezený záznam ve výsledku hledání,
+* v detailu záznamu pouze jednou.
+
+Jako render engine používání Razor Engine z .NET Framework, C# syntaxy. 
+Kompletní popis syntaxe najdete na [w3school.com](https://www.w3schools.com/asp/razor_syntax.asp) nebo na [Microsoftu](https://docs.microsoft.com/en-us/aspnet/web-pages/overview/getting-started/introducing-razor-syntax-c).
+
+Samotný záznam je dostupný v proměnné `item` a vypsání hodnot vlastností se v HTML uvede takto: 
+* __primitivní datové typy__
+    Vypsání hodnoty vlastnosti `Vec`  
+    `<div class='small'>@(item.Vec)</div>`
+
+* __pole__ item.Ucastnici je pole objektů obsahující účastníky řízení. První je potřeba ověřit, zda není pole `null`, 
+    poté obsah pole vypsat (pomocí `foreach` nebo `for`)
+    ```
+    ...
+    <td>
+        @if (item.Ucastnici != null)
+        {
+            foreach (var u in item.Ucastnici)
+            {
+                if (fn_IsNullOrEmpty(u.ICO))
+                {
+                    @fn_NormalizeText(u.Jmeno)
+                }
+                else
+                {
+                    <a href=""https://www.hlidacstatu.cz/subjekt/@u.ICO"">@fn_NormalizeText(u.Jmeno)</a><br />
+                }
+            }
+        }
+    </td>
+    ...
+    ```
+* __objekt__ item.Rozhodnuti je objekt obsahující více informací o samotném rozhodnutí
+včetně textu rozhodnutí (`.PlainText`).
+    ```
+    @if (item.Rozhodnuti != null)
+    {
+    <tr>
+        <td>Rozhodnutí</td>
+        <td>
+            <samp class="small">
+                @fn_FixPlainText(item.Rozhodnuti.PlainText))
+            </samp>
+        </td>
+    </tr>
+    }
+    ```
+
+> Pozor na pojmenování vlastností objektu `item`. Rozlišují se velká a malá písmena
+
+
+### Dostupné funkce pro formátování výstupu
+
+V kódu je možné volat speciální funkce pro formátování hodnot. 
+
+`fn_ShortenText(string value, int length)` - zkrácení textu na maximální délku `length` znaků.
+ke zkrácení dojde na nejbližším konci slova, odstavce či věty.
+
+`fn_FormatDate(datetime value, string format)` - zobrazení data podle určeného formátu. 
+Pokud není `format` určen, je null nebo prázdný, použije se formát `d.M.yyyy`. Pro formátování použijte syntaxi [.NET c# custom date and time format](https://docs.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings).
+
+`fn_FixPlainText(string plaintext)` - funkce, která upraví čistý text pro lepší čitelnost. Vhodné zejména pro delší texty či obsahy dokumentů.
+V praxi se odstraní nadbytečné a příliš se opakující řádky a další speciální znaky. Ná
+
+
+`fn_IsNullOrEmpty(object obj)` - otestuje, zda je object null anebo retezec prazdny. Vhodne pro otestovani existence pole apod. 
+
+
+## Group Hlídač státních webů
+
+Statistiky dostupnosti nejdůležitějších webů, API a služeb veřejné správy.
+Všechna data mohou mít zpoždění až 15 minut a obnovují se každých přibližně 10 minut.
+
+> **Nestahuj data častěji než každých 10 minut a nezatěžuj tak zbytečně server sobě i ostatním uživatelům.**
+
+Pokud bys potřeboval data téměř v reálném čase, napiš na api@hlidacstatu.cz.
+
+### Monitorované služby [GET /WebList]
+
+Seznam monitorovaných webů, API a služeb, jejich ID a kontrolní řetezce.
+
++ Request (application/json)
+ + Headers
+ 
+            Authorization: Token <najdes na hlidacstatu.cz/api/v1>
+
+
++ Request (application/json)
+
++ Response 200 (application/json)
+
+            [
+                {
+                    "hash": "6306B57A524363D494F83CED45FFF372",
+                    "host": "HTTPS nen.nipez.cz",
+                    "hostid": "10107",
+                    "opendataUrl": "https://www.hlidacstatu.cz/statniweby/data/10107?h=6306B57A524363D494F83CED45FFF372",
+                    "popis": "Elektronický nástroj pro administraci a zadávání veřejných zakázek a koncesí pro všechny kategorie veřejných zakázek a všechny kategorie zadavatelů, vč. sektorových. NEN podporuje všechny rozsahy elektronizace od evidence zadávacích řízení po plně elektronické postupy.",
+                    "publicname": "Národní Elektronický Nástroj",
+                    "urad": "Ministerstvo pro místní rozvoj",
+                    "url": "https://nen.nipez.cz"
+                },
+                {
+                    "hash": "8380EF85E36393EF3F94F8178509C5D7",
+                    "host": "HTTPS adisepo.mfcr.cz",
+                    "hostid": "10161",
+                    "opendataUrl": "https://www.hlidacstatu.cz/statniweby/data/10161?h=8380EF85E36393EF3F94F8178509C5D7",
+                    "popis": "Elektronická Podání Pro Finanční Správu",
+                    "publicname": "Elektronická podání pro FS",
+                    "urad": "Ministerstvo financí",
+                    "url": "https://adisepo.mfcr.cz/"
+                }
+                ///...
+            ]
+
+### Dostupnost a údaje služby [GET /WebStatus/{id}?h={hash}]
+
+Statistiky dostupnosti webu, popis a stav HTTPS. Hodnota `Response` je v sekundách.
+
+`ssl.grade` nabývá hodnot A+,A,A-,B,C,D,E,F,M,T,X. Jejich význam najdeš [na webu](https://www.hlidacstatu.cz/StatniWeby/Https).
+
++ Request (application/json)
+ + Headers
+ 
+            Authorization: Token <najdes na hlidacstatu.cz/api/v1>
+
++ Parameters
+    + id: 10354 (int, required) - ID webu
+    + hash: "E30C4A49D63CDB7616740F0EEA98D2B4" (string, required) - kontrolní řetezec unikátní pro každý web
+
+
++ Request (application/json)
+
++ Response 200 (application/json)
+
+            {
+                "availability": {
+                    "Data": [
+                        {
+                            "HttpStatusCode": 200,
+                            "Response": 0.087,
+                            "Time": "2018-09-07T12:36:36+02:00"
+                        },
+                        {
+                            "HttpStatusCode": 200,
+                            "Response": 0.0457,
+                            "Time": "2018-09-07T12:37:37+02:00"
+                        },
+            ///....
+                        {
+                            "HttpStatusCode": 200,
+                            "Response": 0.0322,
+                            "Time": "2018-09-14T13:35:18+02:00"
+                        }
+                    ],
+                    "Host": {
+                        "hash": "E30C4A49D63CDB7616740F0EEA98D2B4",
+                        "host": "HTTPS www.datoveschranky.info aplikacni-rozhrani",
+                        "hostid": "10354",
+                        "opendataUrl": "https://www.hlidacstatu.cz/statniweby/data/10354?h=E30C4A49D63CDB7616740F0EEA98D2B4",
+                        "popis": "Jádro Datových schránek, API rozhraní pro posílání a příjem DS.",
+                        "publicname": "API datových schránek",
+                        "urad": "Ministerstvo vnitra",
+                        "url": "https://www.datoveschranky.info/dulezite-informace/aplikacni-rozhrani"
+                    }
+                },
+                "ssl": {
+                    "copyright": "(c) © Qualys, Inc. https://www.ssllabs.com/",
+                    "fullreport": "https://www.ssllabs.com/ssltest/analyze.html?d=ws1.mojedatovaschranka.cz",
+                    "grade": "B",
+                    "time": "2018-09-14T04:49:54Z"
+                }
+            }

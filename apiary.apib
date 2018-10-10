@@ -96,7 +96,7 @@ Příklad: `https://www.hlidacstatu.cz/Api/v1/Detail/204737?json=1&nice=1`
 + Response 200 (application/json)
 
 
-#### Dump smluv [GET /dumps]
+#### Export (Dump) smluv - přehled dostupných exportů [GET /dumps]
 Seznam dostupných denních a měsíčních dumpů v JSON
 
 + Request (application/json)
@@ -117,6 +117,34 @@ Seznam dostupných denních a měsíčních dumpů v JSON
            },
          .....
         ]
+
+#### Stáhnutí exportu všech smluv [GET /dump]
+Stáhnutí posledního plnému dumpu, obvykle se vytváří 1x týdně. 
+Detaily o souboru dává `[GET /dumps]` 
+
++ Request (application/json)
+ + Headers
+ 
+            Authorization: Token <najdes na hlidacstatu.cz/api/v1>
+
+
++ Response 200 (application/json)
+
+#### Stáhnutí exportu smluv změněných v jeden den [GET /dump?date={date}]
+Stáhnutí posledního plnému dumpu, obvykle se vytváří 1x týdně. 
+Detaily o souboru dává a info o existenci vrací `[GET /dumps]` 
+
++ Parameters
+    + date: autobus (string, required) - datum dumpu, ve formát yyyy-MM-dd (např. 2018-08-23).
+
++ Request (application/json)
+ + Headers
+ 
+            Authorization: Token <najdes na hlidacstatu.cz/api/v1>
+
+
++ Response 200 (application/json)
+
 
 
 ## Group Datasety - rozšířené datové sady Hlídače státu

@@ -8,4 +8,4 @@ Popis kompletního API Hlídače státu, který je online dostupný na [https://
 
 ## DatasetConnector
 
-Knihovna pro .NET Framework umožňující snadnou práci s Datasety. Detailni informace o knihovně naleznete v jejím [popisu](DatasetConnector/READMY.md).
+Knihovna pro .NET Framework umožňující snadnou práci s Datasety. Detailni informace o knihovně naleznete v jejím [popisu](DatasetConnector/README.md).

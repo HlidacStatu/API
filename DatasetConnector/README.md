@@ -2,7 +2,7 @@
 
 Knihovna pro .NET Framework napsaná ve standardu 1.6 umožňující snadnou práci s Datasety Hlídače státu.
 
-##Použití knihovny
+## Použití knihovny
 
 ### Vytvoření instance konektoru
 
@@ -16,7 +16,7 @@ Jakmile máme instanci vytvořenou, je potřeba definovat vlastní dataset.
 
 ### Definice datasetu
 
-Dataset je v knihovně popsaný třídou [Dataset.cs](DatasetConnector/Dataset.cs), která je generická, protože JSON schema se automaticky generuje na základě generického parametru. Generický parametr musí splňovat podmínku, že implementuje rozhranní `IDatasetItem`, který vyžaduje difinici parametru `Id`. Jednotlivé parametry odpovídají definici dafinici datové sady a jejich popis lze nalézt v [dokumentaci](https://hlidacstatu.docs.apiary.io/#reference/datasety-rozsirene-datove-sady-hlidace-statu/datasety).
+Dataset je v knihovně popsaný třídou [Dataset.cs](DatasetConnector/Dataset.cs), která je generická, protože JSON schema se automaticky generuje na základě generického parametru. Generický parametr musí splňovat podmínku, že implementuje rozhranní `IDatasetItem`, který vyžaduje definici parametru `Id`. Jednotlivé parametry odpovídají definici datové sady a jejich popis lze nalézt v [dokumentaci](https://hlidacstatu.docs.apiary.io/#reference/datasety-rozsirene-datove-sady-hlidace-statu/datasety).
 
 Jelikož definice datasetu se v průběhu práce s ním pravděpodobně měnit nebude, je možné ji mít v programu uloženou např. jako statickou proměnnou 
 
@@ -38,13 +38,13 @@ Jelikož definice datasetu se v průběhu práce s ním pravděpodobně měnit n
 			detailTemplate: DetailTemplate);
 ```
 
-kde `Rizeni` je definující strukturu datasetu (v tomto případě insolvenčního rejstříku) a proměnné `SearchResultTemplate` a `DetailTemplate` definují šablony použité pro vykreslení seznamu výsledků vyhledávání a detailu položky datasetu. Více informací k definici šablony lze nalézt v popisu API - [HTML Template](https://hlidacstatu.docs.apiary.io/#reference/html-teplate-syntaxe,-funkce).
+kde `Rizeni` definuje strukturu datasetu (v tomto případě insolvenčního rejstříku) a proměnné `SearchResultTemplate` a `DetailTemplate` definují šablony použité pro vykreslení seznamu výsledků vyhledávání a detailu položky datasetu. Více informací k definici šablony lze nalézt v popisu API - [HTML Template](https://hlidacstatu.docs.apiary.io/#reference/html-teplate-syntaxe,-funkce).
 
-Vlastnosti `datasetId` a generované `JsonSchema` se nesmí měnit. Při nutnosti jejich změny je potřeba nejprvee starý dataset odstranit a poté vytvořit nový se změněnými hodnotami.
+Vlastnosti `datasetId` a generované `JsonSchema` se nesmí měnit. Při nutnosti jejich změny je potřeba nejprve starý dataset odstranit a poté vytvořit nový se změněnými hodnotami.
 
 ### Ověření existence datasetu
 
-Pro ověření, zda dataset již existuje, slouží metoda `DatasetExists`, která jako parametr přijímá definici datasetu a vrací `true` pokud je daný dataset již zaregistrován ve Hlídači státu, jinak vrací `false`.
+Pro ověření, zda dataset již existuje, slouží metoda `DatasetExists`, která jako parametr přijímá definici datasetu a vrací `true`, pokud je daný dataset již zaregistrován v Hlídači státu, jinak vrací `false`.
 
 ```
     var datasetExists = await datasetConnector.DatasetExists(dataset)
@@ -62,7 +62,7 @@ Pokud již vytvářený dataset existuje, je vyvolána výjimka `DatasetConnecto
 
 ### Změna definice datasetu
 
-Existující dataset lze upravit s vyjímkou hodnot `datasetId` a `JsonSchema` (pro jeijch změnu je nutné nejprve dataset smazat a následně vytvořit nový). Úprava datasetu se provede voláním metody `UpdateDataset`, která jako parametr přijímá definici datasetu a vrací string `Ok`, pokud se dataset podařilo upravit.
+Existující dataset lze upravit kromě hodnot `datasetId` a `JsonSchema` (pro jejich změnu je nutné nejprve dataset smazat a následně vytvořit nový). Úprava datasetu se provede voláním metody `UpdateDataset`, která jako parametr přijímá definici datasetu a vrací string `Ok`, pokud se dataset podařilo upravit.
 
 ```
     var updateResult = await datasetConnector.UpdateDataset(changedDataset);

@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard1.6</TargetFramework>
+    <TargetFrameworks>net462;netstandard1.6</TargetFrameworks>
     <RootNamespace>HlidacStatu.Api.Dataset.Connector</RootNamespace>
     <AssemblyName>HlidacStatu.Api.Dataset.Connector</AssemblyName>
     <Authors>Rudolf Plíva</Authors>
@@ -11,10 +11,15 @@
     <PackageIconUrl>https://www.hlidacstatu.cz/texty/wp-content/uploads/2017/02/largetile-150x150.png</PackageIconUrl>
     <Description>Knihovna pro přístup k API funkcím pro správu datasetů v projektu Hlídače Státu</Description>
     <PackageTags>HlidacStatu,API,Dataset,Connector</PackageTags>
+    <Version>1.1.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json.Schema" Version="3.0.10" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="System.Net.Http" />
   </ItemGroup>
 
 </Project>

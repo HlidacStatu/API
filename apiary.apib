@@ -7,10 +7,12 @@ HOST: https://www.hlidacstatu.cz/api/v1
 > Předem díky za upozornění na chyby, nepřesnosti a nejasný popis.
 ---
 ## Verze a změny
-`verze 1.0.1, poslední změna 5.10.2018`
+`verze 1.0.2, poslední změna 5.10.2018`
 
 * Změny 5.10.2018
     * doplněn endpoint DatasetSendNotifications
+    * doplněny parametry DatasetSearch
+    
 
 
 ## Autorizace
@@ -442,7 +444,7 @@ Smazat datovou sadu může pouze ten, kdo ji založil, anebo administrátor.
 
 
 + Parameters
-    + datasetId: rozhodnuti-uohs (string, required)
+    + datasetId: `rozhodnuti-uohs` (string, required)
 
 
 + Response 200 (application/json)
@@ -504,7 +506,7 @@ Vypsat podrobnosti konkrétní datové sady.
             Authorization: Token <najdes na hlidacstatu.cz/api/v1>
 
 + Parameters
-    + datasetId: rozhodnuti-uohs (string, required)
+    + datasetId: `rozhodnuti-uohs` (string, required)
 
         
 + Response 200 (application/json)
@@ -541,7 +543,7 @@ Pokud již v db záznam se stejným `Id` existuje, je přepsán novým záznamem
             Authorization: Token <najdes na hlidacstatu.cz/api/v1>
 
 + Parameters
-    + datasetId: rozhodnuti-uohs (string, required) - datasource Id
+    + datasetId: `rozhodnuti-uohs` (string, required) - datasource Id
     + dataId: 22 (string, required) - ID datového záznamu
 
 
@@ -580,7 +582,7 @@ Získání záznamu z datového zdroje
             Authorization: Token <najdes na hlidacstatu.cz/api/v1>
 
 + Parameters
-    + datasetId: rozhodnuti-uohs (string, required) - ID datasetu
+    + datasetId: `rozhodnuti-uohs` (string, required) - ID datasetu
     + dataid: "123" (string, required) - ID požadovaného záznamu
 
 
@@ -618,7 +620,7 @@ Pozor, není důležité, kdo záznam do DB vložil.
             Authorization: Token <najdes na hlidacstatu.cz/api/v1>
 
 + Parameters
-    + datasetId: rozhodnuti-uohs (string, required) - ID datasetu
+    + datasetId: `rozhodnuti-uohs` (string, required) - ID datasetu
     + dataid: "123" (string, required) - ID mazaného záznamu
 
 
@@ -650,7 +652,7 @@ Pozor, není důležité, kdo záznam do DB vložil.
                 }
             }
 
-### Hledání záznamů z datového zdroje [GET /DatasetSearch/{datasetId}?q={q}&page={page}]
+### Hledání záznamů z datového zdroje [GET /DatasetSearch/{datasetId}?q={q}&page={page}&sort={sort}&desc={desc}]
 
 Získání záznamu z datového zdroje
 
@@ -660,9 +662,11 @@ Získání záznamu z datového zdroje
             Authorization: Token <najdes na hlidacstatu.cz/api/v1>
 
 + Parameters
-    + datasetId: "rozhodnuti-uohs" (string, required) - ID datasetu
+    + datasetId: `rozhodnuti-uohs` (string, required) - ID datasetu
     + q: "obec" (string, required) - dotaz
     + page: 1 (int, required) - stránka výsledků. Max. hodnota je 200.
+    + sort: "atribut" (string) - třídění výsledků, pokud není uvedeno, je dle relevance.
+    + desc: 0 (bool) - příznak směru třídění. Defaultně vzestupně.
 
 
 + Request (application/json)
@@ -754,7 +758,7 @@ V každém případě nikdy nebudou uživatelů zaslány notifikace častěji, n
             Authorization: Token <najdes na hlidacstatu.cz/api/v1>
 
 + Parameters
-    + datasetId: "rozhodnuti-uohs" (string, required) - ID datasetu
+    + datasetId: `rozhodnuti-uohs` (string, required) - ID datasetu
 
 
 + Request (application/json)

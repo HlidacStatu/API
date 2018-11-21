@@ -308,10 +308,12 @@ s některou z definovaných hodnot, je takový objekt následně a asynchronně 
 * `"HsProcessType": "person"` - definuje, že se jedná o objekt obsahující údaje o osobě, kterou chcete provázat s databází osob Hlídače.
     Tento typ předpokládá, že je uveden u objektu obsahující tyto atributy: `Jmeno`,`Prijmeni`,`Narozeni`,`OsobaId` anebo `Name`,`Surname`,`Birthdate`,`OsobaId`
     Hodnota `OsobaId` nemusí a neměla by být vyplněna. Při vložení záznamu do Datasetu Hlídač automaticky doplní `OsobaId` a prováže tak záznam s databází osob Hlídače.
+    **Všechny uvedené atributy včetně `OsobaId` musí být uvedeny v JSONSchema datasetu.**
 
 * `"HsProcessType": "document"` - definuje, že se jedná o objekt obsahující odkaz na dokument, který je potřeba stáhnout a umožnit jeho fulltextové prohledávání.
     Tento typ předpokládá, že je uveden u objektu obsahující tyto atributy: `DocumentUrl` a `DocumentPlainText`.
     Hodnota `DocumentPlainText` nemusí a neměla by být vyplněna. Po vložení záznamu do Datasetu Hlídač automaticky dokument stáhne, vydoluje data a doplní `DocumentPlainText`. Tato operace se provede asynchronně během několika minut až hodin.
+    **Všechny uvedené atributy včetně `DocumentPlainText` musí být uvedeny v JSONSchema datasetu.**
 
 
 + Request (application/json)

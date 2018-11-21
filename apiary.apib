@@ -291,13 +291,28 @@ musíte datovou sadu smazat, a zaregistrovat znovu. Smazáním datové sady se s
     2. rezervované názvy vlastností, nepoužívejte je v jsonSchema ani objektech:
         - `DbCreated`:  obsahuje datum vložení objektu do db.
         - `DbCreatedBy`:  obsahuje info o uživateli, který objekt do db vložil. Tento údaj není poskytován veřejně.
-    3. vlastnost `ICO` kdekoliv (i ve vložených objektech) - pokud je typu `string`, pak Hlídač státu předpokládá, že se jedná IČ subjektu a může se snažit
-    4. vlastnost `OsobaId` kdekoliv (i ve vložených objektech) - pokud jde o string, pak Hlídač Státu předpokládá, že se jedná o identifikátor osoby z databáze Hlídače státu.
+    3. vlastnost `ICO` kdekoliv (i ve vložených objektech) - pokud je typu `string`, pak Hlídač státu předpokládá, že se jedná IČ subjektu a propojí záznam s firmami v Hlídači státu.
+    4. vlastnost `OsobaId` kdekoliv (i ve vložených objektech) - pokud jde o string, pak Hlídač Státu předpokládá, že se jedná o identifikátor osoby z databáze Hlídače státu. Pro nalezení použijte endpoint `FindOsobaId`
     5. vlastnost `Url` v rootu objektu - pokud dává smysl, měl by odkazovat na zdrojový záznam.
+    6. vlastnost `HsProcessType` kdekoliv, v kombinaci s dalšími atributy (viz dále), zajistí následné zpracování záznamu na serveru a doplnění údajů na straně Hlídače.
 
 * `searchResultTemplate` - HTML template či seznam vlastností objektu, které se mají zobrazovat ve výsledku hledání. Podrobnější popis o kousek dál.
 
 * `detailTemplate` - HTML template či seznam vlastností objektu, které se mají zobrazovat na stránce s detailem objektu. Podrobnější popis o kousek dál.
+
+##### HsProcessType - doplnění objektu o další údaje ze strany Hlídače
+
+Pokud libovolný objekt (v rootu, v poli či ve vložených objektech) obsahuje vlastnost `HsProcessType` 
+s některou z definovaných hodnot, je takový objekt následně a asynchronně zpracován a doplněn o další údaje na straně Hlídače.
+
+* `"HsProcessType": "person"` - definuje, že se jedná o objekt obsahující údaje o osobě, kterou chcete provázat s databází osob Hlídače.
+    Tento typ předpokládá, že je uveden u objektu obsahující tyto atributy: `Jmeno`,`Prijmeni`,`Narozeni`,`OsobaId` anebo `Name`,`Surname`,`Birthdate`,`OsobaId`
+    Hodnota `OsobaId` nemusí a neměla by být vyplněna. Při vložení záznamu do Datasetu Hlídač automaticky doplní `OsobaId` a prováže tak záznam s databází osob Hlídače.
+
+* `"HsProcessType": "document"` - definuje, že se jedná o objekt obsahující odkaz na dokument, který je potřeba stáhnout a umožnit jeho fulltextové prohledávání.
+    Tento typ předpokládá, že je uveden u objektu obsahující tyto atributy: `DocumentUrl` a `DocumentPlainText`.
+    Hodnota `DocumentPlainText` nemusí a neměla by být vyplněna. Po vložení záznamu do Datasetu Hlídač automaticky dokument stáhne, vydoluje data a doplní `DocumentPlainText`. Tato operace se provede asynchronně během několika minut až hodin.
+
 
 + Request (application/json)
  + Headers
@@ -771,7 +786,48 @@ V každém případě nikdy nebudou uživatelů zaslány notifikace častěji, n
 
 
 
-### Dohledání IČO subjektu podle jména [GET /CompanyId?companyName={companyName}]
+### Dohledání OsobaId osoby podle jména [GET /FindOsobaId?jmeno={jmeno}&prijmeni={prijmeni}&narozeni={narozeni}]
+
+Podle jména osoby dohledá není identifikátor v Hlídači státu. Vyhledávání funguje s diakritikou i bez.
+
+>OsobaId je pro Hlídač Státu primární identifikátor pro provázaní osob. 
+Pokud zpracováváte datový zdroj, který pracuje s osobami, dohledejte ID osoby
+před vložením záznamu do datasetu pomocí tohoto API.
+Pote ho pod názvem vlastnosti `OsobaId` uložte do vaší datové struktury
+Výrazně tím zlepšíte kvalitu dat v Datasetu.
+
+Upozornění: data nejsou 100% synchronizovaná s obchodním rejstříkem a dalšími rejstříky státu, a zejména změny za poslední měsíc se zde nemusí projevit.
+
+
++ Request (application/json)
+ + Headers
+ 
+            Authorization: Token <najdes na hlidacstatu.cz/api/v1>
+
++ Parameters
+    + jmeno: Jaroslav (string, required) - jméno osoby
+    + prijmeni: Faltýnek (string, required) - jméno osoby
+    + narozeni: 1951-04-28 (string, required) - datum narozeni ve formátu yyyy-MM-dd
+
+
++ Response 200 (application/json)
+
+            {
+                "Jmeno" : "Jaroslat",
+                "Prijmeni" : "Faltýnek",
+                "Narození" : "1951-04-28",
+                "OsobaId": "jaroslav-faltynek"
+            }
+
++ Response 200 (application/json)
+
+            {
+            }
+
+
+
+
+### Dohledání IČO subjektu podle jména [GET /FindCompanyId?companyName={companyName}]
 
 Podle jména subjektu dohledá IČO a dostupné datové schránky. Pokud není subjekt nalezen, vrátí se prázdný JSON.
 Tento endpoint preferuje přesnost, proto je nutné uvést jméno subjektu přesně.

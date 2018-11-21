@@ -306,12 +306,13 @@ Pokud libovolný objekt (v rootu, v poli či ve vložených objektech) obsahuje 
 s některou z definovaných hodnot, je takový objekt následně a asynchronně zpracován a doplněn o další údaje na straně Hlídače.
 
 * `"HsProcessType": "person"` - definuje, že se jedná o objekt obsahující údaje o osobě, kterou chcete provázat s databází osob Hlídače.
-    Tento typ předpokládá, že je uveden u objektu obsahující tyto atributy: `Jmeno`,`Prijmeni`,`Narozeni`,`OsobaId` anebo `Name`,`Surname`,`Birthdate`,`OsobaId`
+    Tento typ předpokládá, že je uveden u objektu obsahující tyto atributy: `Jmeno` (string),`Prijmeni` (string),`Narozeni` (date),`OsobaId` (string) 
+    anebo `Name` (string),`Surname` (string),`Birthdate` (date),`OsobaId` (string)
     Hodnota `OsobaId` nemusí a neměla by být vyplněna. Při vložení záznamu do Datasetu Hlídač automaticky doplní `OsobaId` a prováže tak záznam s databází osob Hlídače.
     **Všechny uvedené atributy včetně `OsobaId` musí být uvedeny v JSONSchema datasetu.**
 
 * `"HsProcessType": "document"` - definuje, že se jedná o objekt obsahující odkaz na dokument, který je potřeba stáhnout a umožnit jeho fulltextové prohledávání.
-    Tento typ předpokládá, že je uveden u objektu obsahující tyto atributy: `DocumentUrl` a `DocumentPlainText`.
+    Tento typ předpokládá, že je uveden u objektu obsahující tyto atributy: `DocumentUrl`(string) a `DocumentPlainText` (string).
     Hodnota `DocumentPlainText` nemusí a neměla by být vyplněna. Po vložení záznamu do Datasetu Hlídač automaticky dokument stáhne, vydoluje data a doplní `DocumentPlainText`. Tato operace se provede asynchronně během několika minut až hodin.
     **Všechny uvedené atributy včetně `DocumentPlainText` musí být uvedeny v JSONSchema datasetu.**
 
@@ -809,13 +810,13 @@ Upozornění: data nejsou 100% synchronizovaná s obchodním rejstříkem a dal�
 + Parameters
     + jmeno: Jaroslav (string, required) - jméno osoby
     + prijmeni: Faltýnek (string, required) - jméno osoby
-    + narozeni: 1951-04-28 (string, required) - datum narozeni ve formátu yyyy-MM-dd
+    + narozeni: 1962-04-28 (string, required) - datum narozeni ve formátu yyyy-MM-dd
 
 
 + Response 200 (application/json)
 
             {
-                "Jmeno" : "Jaroslat",
+                "Jmeno" : "Jaroslav",
                 "Prijmeni" : "Faltýnek",
                 "Narození" : "1951-04-28",
                 "OsobaId": "jaroslav-faltynek"

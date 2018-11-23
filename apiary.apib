@@ -972,6 +972,106 @@ V praxi se odstraní nadbytečné a příliš se opakující řádky a další s
 
 `fn_IsNullOrEmpty(object obj)` - otestuje, zda je object null anebo retezec prazdny. Vhodne pro otestovani existence pole apod. 
 
+## Group Transparetní účty 
+
+Seznam tranparetních účtů politických stran a jednotlivé položky na transparetních účtech firem.
+
+
+### Položky transparetního účtu [GET /ucetexport?id={cislouctu}]
+
++ Request (application/json)
+ + Headers
+ 
+            Authorization: Token <najdes na hlidacstatu.cz/api/v1>
+
++ Parameters
+    + cislouctu: 4080247%2F0100 (string, required) - číslo účetu, UrlEncodované
+
++ Response 200 (application/json)
+
+
+
++ Response 200 (application/json)
+
+        {
+            "bankovniUcet": {
+                "Active": 1,
+                "ApiUrl": "https://www.hlidacstatu.cz/api/v1/ucetexport?id=4080247%2F0100",
+                "CisloUctu": "4080247/0100",
+                "Id": "4080247/0100",
+                "LastSuccessfullParsing": "2018-11-23T07:23:19.6656457+01:00",
+                "Mena": "Kč",
+                "Nazev": "Parlamentní volby 2017",
+                "Subjekt": "ANO 2011",
+                "TypSubjektu": "Politická strana",
+                "TypUctu": 2,
+                "Url": "https://www.kb.cz/cs/transparentni-ucty/ano-2011-volebni-ucet-ano-2011-czk",
+                "numTypUctu": 2
+            },
+            "polozky": [
+                {
+                    "AddId": "",
+                    "BU": {
+                        "Active": 1,
+                        "ApiUrl": "https://www.hlidacstatu.cz/api/v1/ucetexport?id=4080247%2F0100",
+                        "CisloUctu": "4080247/0100",
+                        "Id": "4080247/0100",
+                        "LastSuccessfullParsing": "2018-11-23T07:23:19.6656457+01:00",
+                        "Mena": "Kč",
+                        "Nazev": "Parlamentní volby 2017",
+                        "Subjekt": "ANO 2011",
+                        "TypSubjektu": "Politická strana",
+                        "TypUctu": 2,
+                        "Url": "https://www.kb.cz/cs/transparentni-ucty/ano-2011-volebni-ucet-ano-2011-czk",
+                        "numTypUctu": 2
+                    },
+                    "Castka": -2700.0,
+                    "CisloProtiuctu": "2010201091/0710",
+                    "CisloUctu": "4080247/0100",
+                    "Comments": [],
+                    "Datum": "2017-06-13T00:00:00+02:00",
+                    "Id": "0F8D2AEDAE943EEA2D89C7B4580E3E0A",
+                    "KS": "3558",
+                    "NazevProtiuctu": "–",
+                    "PopisTransakce": "Šeky (Platba na vrub vašeho účtu)",
+                    "SS": "–",
+                    "VS": "71443339",
+                    "ZdrojUrl": "https://www.kb.cz/cs/transparentni-ucty/176311179-ano-2011/detail-uctu-4080247-19.shtml",
+                    "ZpravaProPrijemce": "9000000029 PYORD0000010547 VOJENSKA ZDRAVOTNI POJISTOVNA CR DRAHOBEJLOVA 1404/4PRAHA 9 ICO:47114975ZP ZAMESTNANEC"
+                },
+                {
+                    "AddId": "",
+                    "BU": {
+                        "Active": 1,
+                        "ApiUrl": "https://www.hlidacstatu.cz/api/v1/ucetexport?id=4080247%2F0100",
+                        "CisloUctu": "4080247/0100",
+                        "Id": "4080247/0100",
+                        "LastSuccessfullParsing": "2018-11-23T07:23:19.6656457+01:00",
+                        "Mena": "Kč",
+                        "Nazev": "Parlamentní volby 2017",
+                        "Subjekt": "ANO 2011",
+                        "TypSubjektu": "Politická strana",
+                        "TypUctu": 2,
+                        "Url": "https://www.kb.cz/cs/transparentni-ucty/ano-2011-volebni-ucet-ano-2011-czk",
+                        "numTypUctu": 2
+                    },
+                    "Castka": -5000.0,
+                    "CisloProtiuctu": "970388093/0800",
+                    "CisloUctu": "4080247/0100",
+                    "Comments": [],
+                    "Datum": "2017-07-21T00:00:00+02:00",
+                    "Id": "B4142EA2D0D067642EC8F5F885EF9176",
+                    "KS": "558",
+                    "NazevProtiuctu": "–",
+                    "PopisTransakce": "Šeky (Platba na vrub vašeho účtu)",
+                    "SS": "–",
+                    "VS": "4130000115",
+                    "ZdrojUrl": "https://www.kb.cz/cs/transparentni-ucty/176311179-ano-2011/detail-uctu-4080247-16.shtml",
+                    "ZpravaProPrijemce": "4130000115 PYORD0000010887 BC. JANA HAJNA DONSKA 941LIBEREC DAT.NAR.:05.06.1976PROVOZNI ZA"
+                }
+            }
+        }
+
 
 ## Group Hlídač státních webů
 
@@ -992,11 +1092,11 @@ Seznam monitorovaných webů, API a služeb, jejich ID a kontrolní řetezce.
             Authorization: Token <najdes na hlidacstatu.cz/api/v1>
 
 
-+ Request (application/json)
++ Response 200 (application/json)
 
 + Response 200 (application/json)
 
-            [
+        [
                 {
                     "hash": "6306B57A524363D494F83CED45FFF372",
                     "host": "HTTPS nen.nipez.cz",

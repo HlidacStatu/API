@@ -7,16 +7,22 @@ HOST: https://www.hlidacstatu.cz/api/v1
 > Předem díky za upozornění na chyby, nepřesnosti a nejasný popis.
 ---
 ## Verze a změny
-`verze 1.0.1, poslední změna 5.10.2018`
+`verze 1.1, poslední změna 29.11.2018`
+
+* Změny 27.11.2018
+    * Výměna dočasného template enginu Razor za Scriban (https://github.com/lunet-io/scriban, kompatibilní s `liquid templates`)
+    * Speciální datové struktury Datasetu `HSProcessType`
 
 * Změny 5.10.2018
     * doplněn endpoint DatasetSendNotifications
+    * doplněny parametry DatasetSearch
+    
 
 
 ## Autorizace
 
 Autorizace je prováděna pomocí autentifikačního tokenu, který je Vám přidělen. Autorizační token je nutno odesílat v hlavičce každého požadavku na API.
-Autorizační token: `docela1dlouhy2token3pro4tohle5api`
+Autorizační token: `docela1dlouhy2token3pro4tohleHS5api`
 Příklad k použití:
 ```
 curl -X GET https://www.hlidacstatu.cz/Api/v1/Detail/204737 -H 'Authorization: Token docela1dlouhy2token3pro4tohle5api'
@@ -289,13 +295,31 @@ musíte datovou sadu smazat, a zaregistrovat znovu. Smazáním datové sady se s
     2. rezervované názvy vlastností, nepoužívejte je v jsonSchema ani objektech:
         - `DbCreated`:  obsahuje datum vložení objektu do db.
         - `DbCreatedBy`:  obsahuje info o uživateli, který objekt do db vložil. Tento údaj není poskytován veřejně.
-    3. vlastnost `ICO` kdekoliv (i ve vložených objektech) - pokud je typu `string`, pak Hlídač státu předpokládá, že se jedná IČ subjektu a může se snažit
-    4. vlastnost `OsobaId` kdekoliv (i ve vložených objektech) - pokud jde o string, pak Hlídač Státu předpokládá, že se jedná o identifikátor osoby z databáze Hlídače státu.
+    3. vlastnost `ICO` kdekoliv (i ve vložených objektech) - pokud je typu `string`, pak Hlídač státu předpokládá, že se jedná IČ subjektu a propojí záznam s firmami v Hlídači státu.
+    4. vlastnost `OsobaId` kdekoliv (i ve vložených objektech) - pokud jde o string, pak Hlídač Státu předpokládá, že se jedná o identifikátor osoby z databáze Hlídače státu. Pro nalezení použijte endpoint `FindOsobaId`
     5. vlastnost `Url` v rootu objektu - pokud dává smysl, měl by odkazovat na zdrojový záznam.
+    6. vlastnost `HsProcessType` kdekoliv, v kombinaci s dalšími atributy (viz dále), zajistí následné zpracování záznamu na serveru a doplnění údajů na straně Hlídače.
 
 * `searchResultTemplate` - HTML template či seznam vlastností objektu, které se mají zobrazovat ve výsledku hledání. Podrobnější popis o kousek dál.
 
 * `detailTemplate` - HTML template či seznam vlastností objektu, které se mají zobrazovat na stránce s detailem objektu. Podrobnější popis o kousek dál.
+
+##### HsProcessType - doplnění objektu o další údaje ze strany Hlídače
+
+Pokud libovolný objekt (v rootu, v poli či ve vložených objektech) obsahuje vlastnost `HsProcessType` 
+s některou z definovaných hodnot, je takový objekt následně a asynchronně zpracován a doplněn o další údaje na straně Hlídače.
+
+* `"HsProcessType": "person"` - definuje, že se jedná o objekt obsahující údaje o osobě, kterou chcete provázat s databází osob Hlídače.
+    Tento typ předpokládá, že je uveden u objektu obsahující tyto atributy: `Jmeno` (string),`Prijmeni` (string),`Narozeni` (date),`OsobaId` (string) 
+    anebo `Name` (string),`Surname` (string),`Birthdate` (date),`OsobaId` (string)
+    Hodnota `OsobaId` nemusí a neměla by být vyplněna. Při vložení záznamu do Datasetu Hlídač automaticky doplní `OsobaId` a prováže tak záznam s databází osob Hlídače.
+    **Všechny uvedené atributy včetně `OsobaId` musí být uvedeny v JSONSchema datasetu.**
+
+* `"HsProcessType": "document"` - definuje, že se jedná o objekt obsahující odkaz na dokument, který je potřeba stáhnout a umožnit jeho fulltextové prohledávání.
+    Tento typ předpokládá, že je uveden u objektu obsahující tyto atributy: `DocumentUrl`(string) a `DocumentPlainText` (string).
+    Hodnota `DocumentPlainText` nemusí a neměla by být vyplněna. Po vložení záznamu do Datasetu Hlídač automaticky dokument stáhne, vydoluje data a doplní `DocumentPlainText`. Tato operace se provede asynchronně během několika minut až hodin.
+    **Všechny uvedené atributy včetně `DocumentPlainText` musí být uvedeny v JSONSchema datasetu.**
+
 
 + Request (application/json)
  + Headers
@@ -442,7 +466,7 @@ Smazat datovou sadu může pouze ten, kdo ji založil, anebo administrátor.
 
 
 + Parameters
-    + datasetId: rozhodnuti-uohs (string, required)
+    + datasetId: `rozhodnuti-uohs` (string, required)
 
 
 + Response 200 (application/json)
@@ -504,7 +528,7 @@ Vypsat podrobnosti konkrétní datové sady.
             Authorization: Token <najdes na hlidacstatu.cz/api/v1>
 
 + Parameters
-    + datasetId: rozhodnuti-uohs (string, required)
+    + datasetId: `rozhodnuti-uohs` (string, required)
 
         
 + Response 200 (application/json)
@@ -541,7 +565,7 @@ Pokud již v db záznam se stejným `Id` existuje, je přepsán novým záznamem
             Authorization: Token <najdes na hlidacstatu.cz/api/v1>
 
 + Parameters
-    + datasetId: rozhodnuti-uohs (string, required) - datasource Id
+    + datasetId: `rozhodnuti-uohs` (string, required) - datasource Id
     + dataId: 22 (string, required) - ID datového záznamu
 
 
@@ -580,7 +604,7 @@ Získání záznamu z datového zdroje
             Authorization: Token <najdes na hlidacstatu.cz/api/v1>
 
 + Parameters
-    + datasetId: rozhodnuti-uohs (string, required) - ID datasetu
+    + datasetId: `rozhodnuti-uohs` (string, required) - ID datasetu
     + dataid: "123" (string, required) - ID požadovaného záznamu
 
 
@@ -618,7 +642,7 @@ Pozor, není důležité, kdo záznam do DB vložil.
             Authorization: Token <najdes na hlidacstatu.cz/api/v1>
 
 + Parameters
-    + datasetId: rozhodnuti-uohs (string, required) - ID datasetu
+    + datasetId: `rozhodnuti-uohs` (string, required) - ID datasetu
     + dataid: "123" (string, required) - ID mazaného záznamu
 
 
@@ -650,7 +674,7 @@ Pozor, není důležité, kdo záznam do DB vložil.
                 }
             }
 
-### Hledání záznamů z datového zdroje [GET /DatasetSearch/{datasetId}?q={q}&page={page}]
+### Hledání záznamů z datového zdroje [GET /DatasetSearch/{datasetId}?q={q}&page={page}&sort={sort}&desc={desc}]
 
 Získání záznamu z datového zdroje
 
@@ -660,9 +684,11 @@ Získání záznamu z datového zdroje
             Authorization: Token <najdes na hlidacstatu.cz/api/v1>
 
 + Parameters
-    + datasetId: "rozhodnuti-uohs" (string, required) - ID datasetu
+    + datasetId: `rozhodnuti-uohs` (string, required) - ID datasetu
     + q: "obec" (string, required) - dotaz
     + page: 1 (int, required) - stránka výsledků. Max. hodnota je 200.
+    + sort: "Rok" (string) - třídění výsledků, pokud není uvedeno, je dle relevance.
+    + desc: 0 (bool) - příznak směru třídění. Defaultně vzestupně.
 
 
 + Request (application/json)
@@ -754,7 +780,7 @@ V každém případě nikdy nebudou uživatelů zaslány notifikace častěji, n
             Authorization: Token <najdes na hlidacstatu.cz/api/v1>
 
 + Parameters
-    + datasetId: "rozhodnuti-uohs" (string, required) - ID datasetu
+    + datasetId: `rozhodnuti-uohs` (string, required) - ID datasetu
 
 
 + Request (application/json)
@@ -767,7 +793,48 @@ V každém případě nikdy nebudou uživatelů zaslány notifikace častěji, n
 
 
 
-### Dohledání IČO subjektu podle jména [GET /CompanyId?companyName={companyName}]
+### Dohledání OsobaId osoby podle jména [GET /FindOsobaId?jmeno={jmeno}&prijmeni={prijmeni}&narozeni={narozeni}]
+
+Podle jména osoby dohledá není identifikátor v Hlídači státu. Vyhledávání funguje s diakritikou i bez.
+
+>OsobaId je pro Hlídač Státu primární identifikátor pro provázaní osob. 
+Pokud zpracováváte datový zdroj, který pracuje s osobami, dohledejte ID osoby
+před vložením záznamu do datasetu pomocí tohoto API.
+Pote ho pod názvem vlastnosti `OsobaId` uložte do vaší datové struktury
+Výrazně tím zlepšíte kvalitu dat v Datasetu.
+
+Upozornění: data nejsou 100% synchronizovaná s obchodním rejstříkem a dalšími rejstříky státu, a zejména změny za poslední měsíc se zde nemusí projevit.
+
+
++ Request (application/json)
+ + Headers
+ 
+            Authorization: Token <najdes na hlidacstatu.cz/api/v1>
+
++ Parameters
+    + jmeno: Jaroslav (string, required) - jméno osoby
+    + prijmeni: Faltýnek (string, required) - jméno osoby
+    + narozeni: 1962-04-28 (string, required) - datum narozeni ve formátu yyyy-MM-dd
+
+
++ Response 200 (application/json)
+
+            {
+                "Jmeno" : "Jaroslav",
+                "Prijmeni" : "Faltýnek",
+                "Narození" : "1951-04-28",
+                "OsobaId": "jaroslav-faltynek"
+            }
+
++ Response 200 (application/json)
+
+            {
+            }
+
+
+
+
+### Dohledání IČO subjektu podle jména [GET /FindCompanyId?companyName={companyName}]
 
 Podle jména subjektu dohledá IČO a dostupné datové schránky. Pokud není subjekt nalezen, vrátí se prázdný JSON.
 Tento endpoint preferuje přesnost, proto je nutné uvést jméno subjektu přesně.
@@ -808,94 +875,137 @@ Upozornění: data nejsou 100% synchronizovaná s obchodním rejstříkem a dal�
 
 ### HTML template pro searchResultTemplate a detailTemplate 
 
->    *__!!Pozor, jedná se o experimentální funkcionalitu, která nemusí fungovat. Při nejasnosti piš na michal@michalblaha.cz.!!__*
-
 Template je možné definovat dvěma způsoby:
 
 1. pomocí seznamu vlastností - v takovém případě do `properties` dáš textové pole, které obsahuje seznam vlastností, které se mají vypsat.
 O vhodný způsob zobrazení se postará Hlídač státu. To je snadná a jednoduchá cesta pro rychlý výpis údajů. Je to vhodné pro testování.
 Doporučujeme v takovém případě nastavit v registraci datového zdroje `betaversion = true`. 
-Hodnoty `header`, `body` a `footer` musí být `null`.
+Hodnota `body`  musí být `null`.
     ```
     {
-        "header": null,
         "body": null,
-        "footer": null,
         "properties": ["Id","Cj","Rok","Vec"]
     }
     ```
 
-2. velmi detailně pomocí HTML. K tomu slouží vlastnosti `header`,`body` a `footer`. Pouze `item` je povinný.
-    ```
+2. velmi detailně pomocí HTML. K tomu slouží vlastnost `body`. Je to volný template 
+```
     {
-        "header": "<h3>{Vec}</h3>",
-        "body": "<table><tr><td>Čj</td><td>{item.Cj}</td><tr>.....<table>",
-        "footer": "",
+        "body": "<table><tr><td>Čj</td><td>{{item.Cj}}</td><tr>.....<table>",
         "properties": null
     }
-    ```
-    Pokud jsou `item` i `properties` nastaveny, `properties` se ignorují. Pokud jsou obě `null`, zobrazí se chyba při renderování stránky.
+```
 
-### Syntaxe HTML Template - Razor Engine
+Pokud jsou nastaveny jak `body`, tak `properties` nastaveny, `properties` se ignorují. 
+Pokud jsou obě `null`, zobrazí se chyba při renderování stránky.
 
-Jedná se o fragmenty HTML. HTML v `header` a `footer` se vždy renderují pouze jednou.
+### Syntaxe HTML Template - Scriban
 
-HTML v `body` se
-* ve vyhledávání renderuje opakovaně pro každý nalezený záznam ve výsledku hledání,
-* v detailu záznamu pouze jednou.
+Jedná se o template engine kompatibilní s `liquid`. 
 
-Jako render engine používání Razor Engine z .NET Framework, C# syntaxy. 
-Kompletní popis syntaxe najdete na [w3school.com](https://www.w3schools.com/asp/razor_syntax.asp) nebo na [Microsoftu](https://docs.microsoft.com/en-us/aspnet/web-pages/overview/getting-started/introducing-razor-syntax-c).
+Stručny přehled najdete zde https://github.com/lunet-io/scriban, přehlednou dokumentaci na https://github.com/lunet-io/scriban/tree/master/doc
 
-Samotný záznam je dostupný v proměnné `item` a vypsání hodnot vlastností se v HTML uvede takto: 
-* __primitivní datové typy__
-    Vypsání hodnoty vlastnosti `Vec`  
-    `<div class='small'>@(item.Vec)</div>`
+Hlídač státu zajiští, že se do templatu vloží vždy odpovídající datová struktura
 
-* __pole__ item.Ucastnici je pole objektů obsahující účastníky řízení. První je potřeba ověřit, zda není pole `null`, 
-    poté obsah pole vypsat (pomocí `foreach` nebo `for`)
-    ```
-    ...
-    <td>
-        @if (item.Ucastnici != null)
-        {
-            foreach (var u in item.Ucastnici)
-            {
-                if (fn_IsNullOrEmpty(u.ICO))
-                {
-                    @fn_NormalizeText(u.Jmeno)
-                }
-                else
-                {
-                    <a href=""https://www.hlidacstatu.cz/subjekt/@u.ICO"">@fn_NormalizeText(u.Jmeno)</a><br />
-                }
-            }
-        }
-    </td>
-    ...
-    ```
-* __objekt__ item.Rozhodnuti je objekt obsahující více informací o samotném rozhodnutí
-včetně textu rozhodnutí (`.PlainText`).
-    ```
-    @if (item.Rozhodnuti != null)
-    {
-    <tr>
-        <td>Rozhodnutí</td>
-        <td>
-            <samp class="small">
-                @fn_FixPlainText(item.Rozhodnuti.PlainText))
-            </samp>
-        </td>
-    </tr>
+#### Vyhledávání
+
+Do template pro vyhledávání se vkládá .NET datová struktura obdobná dále uvedené struktuře. 
+Pro přehlednost je zde uvedena v JSON formě. V `Result` je pole nalezených zaznamů v jejich struktuře
+
+```
+{
+    "model" : {
+        "Total": 10,
+        "Page": 1,
+        "Q": "hledaný výraz"
+        "Result" : [{ "Id" = "id zaznamu" },{"nazev":"Pojmenování"}{"atribut2":"hodnota2"}] 
+}
+```
+
+Typický `searchResultTemplate` pro vyhledávání vypadá takto:
+
+```
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Název</th>
+            <th>Další pole</th>
+        </tr>
+    </thead>
+    <tbody>
+                        
+{{ for item in model.Result }}
+           <tr>
+                <td style="white-space: nowrap;">
+                    <a href="{{fn_DatasetItemUrl item.Id}}">{{item.Id}}</a>
+                </td>
+                <td style="white-space: nowrap;">
+                    {{item.Nazev}}
+                </td>
+                <td>
+                    {{fn_FormatDate item.atribut2  "dd.MM.yyyy"}}
+                </td>
+                <td>
+                    {{fn_ShortenText item.Vec 200}}
+                </td>
+            </tr>
+{{end }}
+</tbody></table>
+```
+
+#### Detail záznamu
+
+Do template pro vyhledávání se vkládá .NET datová struktura obdobná dále uvedené struktuře. 
+V `model` obsahuje jeden záznam v jejo originál struktuře odpovídající JSON schema.
+Pro přehlednost je zde uvedena v JSON formě.
+
+```
+{
+    "model" : {
+        { "Id" = "id zaznamu" },
+        {"Nazev":"Pojmenování"}, 
+        {"atribut2":"hodnota2"}
     }
-    ```
+}
+```
 
-> Pozor na pojmenování vlastností objektu `item`. Rozlišují se velká a malá písmena
+Typický `detailTemplate` pro vyhledávání vypadá takto:
+
+```
+{{this.item = model #nepovinne, pouze sjednocení pojmenování záznamu s templatem pro jeden zaznam. Bez tohoto řádku by jste namísto 'item' psali 'model' }}
+<table class="table table-hover">
+        <tbody>
+            <tr>
+                <td>Id</td>
+                <td>{{item.Id}}</td>
+            </tr>
+            <tr>
+                <td>Pojmenování</td>
+                <td>{{item.Nazev}}</td>
+            </tr>
+            {{ if item.atribut2}}
+                <tr>
+                    <td>Další pole</td>
+                    <td>{{fn_FormatDate item.atribut2  "dd.MM.yyyy"}}</td>
+                </tr>
+            {{end}}
+        </tbody>
+    </table>
+```
+
+
+> Pozor! Rozlišují se velká a malá písmena.
 
 
 ### Dostupné funkce pro formátování výstupu
 
 V kódu je možné volat speciální funkce pro formátování hodnot. 
+V `Scriban` se funkce volají s parametry oddělenými mezerou
+
+`{{fn_ShortenText "text" 50}}` - zkrácení textu na max. 50 znaků
+
+Dále uvádíme seznam dostupných funkcí nad rámec [build-in funkcí Scribanu](https://github.com/lunet-io/scriban/blob/master/doc/builtins.md).
 
 `fn_ShortenText(string value, int length)` - zkrácení textu na maximální délku `length` znaků.
 ke zkrácení dojde na nejbližším konci slova, odstavce či věty.
@@ -906,8 +1016,120 @@ Pokud není `format` určen, je null nebo prázdný, použije se formát `d.M.yy
 `fn_FixPlainText(string plaintext)` - funkce, která upraví čistý text pro lepší čitelnost. Vhodné zejména pro delší texty či obsahy dokumentů.
 V praxi se odstraní nadbytečné a příliš se opakující řádky a další speciální znaky. Ná
 
+`fn_NormalizeText(dynamic text)` - vymaže všechny HTML znáčky a přebytečné neviditelné znaky.
+
+`fn_FormatNumber(dynamic value, string format = null)` - naformátuje číslo. Formá může mít hbanodnoty "cs" nebo "en". Podle toho je zvolen formát čísla.
 
 `fn_IsNullOrEmpty(object obj)` - otestuje, zda je object null anebo retezec prazdny. Vhodne pro otestovani existence pole apod. 
+
+`fn_RenderPersonWithLink(string osobaId, string jmeno, string prijmeni, string rokNarozeni = "")`
+`fn_RenderPersonWithLink2(string osobaId)`
+
+`fn_RenderCompanyWithLink(string ico)`
+
+`fn_FormatPrice(dynamic value)`
+
+
+
+## Group Transparetní účty 
+
+Seznam tranparetních účtů politických stran a jednotlivé položky na transparetních účtech firem.
+
+
+### Položky transparetního účtu [GET /ucetexport?id={cislouctu}]
+
++ Request (application/json)
+ + Headers
+ 
+            Authorization: Token <najdes na hlidacstatu.cz/api/v1>
+
++ Parameters
+    + cislouctu: 4080247%2F0100 (string, required) - číslo účetu, UrlEncodované
+
++ Response 200 (application/json)
+
+
+
++ Response 200 (application/json)
+
+        {
+            "bankovniUcet": {
+                "Active": 1,
+                "ApiUrl": "https://www.hlidacstatu.cz/api/v1/ucetexport?id=4080247%2F0100",
+                "CisloUctu": "4080247/0100",
+                "Id": "4080247/0100",
+                "LastSuccessfullParsing": "2018-11-23T07:23:19.6656457+01:00",
+                "Mena": "Kč",
+                "Nazev": "Parlamentní volby 2017",
+                "Subjekt": "ANO 2011",
+                "TypSubjektu": "Politická strana",
+                "TypUctu": 2,
+                "Url": "https://www.kb.cz/cs/transparentni-ucty/ano-2011-volebni-ucet-ano-2011-czk",
+                "numTypUctu": 2
+            },
+            "polozky": [
+                {
+                    "AddId": "",
+                    "BU": {
+                        "Active": 1,
+                        "ApiUrl": "https://www.hlidacstatu.cz/api/v1/ucetexport?id=4080247%2F0100",
+                        "CisloUctu": "4080247/0100",
+                        "Id": "4080247/0100",
+                        "LastSuccessfullParsing": "2018-11-23T07:23:19.6656457+01:00",
+                        "Mena": "Kč",
+                        "Nazev": "Parlamentní volby 2017",
+                        "Subjekt": "ANO 2011",
+                        "TypSubjektu": "Politická strana",
+                        "TypUctu": 2,
+                        "Url": "https://www.kb.cz/cs/transparentni-ucty/ano-2011-volebni-ucet-ano-2011-czk",
+                        "numTypUctu": 2
+                    },
+                    "Castka": -2700.0,
+                    "CisloProtiuctu": "2010201091/0710",
+                    "CisloUctu": "4080247/0100",
+                    "Comments": [],
+                    "Datum": "2017-06-13T00:00:00+02:00",
+                    "Id": "0F8D2AEDAE943EEA2D89C7B4580E3E0A",
+                    "KS": "3558",
+                    "NazevProtiuctu": "–",
+                    "PopisTransakce": "Šeky (Platba na vrub vašeho účtu)",
+                    "SS": "–",
+                    "VS": "71443339",
+                    "ZdrojUrl": "https://www.kb.cz/cs/transparentni-ucty/176311179-ano-2011/detail-uctu-4080247-19.shtml",
+                    "ZpravaProPrijemce": "9000000029 PYORD0000010547 VOJENSKA ZDRAVOTNI POJISTOVNA CR DRAHOBEJLOVA 1404/4PRAHA 9 ICO:47114975ZP ZAMESTNANEC"
+                },
+                {
+                    "AddId": "",
+                    "BU": {
+                        "Active": 1,
+                        "ApiUrl": "https://www.hlidacstatu.cz/api/v1/ucetexport?id=4080247%2F0100",
+                        "CisloUctu": "4080247/0100",
+                        "Id": "4080247/0100",
+                        "LastSuccessfullParsing": "2018-11-23T07:23:19.6656457+01:00",
+                        "Mena": "Kč",
+                        "Nazev": "Parlamentní volby 2017",
+                        "Subjekt": "ANO 2011",
+                        "TypSubjektu": "Politická strana",
+                        "TypUctu": 2,
+                        "Url": "https://www.kb.cz/cs/transparentni-ucty/ano-2011-volebni-ucet-ano-2011-czk",
+                        "numTypUctu": 2
+                    },
+                    "Castka": -5000.0,
+                    "CisloProtiuctu": "970388093/0800",
+                    "CisloUctu": "4080247/0100",
+                    "Comments": [],
+                    "Datum": "2017-07-21T00:00:00+02:00",
+                    "Id": "B4142EA2D0D067642EC8F5F885EF9176",
+                    "KS": "558",
+                    "NazevProtiuctu": "–",
+                    "PopisTransakce": "Šeky (Platba na vrub vašeho účtu)",
+                    "SS": "–",
+                    "VS": "4130000115",
+                    "ZdrojUrl": "https://www.kb.cz/cs/transparentni-ucty/176311179-ano-2011/detail-uctu-4080247-16.shtml",
+                    "ZpravaProPrijemce": "4130000115 PYORD0000010887 BC. JANA HAJNA DONSKA 941LIBEREC DAT.NAR.:05.06.1976PROVOZNI ZA"
+                }
+            }
+        }
 
 
 ## Group Hlídač státních webů
@@ -929,11 +1151,11 @@ Seznam monitorovaných webů, API a služeb, jejich ID a kontrolní řetezce.
             Authorization: Token <najdes na hlidacstatu.cz/api/v1>
 
 
-+ Request (application/json)
++ Response 200 (application/json)
 
 + Response 200 (application/json)
 
-            [
+        [
                 {
                     "hash": "6306B57A524363D494F83CED45FFF372",
                     "host": "HTTPS nen.nipez.cz",

@@ -20,16 +20,15 @@ namespace HlidacStatu.Api.Dataset.Connector
             public ClassicSearchResultTemplate AddColumn(string columnHeader, string columnTemplateValue, string style = null)
             {
                 columns.Add(new column() { header = columnHeader, content = columnTemplateValue, style = style });
-                this.Header = GenerateHeader();
-                this.Body = GenerateBody();
-                this.Footer = GenerateFooter();
+                this.Body = GenerateHeader() + "\n" + GenerateBody() + "\n" + GenerateFooter();
                 return this;
             }
 
             private string GenerateHeader()
             {
                 System.Text.StringBuilder sb = new System.Text.StringBuilder(512);
-                sb.Append(@"<table class=""table table-hover"">
+                sb.AppendLine("<!-- scriban {{ date.now }} --> ");
+                sb.AppendLine(@"<table class=""table table-hover"">
                         <thead>
                             <tr>");
                 foreach (var c in columns)
@@ -45,7 +44,8 @@ namespace HlidacStatu.Api.Dataset.Connector
             private string GenerateBody()
             {
                 System.Text.StringBuilder sb = new System.Text.StringBuilder(512);
-                sb.Append(@"<tr>");
+                sb.AppendLine(@"{{ for item in model.Result }}");
+                sb.AppendLine(@"<tr>");
                 foreach (var c in columns)
                 {
                     sb.Append($"<td ");
@@ -53,7 +53,8 @@ namespace HlidacStatu.Api.Dataset.Connector
                         sb.Append($"style=\"{c.style}\" ");
                     sb.AppendLine($">{c.content}</td>");
                 }
-                sb.Append(@"</tr>");
+                sb.AppendLine(@"</tr>");
+                sb.AppendLine(@"{{ end }}");
                 return sb.ToString();
             }
 

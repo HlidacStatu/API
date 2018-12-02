@@ -21,15 +21,13 @@ namespace HlidacStatu.Api.Dataset.Connector
             public ClassicDetailTemplate AddColumn(string columnHeader, string columnTemplateValue, string style = null)
             {
                 columns.Add(new column() { header = columnHeader, content = columnTemplateValue, style = style });
-                this.Header = GenerateHeader();
-                this.Body = GenerateBody();
-                this.Footer = GenerateFooter();
+                this.Body = GenerateHeader() + "\n" + GenerateBody() + "\n" + GenerateFooter();
                 return this;
             }
 
             private string GenerateHeader()
             {
-                return "";
+                return "<!-- scriban {{ date.now }} --> \n {{this.item = model}}";
             }
             private string GenerateBody()
             {

@@ -7,10 +7,15 @@ namespace HlidacStatu.Api.Dataset.Connector
 {
     public class DatasetConnector : IDatasetConnector
     {
-        private static string apiRoot = "https://www.hlidacstatu.cz/api/v1";
+        private string apiRoot = "https://www.hlidacstatu.cz/api/v1";
 
         private readonly string ApiToken;
         private readonly HttpClient HttpClient;
+
+        public void SetDeveleperUrl(string devApiUrl = null)
+        {
+            apiRoot = devApiUrl ?? "http://local.hlidacstatu.cz/api/v1";
+        }
 
         public DatasetConnector(string apiToken)
         {

@@ -567,7 +567,7 @@ Pokud již v db záznam se stejným `Id` existuje, je přepsán novým záznamem
 + Parameters
     + datasetId: `rozhodnuti-uohs` (string, required) - datasource Id
     + dataId: 22 (string, required) - ID datového záznamu
-    + rewrite: 0 (int) - default: 0; 1 - pokud záznam existuje, pak se přepíše vkládanými daty. Pro hodnotu 0, pokud záznam existuje, data se nezapíší a ignorují se.
+    + rewrite: false (boolean) - default: false; `rewrite=true` - pokud záznam existuje, pak se přepíše vkládanými daty. Pro hodnotu false, pokud záznam existuje, data se nezapíší a ignorují se.
 
 
 + Request (application/json)

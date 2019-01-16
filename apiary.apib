@@ -553,7 +553,7 @@ Vypsat podrobnosti konkrétní datové sady.
 
 
 
-### Přidat data do datového zdroje [POST /DatasetItem/{datasetId}/{dataId}]
+### Přidat data do datového zdroje [POST /DatasetItem/{datasetId}/{dataId}?rewrite={rewrite}]
 
 Vložení dat do datového zdroje. Vkládaná data jsou kontrolována na validitu proti JSON Schematu, které bylo vloženo při registraci datového zdroje.
 Vkládaný záznam musí obsahovat vlastnost `Id`. 
@@ -567,6 +567,7 @@ Pokud již v db záznam se stejným `Id` existuje, je přepsán novým záznamem
 + Parameters
     + datasetId: `rozhodnuti-uohs` (string, required) - datasource Id
     + dataId: 22 (string, required) - ID datového záznamu
+    + rewrite: 0 (int) - default: 0; 1 - pokud záznam existuje, pak se přepíše vkládanými daty. Pro hodnotu 0, pokud záznam existuje, data se nezapíší a ignorují se.
 
 
 + Request (application/json)
@@ -619,6 +620,41 @@ Získání záznamu z datového zdroje
 + Response 200 (application/json)
 
             null // vratí null, pokud záznam neexistuje
+
++ Response 200 (application/json)
+
+            {
+                "valid": false,
+                "error" : {
+                    "number" : -2,
+                    "description" : "dataset not found"
+                }
+            }
+
+
+### Ověření existence záznamu v datovém zdroji [GET /DatasetItem_Exists/{datasetId}/{dataid}]
+
+Ověření, zda záznam s identifikátorem `datasetId` v datovém zdroji existuje. Odpovědí je true/false.
+
++ Request (application/json)
+ + Headers
+ 
+            Authorization: Token <najdes na hlidacstatu.cz/api/v1>
+
++ Parameters
+    + datasetId: `rozhodnuti-uohs` (string, required) - ID datasetu
+    + dataid: "123" (string, required) - ID požadovaného záznamu
+
+
++ Request (application/json)
+
++ Response 200 (application/json)
+
+        true
+
++ Response 200 (application/json)
+
+            false
 
 + Response 200 (application/json)
 

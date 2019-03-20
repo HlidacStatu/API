@@ -39,12 +39,12 @@ licencí CC BY 3.0. Licence je jednoduchá a její pravidla také.
 
 Nejdůležitější, nikoliv jediná pravidla licence:
 
-1. Dílo a obsah smíš stáhnout, sdílet a libovolně upravit.
-2. Musíš vždy a bezpodmínečně uvést původ dat a autorství zdrojových dat (na internetu plný, funkční internetový odkaz na Hlídač státu)
-3. Nesmíš přidat žádná další technická či právní omezení nad rámec této licence.
-4. Pokud ti tato licence nevyhovuje, napiš na api@hlidacstatu.cz
+1. Dílo a obsah smíte stáhnout, sdílet a libovolně upravit.
+2. Musíte vždy a bezpodmínečně uvést původ dat a autorství zdrojových dat (na internetu plný, funkční internetový odkaz na Hlídač státu)
+3. Nesmíte přidat žádná další technická či právní omezení nad rámec této licence.
+4. Pokud vám tato licence nevyhovuje, napište na api@hlidacstatu.cz
 
-[Přečti si ji prosím](https://www.hlidacstatu.cz/texty/licence/).
+[Přečtěte si ji prosím](https://www.hlidacstatu.cz/texty/licence/).
 
 ## Group Smlouvy
 
@@ -567,7 +567,9 @@ Pokud již v db záznam se stejným `Id` existuje, je přepsán novým záznamem
 + Parameters
     + datasetId: `rozhodnuti-uohs` (string, required) - datasource Id
     + dataId: 22 (string, required) - ID datového záznamu
-    + rewrite: false (boolean) - default: false; `rewrite=true` - pokud záznam existuje, pak se přepíše vkládanými daty. Pro hodnotu false, pokud záznam existuje, data se nezapíší a ignorují se.
+    + rewrite: false (boolean) - default: false; `rewrite=true` - pokud záznam se stejným ID existuje, 
+    pak se přepíše vkládanými daty. 
+    Pro hodnotu false, pokud záznam se stejným ID existuje, data se nezapíší a ignorují se. Nekontrolujeme, zda se záznamy obsahově liší.
 
 
 + Request (application/json)

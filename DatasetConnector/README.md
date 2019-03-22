@@ -24,26 +24,34 @@ Dataset je v knihovně popsaný třídou [Dataset.cs](DatasetConnector/Dataset.c
 Jelikož definice datasetu se v průběhu práce s ním pravděpodobně měnit nebude, je možné ji mít v programu uloženou např. jako statickou proměnnou 
 
 ```
-		public static Dataset<Rizeni> dataset = new Dataset<Rizeni>(
-			name: "Insolvenční rejstřík",
-			datasetId: "insolvencni-rejstrik",
-			origUrl: "https://isir.justice.cz/isir/common/index.do",
-			description: "Seznam dlužníků vedený v insolvenčním rejstříku, proti kterým bylo zahájeno insolvenční řízení po 1. lednu 2008 a nebyli z rejstříku vyškrtnuti dle § 425 insolvenčního zákona.",
-			sourceCodeUrl: "https://github.com/rpliva/HlidacStatu-InsolvencniRejstrik",
-			orderList: new string[,] { 
-				{ "Soud", "Soud" }, 
-				{ "Datum zahájení řízení", "ZahajeniRizeni" }, 
-				{ "Jméno/název", "Nazev" }, 
-				{ "Aktualní stav", "AktualniStav" }
-			},
-			betaVersion: false,
-			searchResultTemplate: SearchResultTemplate,
-			detailTemplate: DetailTemplate);
+		new HlidacStatu.Api.Dataset.Connector.Dataset<Most>(
+                "Stav Mostů v ČR", "Stav-Mostu", "http://bms.clevera.cz/Public", "Stav mostů v ČR. V tuto chvíli na dálnicích a silnicích I.třídy, které spravuje ŘSD.", "https://github.com/HlidacStatu/Datasety/tree/master/MostyRSD",
+                false, true,
+                new string[,] { { "Stav mostů", "Stav" }, { "Poslední kontrola", "PosledniProhlidka" } },
+                new ClassicTemplate.ClassicSearchResultTemplate()
+                    .AddColumn("Označení", @"<a href=""@(fn_DatasetItemUrl(item.Id))"">@item.Oznaceni</a>")
+                    .AddColumn("Jméno", "@item.Jmeno")
+                    .AddColumn("Stav mostu", "@item.PopisStavu")
+                    .AddColumn("Poslední kontrola", "@fn_FormatDate(item.PosledniProhlidka,\"dd.MM.yyyy\")")
+                    .AddColumn("Mapa", "<a target='blank' href='https://mapy.cz/zakladni?q=@(fn_FormatNumber(item.GPS_Lat,\"en\")),@(fn_FormatNumber(item.GPS_Lng,\"en\"))'>na mapě</a>")
+                ,
+                new ClassicTemplate.ClassicDetailTemplate()
+                    .AddColumn("Jméno", "@item.Jmeno")
+                    .AddColumn("Místní název", "@item.MistniNazev")
+                    .AddColumn("Poslední kontrola", "@fn_FormatDate(item.PosledniProhlidka,\"dd.MM.yyyy\")")
+                    .AddColumn("Stav mostu", "@item.PopisStavu")
+                    .AddColumn("Spravuje", "@item.SpravaOrganizace, @item.SpravaProvozniUsek, @item.SpravaStredisko")
+                    .AddColumn("Souřadnice", "Lat: @(fn_FormatNumber(item.GPS_Lat,\"en\"))<br/>Long: @(fn_FormatNumber(item.GPS_Lng,\"en\"))")
+                    .AddColumn("Mapa", "<iframe src=\"https://api.mapy.cz/frame?params=%7B%22x%22%3A@(fn_FormatNumber(item.GPS_Lng,\"en\"))%2C%22y%22%3A@(fn_FormatNumber(item.GPS_Lat,\"en\"))%2C%22base%22%3A%221%22%2C%22layers%22%3A%5B%5D%2C%22zoom%22%3A16%2C%22url%22%3A%22https%3A%2F%2Fmapy.cz%2Fs%2F3auci%22%2C%22mark%22%3A%7B%22x%22%3A%22@(fn_FormatNumber(item.GPS_Lng,\"en\"))%22%2C%22y%22%3A%22@(fn_FormatNumber(item.GPS_Lat,\"en\"))%22%2C%22title%22%3A%22Poloha+mostu%22%7D%2C%22overview%22%3Atrue%7D&amp;width=500&amp;height=333&amp;lang=cs\" width=\"500\" height=\"333\" style=\"border:none\" frameBorder=\"0\"></iframe>")
+                );
 ```
 
-kde `Rizeni` definuje strukturu datasetu (v tomto případě insolvenčního rejstříku) a proměnné `SearchResultTemplate` a `DetailTemplate` definují šablony použité pro vykreslení seznamu výsledků vyhledávání a detailu položky datasetu. Více informací k definici šablony lze nalézt v popisu API - [HTML Template](https://hlidacstatu.docs.apiary.io/#reference/html-teplate-syntaxe,-funkce).
+kde `Most` definuje strukturu datasetu (v tomto případě informace o jednom mostu) a proměnné `SearchResultTemplate` a `DetailTemplate` definují šablony použité pro vykreslení seznamu výsledků vyhledávání a detailu položky datasetu. Více informací k definici šablony lze nalézt v popisu API - [HTML Template](https://hlidacstatu.docs.apiary.io/#reference/html-teplate-syntaxe,-funkce).
+
+Pomocná třída a metody v ní `ClassicTemplate` pomohou vygenerovat template pro stránku s výsledky hledání a detail.
 
 Vlastnosti `datasetId` a generované `JsonSchema` se nesmí měnit. Při nutnosti jejich změny je potřeba nejprve starý dataset odstranit a poté vytvořit nový se změněnými hodnotami.
+
 
 ### Ověření existence datasetu
 

@@ -3,7 +3,7 @@
 [![NuGet](https://img.shields.io/nuget/dt/HlidacStatu.Api.Dataset.Connector.svg)](https://www.nuget.org/packages/HlidacStatu.Api.Dataset.Connector)
 [![NuGet](https://img.shields.io/nuget/v/HlidacStatu.Api.Dataset.Connector.svg)](https://www.nuget.org/packages/HlidacStatu.Api.Dataset.Connector)
 
-Knihovna pro .NET Framework napsaná ve standardu 1.6 umožňující snadnou práci s Datasety Hlídače státu.
+Knihovna pro .NET Framework napsaná ve .NET Standardu 1.6 a .NET Framework 4.6.1 umožňující snadnou práci s Datasety Hlídače státu. Dostupná také jako [NuGet balíček](https://www.nuget.org/packages/HlidacStatu.Api.Dataset.Connector).
 
 ## Použití knihovny
 

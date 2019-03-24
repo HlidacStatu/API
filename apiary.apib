@@ -553,7 +553,7 @@ Vypsat podrobnosti konkrétní datové sady.
 
 
 
-### Přidat data do datového zdroje [POST /DatasetItem/{datasetId}/{dataId}?rewrite={rewrite}]
+### Přidat data do datového zdroje [POST /DatasetItem/{datasetId}/{dataId}?mode={mode}]
 
 Vložení dat do datového zdroje. Vkládaná data jsou kontrolována na validitu proti JSON Schematu, které bylo vloženo při registraci datového zdroje.
 Vkládaný záznam musí obsahovat vlastnost `Id`. 
@@ -567,9 +567,12 @@ Pokud již v db záznam se stejným `Id` existuje, je přepsán novým záznamem
 + Parameters
     + datasetId: `rozhodnuti-uohs` (string, required) - datasource Id
     + dataId: 22 (string, required) - ID datového záznamu
-    + rewrite: false (boolean) - default: false; `rewrite=true` - pokud záznam se stejným ID existuje, 
-    pak se přepíše vkládanými daty. 
-    Pro hodnotu false, pokud záznam se stejným ID existuje, data se nezapíší a ignorují se. Nekontrolujeme, zda se záznamy obsahově liší.
+    + mode: skip (string) - mode zpracování záznamu 
+            default: **mode=skip** - nebo pokud není hodnota uvedena, tak záznam se stejným ID existuje, data se nezapíší a ignorují se; Nekontrolujeme, zda se záznamy obsahově liší.
+            **mode=rewrite** - pokud záznam se stejným ID existuje, pak se přepíše vkládanými daty. 
+            **mode=merge** - nový záznam přepíše hodnoty v existujících atributech staré verze objektu. 
+            Pole jsou doplněna novými unikátními hodnotami. Neexistující pole v novém objektu (či pole s hodnotou null) jsou ignorována
+            a nezapisují se do starého objektu (nemažou původní hodnoty).
 
 
 + Request (application/json)

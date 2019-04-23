@@ -66,7 +66,7 @@ Pro ověření, zda dataset již existuje, slouží metoda `DatasetExists`, kter
 Nový dataset se v Hlídači státu vytvoří (zaregistruje) voláním metody `RegisterDataset`, která jako parametr přijímá definici datasetu a vrací id datasetu v Hlídači státu (`datasetId` není povinná položka a pokud není vyplněna, Hlídač státu ji automaticky odvodí z názvu datasetu, tato hodnota je následně vrácena. Pokud je hodnota `datasetId` vyplněna, je použita při registraci a vrácena).
 
 ```
-    var datasetId = await datasetConnector.RegisterDataset(dataset);
+    var datasetId = await datasetConnector.CreateDataset(dataset);
 ```
 
 Pokud již vytvářený dataset existuje, je vyvolána výjimka `DatasetConnectorException`.

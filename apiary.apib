@@ -1042,33 +1042,39 @@ Typický `detailTemplate` pro vyhledávání vypadá takto:
 ### Dostupné funkce pro formátování výstupu
 
 V kódu je možné volat speciální funkce pro formátování hodnot. 
-V `Scriban` se funkce volají s parametry oddělenými mezerou
+V `Scriban` se funkce volají **s parametry oddělenými mezerou**
 
-`{{fn_ShortenText "text" 50}}` - zkrácení textu na max. 50 znaků
+`string {{fn_ShortenText "text" 50}}` - zkrácení textu na max. 50 znaků, funkce vrací string
 
 Dále uvádíme seznam dostupných funkcí nad rámec [build-in funkcí Scribanu](https://github.com/lunet-io/scriban/blob/master/doc/builtins.md).
 
-`fn_ShortenText(string value, int length)` - zkrácení textu na maximální délku `length` znaků.
+`string fn_ShortenText(string value, int length)` - zkrácení textu na maximální délku `length` znaků.
 ke zkrácení dojde na nejbližším konci slova, odstavce či věty.
 
-`fn_FormatDate(datetime value, string format)` - zobrazení data podle určeného formátu. 
-Pokud není `format` určen, je null nebo prázdný, použije se formát `d.M.yyyy`. Pro formátování použijte syntaxi [.NET c# custom date and time format](https://docs.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings).
-
-`fn_FixPlainText(string plaintext)` - funkce, která upraví čistý text pro lepší čitelnost. Vhodné zejména pro delší texty či obsahy dokumentů.
+`string fn_FixPlainText(string plaintext)` - funkce, která upraví čistý text pro lepší čitelnost. Vhodné zejména pro delší texty či obsahy dokumentů.
 V praxi se odstraní nadbytečné a příliš se opakující řádky a další speciální znaky. Ná
 
-`fn_NormalizeText(dynamic text)` - vymaže všechny HTML znáčky a přebytečné neviditelné znaky.
+`string fn_NormalizeText(dynamic text)` - vymaže všechny HTML znáčky a přebytečné neviditelné znaky.
 
-`fn_FormatNumber(dynamic value, string format = null)` - naformátuje číslo. Formá může mít hbanodnoty "cs" nebo "en". Podle toho je zvolen formát čísla.
+`boolean fn_IsNullOrEmpty(object obj)` - otestuje, zda je object null anebo retezec prazdny. Vhodne pro otestovani existence pole apod. 
 
-`fn_IsNullOrEmpty(object obj)` - otestuje, zda je object null anebo retezec prazdny. Vhodne pro otestovani existence pole apod. 
+`string fn_RenderPersonWithLink(string osobaId, string jmeno, string prijmeni, string rokNarozeni = "")` - vyrendruje jméno, příjmení a rok narození osoby s odkazem na její profil
 
-`fn_RenderPersonWithLink(string osobaId, string jmeno, string prijmeni, string rokNarozeni = "")`
-`fn_RenderPersonWithLink2(string osobaId)`
+`string fn_RenderPersonWithLinkAndStat(string osobaId, bool twoLines = false)` - pro existující osobu vrací její jméno, odkaz na její profil a základní statistiku vztahů se státem. Jinak prázdný řetezec.
 
-`fn_RenderCompanyWithLink(string ico)`
+`string fn_RenderPersonWithLink2(string osobaId)` -  vrací jméno, příjmení a rok narození osoby s odkazem na její profil. Pokud osoba neexistuje, vrací prázdný string
 
-`fn_FormatPrice(dynamic value)`
+`string fn_RenderCompanyWithLink(string ico)` - pro existující firmu vrací její název a odkaz na její profil. Jinak vrátí pouze IČO.
+
+`string fn_RenderCompanyWithLinkAndStat(string ico, bool twoLines = false)` - pro existující firmu vrací její název a odkaz na její profil a základní statistiku vztahů se státem. Jinak vrátí pouze IČO.
+
+`string fn_FormatDate(datetime value, string format)` - zobrazení data podle určeného formátu. 
+Pokud není `format` určen, je null nebo prázdný, použije se formát `d.M.yyyy`. Pro formátování použijte syntaxi [.NET c# custom date and time format](https://docs.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings).
+
+`string fn_FormatNumber(dynamic value, string format = null)` - naformátuje číslo. Formát může mít hodnoty "cs" nebo "en". Podle toho je zvolen formát čísla.
+
+`fn_FormatPrice(dynamic value, string mena = "Kč")` - naformátuje číslo jako cenu s měnou Kč
+
 
 
 

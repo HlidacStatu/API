@@ -1063,13 +1063,13 @@ V praxi se odstraní nadbytečné a příliš se opakující řádky a další s
 
 `string fn_RenderPersonWithLink(string osobaId, string jmeno, string prijmeni, string rokNarozeni = "")` - vyrendruje jméno, příjmení a rok narození osoby s odkazem na její profil
 
-`string fn_RenderPersonStatistic(string osobaId, bool twoLines = false)` - pro existující osobu vrací základní statistiku vztahů na osobu navázaných firem se státem. Jinak prázdný řetezec.
+`string fn_RenderPersonStatistic(string osobaId, bool twoLines = false, string prefix = "", string postfix = "")` - pro existující osobu vrací základní statistiku vztahů na osobu navázaných firem se státem. Jinak prázdný řetezec.
 
 `string fn_RenderPersonWithLink2(string osobaId)` -  vrací jméno, příjmení a rok narození osoby s odkazem na její profil. Pokud osoba neexistuje, vrací prázdný string
 
 `string fn_RenderCompanyWithLink(string ico)` - pro existující firmu vrací její název a odkaz na její profil. Jinak vrátí pouze IČO.
 
-`string fn_RenderCompanyStatistic(string ico, bool twoLines = false)` - pro existující firmu vrací základní statistiku vztahů firmy se státem. Pro neexistující IČO prázdný řetezec.
+`string fn_RenderCompanyStatistic(string ico, bool twoLines = false, string prefix = "", string postfix = "")` - pro existující firmu vrací základní statistiku vztahů firmy se státem. Pro neexistující IČO prázdný řetezec.
 
 `string fn_FormatDate(datetime value, string format)` - zobrazení data podle určeného formátu. 
 Pokud není `format` určen, je null nebo prázdný, použije se formát `d.M.yyyy`. Pro formátování použijte syntaxi [.NET c# custom date and time format](https://docs.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings).

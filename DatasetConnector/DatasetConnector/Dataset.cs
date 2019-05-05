@@ -23,7 +23,7 @@ namespace HlidacStatu.Api.Dataset.Connector
 			{
 				DefaultRequired = Required.Default
 			};
-			JsonSchema = jsonGen.Generate(typeof(TData));
+			JsonSchema = jsonGen.Generate(typeof(TData)).ToString();
 		}
 
 		public string Name { get; private set; }
@@ -31,7 +31,7 @@ namespace HlidacStatu.Api.Dataset.Connector
 		public string OrigUrl { get; private set; }
 		public string Description { get; private set; }
 		public string SourceCodeUrl { get; private set; }
-		public JSchema JsonSchema { get; private set; }
+		public string JsonSchema { get; private set; }
 		public bool BetaVersion { get; private set; }
 		public bool AllowWriteAccess { get; private set; }
 		public string[,] OrderList { get; private set; }

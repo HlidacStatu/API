@@ -11,7 +11,7 @@
     <PackageIconUrl>https://www.hlidacstatu.cz/texty/wp-content/uploads/2017/02/largetile-150x150.png</PackageIconUrl>
     <Description>Knihovna pro přístup k API funkcím pro správu datasetů v projektu Hlídače Státu</Description>
     <PackageTags>HlidacStatu,API,Dataset,Connector</PackageTags>
-    <Version>1.1.5</Version>
+    <Version>1.2.0</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 

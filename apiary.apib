@@ -196,86 +196,38 @@ musíte datovou sadu smazat, a zaregistrovat znovu. Smazáním datové sady se s
 
 #### Popis struktury registrace datové sady
 
+Ukázka datové struktury zde: https://github.com/HlidacStatu/API/blob/master/register.sample.json
+
 ```
 {
-              "name": "Rozhodnuti UOHS",
-              "datasetId": "rozhodnutiUOHS",
-              "origUrl": "http://www.uohs.cz/cs/verejne-zakazky/sbirky-rozhodnuti/",
-              "sourcecodeUrl": null,
-              "description": null,
-              "betaversion" : false,
-              "allowWriteAccess" : false,              
-              "jsonSchema": {
-                "definitions": {
-                  "Ucastnik": {
-                    "type": [
-                      "object",
-                      "null"
-                    ],
-                    "properties": {
-                      "Jmeno": {
-                        "type": [
-                          "string",
-                          "null"
-                        ]
-                      },
-                      "ICO": {
-                        "type": [
-                          "string",
-                          "null"
-                        ]
-                      }
-                    }
-                  }
-                },
-                "type": "object",
-                "properties": {
-                  "Id": {
-                    "type": [
-                      "string",
-                      "null"
-                    ]
-                  },
-                  "Url": {
-                    "type": [
-                      "string",
-                      "null"
-                    ]
-                  },
-                  "Cj": {
-                    "type": [
-                      "string",
-                      "null"
-                    ]
-                  },
-                  "Ucastnici": {
-                    "type": [
-                      "array",
-                      "null"
-                    ],
-                    "items": {
-                      "$ref": "#/definitions/Ucastnik"
-                    }
-                  },
-                        //ZKRÁCENO!!
-                  "Vec": {
-                    "type": [
-                      "string",
-                      "null"
-                    ]
-                  }
-                }
-              },
-              "searchResultTemplate": {
-                "properties": ["Id","Cj","Rok","Vec"]
-              },
-              "detailTemplate": {
-                "header": "<h3>@(item.Vec)</h3>",
-                "item": "<table><tr><td>Čj</td><td>@(item.Cj)</td><tr>.....<table>",
-                "footer": "",
-                "properties": null
-              }
-            }
+   "id": "rozhodnuti-uohs",
+   "name": "Rozhodnutí UOHS",
+   "datasetId": "rozhodnuti-uohs",
+   "origUrl": "http://www.uohs.cz/cs/verejne-zakazky/sbirky-rozhodnuti/",
+   "sourcecodeUrl": null,
+   "description": "Sbírka rozhodnutí Úřadu pro ochranu hospodářské soutěže od roku 1999 v oblastech hospodářská soutěž, veřejné zakázky, veřejná podpora a významná tržní síla.",
+   "jsonSchema": ".... JSON Schema, viz ukázka na odkazu výše ",
+   "createdBy": "michal@michalblaha.cz",
+   "created": "2018-09-22T10:44:38.7784317+02:00",
+   "betaversion": false,
+   "allowWriteAccess": false,
+   "hidden": false,
+   "searchResultTemplate": {
+      "header": "",
+      "body": "<!-- scriban {{ date.now }} --> .... scriban/liquid template",
+      "footer": "",
+      "title": null,
+      "properties": null
+   },
+   "detailTemplate": {
+      "header": "",
+      "body": "<!-- scriban {{ date.now }} --> .... scriban/liquid template",
+      "footer": "",
+      "title": "@item.Vec",
+      "properties": null
+   },
+   "orderList": [["Nabytí právní moci", "PravniMoc"], ["Účastníci", "Ucastnici.Jmeno.keyword"]]
+}
 ```
 
 * `datasetId` - unikátní jméno datové sady. Má pouze několik omezení 
@@ -331,83 +283,7 @@ s některou z definovaných hodnot, je takový objekt následně a asynchronně 
 
  + Body
 
-            {
-              "name": "Rozhodnuti UOHS",
-              "datasetId": "rozhodnuti-uohs",
-              "origUrl": "http://www.uohs.cz/cs/verejne-zakazky/sbirky-rozhodnuti/",
-              "sourcecodeUrl": null,
-              "description": null,
-              "jsonSchema": {
-                "definitions": {
-                  "Ucastnik": {
-                    "type": [
-                      "object",
-                      "null"
-                    ],
-                    "properties": {
-                      "Jmeno": {
-                        "type": [
-                          "string",
-                          "null"
-                        ]
-                      },
-                      "ICO": {
-                        "type": [
-                          "string",
-                          "null"
-                        ]
-                      }
-                    }
-                  }
-                },
-                "type": "object",
-                "properties": {
-                  "Id": {
-                    "type": [
-                      "string",
-                      "null"
-                    ]
-                  },
-                  "Url": {
-                    "type": [
-                      "string",
-                      "null"
-                    ]
-                  },
-                  "Cj": {
-                    "type": [
-                      "string",
-                      "null"
-                    ]
-                  },
-                  "Ucastnici": {
-                    "type": [
-                      "array",
-                      "null"
-                    ],
-                    "items": {
-                      "$ref": "#/definitions/Ucastnik"
-                    }
-                  },
-                        //ZKRÁCENO!!
-                  "Vec": {
-                    "type": [
-                      "string",
-                      "null"
-                    ]
-                  }
-                }
-              },
-              "searchResultTemplate": {
-                "properties": ["Id","Cj","Rok","Vec"]
-              },
-              "detailTemplate": {
-                "header": "<h3>{Vec}</h3>",
-                "item": "<table><tr><td>Čj</td><td>{Cj}</td><tr>.....<table>",
-                "footer": "",
-                "properties": null
-              }
-            }
+            ..viz https://github.com/HlidacStatu/API/blob/master/register.sample.json
 
 + Response 200 (application/json)
 

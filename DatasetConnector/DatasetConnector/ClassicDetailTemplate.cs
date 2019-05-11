@@ -38,9 +38,9 @@ namespace HlidacStatu.Api.Dataset.Connector
                     sb.Append($"<tr><td>{c.header}</td><td ");
                     if (!string.IsNullOrEmpty(c.style))
                         sb.Append($"style=\"{c.style}\" ");
-                    sb.AppendLine($">{c.content}</td>");
+                    sb.AppendLine($">{c.content}</td></tr>");
                 }
-                sb.Append(@"</tr></table>");
+                sb.Append(@"</table>");
                 return sb.ToString();
             }
 

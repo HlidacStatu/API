@@ -61,6 +61,160 @@ Nejdůležitější, nikoliv jediná pravidla licence:
 API pro získání smluv z Hlídače smluv v JSON formátu
 
 
+### Příklad jednoho záznamu smlouvy:
+
+Není-li uvedeno jinak, jsou údaje z Hlídače státu.
+
+```
+{
+  "identifikator": {
+    "idSmlouvy": "8256587", // Id smlouvy  (z registru smluv)
+    "idVerze": "8911171"  // Id verze smlouvy  (z registru smluv)
+  },
+  "schvalil": null,       // jméno osoby (z registru smluv)
+  "hodnotaBezDph": null,   // (z registru smluv)
+  "hodnotaVcetneDph": null,   // (z registru smluv)
+  "ciziMena": null,   // (z registru smluv)
+  "platnyZaznam": true,     // pokud je false, jde o zneplatnetnou smlouvu
+  "PravniRamec": 2,  //  0=neznámí, 1=do 1.7.2017, 2=po 1.7.2017 včetně , 3= před zákonem o RS
+  "Prilohy": [  //pole obsahující dokumenty/smlouvy
+    {
+      "FileMetadata": null,
+      "data": null,
+      "nazevSouboru": "Sml. 490_2018_D1.pdf", //originalni nazev souboru    // (z registru smluv)
+      "hash": {   //hash souboru, kontrola validity  (z registru smluv) 
+        "algoritmus": "sha256",
+        "Value": "599e7a6a9048c80dca628df84800b09699d83d21fd49cadef654d17fe275f575"
+      },
+        //odkaz na soubor v RS    // (z registru smluv)
+      "odkaz": "https://smlouvy.gov.cz/smlouva/soubor/11761431/Sml.%20490_2018_D1.pdf",
+      "DatlClassification": null,
+      
+      //textová podoba dokumentu
+      "PlainTextContent": "Dodatek i. L ke kupni smlouv6 o doddvce\r\n\r\n  Smluvni strany:\r\n\r\nMuzeum hlavniho města... zkráceno",
+      
+      "PlainTextContentQuality": 3, //způsob získání text.podoby: 
+                    // Unknown = 0,
+                    // Exact = 1, - získáno z txt souboru, přesná podoba
+                    // Calculated = 2, 
+                    // Parsed = 3,  - získáno strojově z dokumentu
+                    // Estimated = 4,  - získáno pomocí OCR, nepřesné
+                    // AddedManual = 5, - doplněno ručně
+
+      
+      
+      "LastUpdate": "2019-08-20T11:45:26.8997187+02:00",  // poslední změna přílohy
+      "LocalCopy": null,
+      "ContentType": null,
+      "Lenght": 2998,        // počet znaků 
+      "WordCount": 356,      // počet slov
+      "Pages": 0,
+      "EnoughExtractedText": true
+    }
+  ],
+  "LastUpdate": "2019-08-20T11:45:26.915326+02:00",   // poslední změna záznamu v HS
+  "CalculatedPriceWithVATinCZK": 0.0,  // cena převedená do Kč s DPH
+  "CalcutatedPriceQuality": 0,    // přesnost vypoctu ceny s Kč s DPH. 1=přesná  2=spočítaný odhad
+  "Classification": { // klasifikace smlouvy podle oboru. Beta verze
+    "LastUpdate": "2019-07-14T18:59:32.161348+02:00",
+    "Version": 0,
+    "Types": [
+      {
+        "TypeValue": 10001,
+        "ClassifProbability": 0.825404859999175
+      },
+      {
+        "TypeValue": 10303,
+        "ClassifProbability": 0.808962865938306
+      },
+      {
+        "TypeValue": 10002,
+        "ClassifProbability": 0.805769168207763
+      },
+      {
+        "TypeValue": 11305,
+        "ClassifProbability": 0.804947288255946
+      },
+      {
+        "TypeValue": 11303,
+        "ClassifProbability": 0.801971530336268
+      },
+      {
+        "TypeValue": 10502,
+        "ClassifProbability": 0.80137540426054
+      },
+      {
+        "TypeValue": 10302,
+        "ClassifProbability": 0.800935862304785
+      }
+    ]
+  },
+  "Issues": [ //nalezené chyby
+    {
+      "IssueTypeId": 100,
+      "Created": "2019-04-30T16:06:44.4791703+02:00",
+      "Title": "Nulová hodnota smlouvy",
+      "TextDescription": "Smlouva nemá v metadatech uvedenu cenu. Utajení hodnoty smlouvy je možné pouze v odůvodněných případech, což při této kontrole nehodnotíme.",
+      "Public": true,
+      "Permanent": false,
+      "Importance": 5,
+      "AffectedParams": null,
+      "AnalyzerType": "HlidacStatu.Plugin.IssueAnalyzers.Price"
+    }
+  ],
+  "Enhancements": [  //provedené úpravy,doplnění smlouvy
+    {
+      "Created": "2019-08-20T11:45:26.8997187+02:00",
+      "Title": "Text přílohy extrahován z obsahu dokumentu ",
+      "Description": "",
+      "Changed": {
+        "ParameterName": "item.Prilohy[0].PlainTextContent",
+        "PreviousValue": "",
+        "NewValue": ""
+      },
+      "Public": true,
+      "EnhancerType": "HlidacStatu.Plugin.Enhancers.TextMiner"
+    }
+  ],
+  "ConfidenceValue": 5.0, //   míra chybovosti smlouvy
+  "Id": "8911171",   // id verze smlouvy
+  "odkaz": "https://smlouvy.gov.cz/smlouva/8911171",  // URL záznamu v registru smluv
+  "casZverejneni": "2019-04-30T16:04:09+02:00",   // datum zveřejnění v RS (z registru smluv) 
+  "VkladatelDoRejstriku": { // subjekt, ktery záznam vložil do RS (z registru smluv) 
+    "datovaSchranka": "4aniq5f",
+    "nazev": "Muzeum hlavního města Prahy",
+    "ico": "00064432",
+    "adresa": " ,  Kožná 1 110 00 Praha 1 Hlavní město Praha, ",
+    "utvar": null
+  },
+  "Platce": { // objednatel (z HS). Pokud v RS není uvedeno, Hlídač odhaduje kdo je plátce 
+    "datovaSchranka": "4aniq5f",
+    "nazev": "Muzeum hlavního města Prahy",
+    "ico": "00064432",
+    "adresa": " ,  Kožná 1 110 00 Praha 1 Hlavní město Praha, ",
+    "utvar": null
+  },
+  "Prijemce": [ // dodavatele (z HS). Pokud v RS není uvedeno, Hlídač odhaduje kdo je dodavatel
+    {
+      "datovaSchranka": "mhx6wg3",
+      "nazev": "FORM, spol. s r.o.",
+      "ico": "43964532",
+      "adresa": "Poručíka Hoši 512/2a, 74711, Kozmice",
+      "utvar": null
+    }
+  ],
+  "predmet": "Dodatek ke kupní smlouvě o dodávce - prodloužení doby plnění",     // z RS
+  "datumUzavreni": "2019-04-26T00:00:00",     // datum uzavrení/podpisu smlouvy, z RS
+  "cisloSmlouvy": null,                // z RS
+  "navazanyZaznam": null,                // z RS
+  "souvisejiciSmlouvy": null,                 // z HS
+  "SVazbouNaPolitiky": null,     // z HS, vzdy prazdne
+  "SVazbouNaPolitikyNedavne": null,     // z HS, vzdy prazdne
+  "SVazbouNaPolitikyAktualni": null     // z HS, vzdy prazdne
+}
+```
+
+
 #### Jednotlivá smlouva [GET /detail/{id_smlouvy}?nice={nice}&json=1]
 
 Příklad: `https://www.hlidacstatu.cz/Api/v1/Detail/204737?json=1&nice=1`
@@ -77,6 +231,9 @@ Příklad: `https://www.hlidacstatu.cz/Api/v1/Detail/204737?json=1&nice=1`
 
 
 + Response 200 (application/json)
+
+        viz níže
+
 
 
 

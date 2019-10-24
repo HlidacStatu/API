@@ -426,8 +426,13 @@ Pokud libovolný objekt (v rootu, v poli či ve vložených objektech) obsahuje 
 s některou z definovaných hodnot, je takový objekt následně a asynchronně zpracován a doplněn o další údaje na straně Hlídače.
 
 * `"HsProcessType": "person"` - definuje, že se jedná o objekt obsahující údaje o osobě, kterou chcete provázat s databází osob Hlídače.
-    Tento typ předpokládá, že je uveden u objektu obsahující tyto atributy: `Jmeno` (string),`Prijmeni` (string),`Narozeni` (date),`OsobaId` (string) 
-    anebo `Name` (string),`Surname` (string),`Birthdate` (date),`OsobaId` (string)
+    Tento typ předpokládá, že je uveden u objektu obsahující tyto atributy: 
+    * `Jmeno` nebo `Name` (string)
+    * `Prijmeni` nebo `Surname` (string)
+        * anebo namísto `Jmeno` a `Prijmeni` pouze jeden atribut `CeleJmeno` nebo `Fullname`
+    * `Narozeni` nebo `Birthdate` (date)
+    * `OsobaId` (string) 
+    
     Hodnota `OsobaId` nemusí a neměla by být vyplněna. Při vložení záznamu do Datasetu Hlídač automaticky doplní `OsobaId` a prováže tak záznam s databází osob Hlídače.
     **Všechny uvedené atributy včetně `OsobaId` musí být uvedeny v JSONSchema datasetu.**
 

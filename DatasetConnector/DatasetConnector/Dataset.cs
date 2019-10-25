@@ -6,7 +6,7 @@ namespace HlidacStatu.Api.Dataset.Connector
 {
 	public class Dataset<TData> where TData : IDatasetItem
 	{
-		public Dataset(string name, string datasetId, string origUrl, string description = "", string sourceCodeUrl = "", bool betaVersion = true, bool allowWriteAccess = false, string[,] orderList = null, Template searchResultTemplate = null, Template detailTemplate = null)
+		public Dataset(string name, string datasetId, string origUrl, string description = "", string sourceCodeUrl = "", bool betaVersion = true, bool allowWriteAccess = false, string[,] orderList = null, Template searchResultTemplate = null, Template detailTemplate = null, bool hidden = false)
 		{
 			Name = name;
 			DatasetId = datasetId;
@@ -18,7 +18,7 @@ namespace HlidacStatu.Api.Dataset.Connector
 			OrderList = orderList;
 			SearchResultTemplate = searchResultTemplate;
 			DetailTemplate = detailTemplate;
-
+            Hidden = hidden;
 			var jsonGen = new JSchemaGenerator
 			{
 				DefaultRequired = Required.Default
@@ -34,6 +34,7 @@ namespace HlidacStatu.Api.Dataset.Connector
 		public string JsonSchema { get; private set; }
 		public bool BetaVersion { get; private set; }
 		public bool AllowWriteAccess { get; private set; }
+        public bool Hidden { get; private set; }
 		public string[,] OrderList { get; private set; }
 		public Template SearchResultTemplate { get; private set; }
 		public Template DetailTemplate { get; private set; }

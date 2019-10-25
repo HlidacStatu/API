@@ -25,17 +25,23 @@ namespace HlidacStatu.Api.Dataset.Connector
             HttpClient.DefaultRequestHeaders.Add("Authorization", ApiToken);
         }
 
-        public async Task<string> AddItemToDataset<TData>(Dataset<TData> dataset, TData item)
+        public enum AddItemMode
+        {
+            Skip,
+            Rewrite,
+            Merge
+        }
+        public async Task<string> AddItemToDataset<TData>(Dataset<TData> dataset, TData item, AddItemMode mode =  AddItemMode.Skip)
             where TData : IDatasetItem
         {
-            return await AddItemToDataset<TData>(dataset.DatasetId, item);
+            return await AddItemToDataset<TData>(dataset.DatasetId, item, mode);
         }
 
-        public async Task<string> AddItemToDataset<TData>(string datasetId, TData item)
+        public async Task<string> AddItemToDataset<TData>(string datasetId, TData item, AddItemMode mode = AddItemMode.Skip)
 			where TData : IDatasetItem
 		{
 			var content = new StringContent(JsonConvert.SerializeObject(item));
-			var response = await HttpClient.PostAsync(apiRoot + $"/DatasetItem/{datasetId}/{item.Id}", content);
+			var response = await HttpClient.PostAsync(apiRoot + $"/DatasetItem/{datasetId}/{item.Id}?mode={mode.ToString()}", content);
 			var result = JObject.Parse(await response.Content.ReadAsStringAsync());
 			if (result["error"] == null)
 			{

@@ -56,9 +56,12 @@ namespace HlidacStatu.Api.Dataset.Connector
             where TData : IDatasetItem
         {
             var response = await HttpClient.GetAsync(apiRoot + "/Datasets/" + dataset.DatasetId);
-            var content = await response.Content.ReadAsStringAsync();
+            var result = JObject.Parse(await response.Content.ReadAsStringAsync());
 
-            return JContainer.Parse(content).HasValues;
+            if (result["error"] == null)
+                return true;
+            else
+                return false;
         }
 
         public async Task<string> CreateDataset<TData>(Dataset<TData> dataset)

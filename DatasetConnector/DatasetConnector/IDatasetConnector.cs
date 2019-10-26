@@ -8,7 +8,8 @@ namespace HlidacStatu.Api.Dataset.Connector
         Task<string> AddItemToDataset<TData>(string datasetId, TData item, DatasetConnector.AddItemMode mode) where TData : IDatasetItem;
 
         Task<TData> GetItemFromDataset<TData>(string datasetId, string id) where TData : IDatasetItem;
-        Task<SearchResult<TData>> SearchItemsInDataset<TData>(string datasetId, string query, int page) where TData : IDatasetItem;
+        Task<SearchResult<TData>> SearchItemsInDataset<TData>(string datasetId, string query, int page, string sort, bool desc) 
+            where TData : IDatasetItem;
 
         Task<bool> DatasetExists<TData>(Dataset<TData> dataset) where TData : IDatasetItem;
 		Task DeleteDataset<TData>(Dataset<TData> dataset) where TData : IDatasetItem;

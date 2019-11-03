@@ -1118,8 +1118,9 @@ Pokud není `format` určen, je null nebo prázdný, použije se formát `d.M.yy
 
 `string fn_FormatNumber(dynamic value, string format = null)` - naformátuje číslo. Formát může mít hodnoty "cs" nebo "en". Podle toho je zvolen formát čísla.
 
-`fn_FormatPrice(dynamic value, string mena = "Kč")` - naformátuje číslo jako cenu s měnou Kč
+`string fn_FormatPrice(dynamic value, string mena = "Kč")` - naformátuje číslo jako cenu s měnou Kč
 
+`string fn_Pluralize(dynamic pocet, string zeroText, string oneText, string twoText, string moreText)` - slova/věty v závislosti podle počtu. příklad: `fn_Pluralize total  "žádné nové zakázky"  "jednu novou zakázku"  "{0} nové zakázky"  "{0} nových zakázek"`
 
 
 

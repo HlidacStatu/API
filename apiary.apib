@@ -266,7 +266,7 @@ Příklad: `https://www.hlidacstatu.cz/Api/v1/Detail/204737?json=1&nice=1`
 + Response 200 (application/json)
 
 
-#### Export (Dump) smluv - přehled dostupných exportů [GET /dumps]
+#### Export (Dump) smluv a dalších databází - přehled dostupných exportů [GET /dumps]
 Seznam dostupných denních a měsíčních dumpů v JSON
 
 + Request (application/json)
@@ -283,14 +283,18 @@ Seznam dostupných denních a měsíčních dumpů v JSON
               "date":"\/Date(1503584641162)\/",               //datum, ke kteremu se vztahuje
               "size":34670034,                                //velikost souboru
               "fulldump":true,                                //pokud true, pak je to dump vsech smluv, jinak denni dump
+              "datatype" : "smlouvy"                          //může být i libovolná db z hlidacstatu.cz/data
               "created":"\/Date(1503584641162)\/"             //datum vytvoreni dumpu
            },
          .....
         ]
 
-#### Stáhnutí exportu všech smluv [GET /dump]
+#### Stáhnutí exportu všech smluv či jiný databází [GET /dump?datatype={datatype}]
 Stáhnutí posledního plnému dumpu, obvykle se vytváří 1x týdně. 
 Detaily o souboru dává `[GET /dumps]` 
+
++ Parameters
+    + datatype: `smlouvy` {string, required} - ci nazev jine databaze
 
 + Request (application/json)
  + Headers

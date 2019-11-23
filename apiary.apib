@@ -7,7 +7,10 @@ HOST: https://www.hlidacstatu.cz/api/v1
 > Předem díky za upozornění na chyby, nepřesnosti a nejasný popis.
 ---
 ## Verze a změny
-`verze 1.3.0, poslední změna 03.11.2019`
+`verze 1.3.1, poslední změna 23.11.2019`
+
+* Změny 03.11.2019
+    * přidána funkce `fn_RenderPersonNoLink`.
 
 * Změny 03.11.2019
     * API Dumps podporuji i další typy dat než jen smlouvy.
@@ -1115,6 +1118,8 @@ V praxi se odstraní nadbytečné a příliš se opakující řádky a další s
 `string fn_RenderPersonStatistic(string osobaId, bool twoLines = false, string prefix = "", string postfix = "")` - pro existující osobu vrací základní statistiku vztahů na osobu navázaných firem se státem. Jinak prázdný řetezec.
 
 `string fn_RenderPersonWithLink2(string osobaId)` -  vrací jméno, příjmení a rok narození osoby s odkazem na její profil. Pokud osoba neexistuje, vrací prázdný string
+
+`string fn_RenderPersonNoLink(string osobaId, string jmeno="", string prijmeni="", string rokNarozeni ="") - vrací jméno osoby podle osobaId. Pokud není nalezena, vrátí osobu v dalších parametrech nebo prázdný string
 
 `string fn_RenderCompanyWithLink(string ico)` - pro existující firmu vrací její název a odkaz na její profil. Jinak vrátí pouze IČO.
 

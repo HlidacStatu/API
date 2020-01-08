@@ -1,0 +1,1392 @@
+openapi: "3.0.2"
+info:
+  title: "REST API Hlídače státu"
+  description: "REST API Hlídače státu"
+  version: "2.0.0"
+  contact:
+    email: "podpora@hlidacstatu.cz"
+
+servers:
+- url: "http://www.hlidacstatu.cz/api/v2.0.0"
+  description: "hlidacstatu.cz"
+
+tags:
+- name: smlouvy
+  description: Práce s registrem smluv
+- name: verejne_zakazky
+  description: Práce s registrem veřejných zakázek
+- name: datasety
+  description: Datasety tvořené uživateli Hlídače
+- name: osoby
+  description: Databáze osob
+- name: subjekty
+  description: Databáze subjektů (osoby, úřady, firmy...)
+
+paths:
+  /smlouvy/hledat:
+    get:
+      summary: Hledá smlouvy v databázi podle vyhledávacího parametru
+      tags:
+        - smlouvy
+      parameters:
+        - $ref: "#/components/parameters/VyhledavaciParametr"
+        - $ref: "#/components/parameters/CisloStranky"
+        - $ref: "#/components/parameters/PocetVysledkuNaStranku"
+        - $ref: "#/components/parameters/RazeniParametr"
+        - $ref: "#/components/parameters/RazeniSmer"
+      responses:
+        200:
+          description: Úspěšně vrácen seznam smluv
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - celkem
+                  - smlouvy
+                properties:
+                  celkem:
+                    description: Celkový počet výsledků v databázi, které odpovídají vyhledávacímu parametru
+                    type: integer
+                  smlouvy:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Smlouva"
+        400:
+          $ref: "#/components/responses/ChybneParametry"
+        401:
+          $ref: "#/components/responses/Neautorizovano"
+        500:
+          $ref: "#/components/responses/InterniChyba"
+
+  /smlouvy/detail/{id}:
+    get:
+      summary: Zobrazí jednu smlouvu podle zadaného ID (ID verze)
+      tags:
+        - smlouvy
+      parameters:
+        - name: id
+          in: path
+          description: unikátní ID smlouvy, která se má zobrazit (ID verze)
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Úspěšně vrácena smlouva
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Smlouva"
+        400:
+          $ref: "#/components/responses/ChybneParametry"
+        401:
+          $ref: "#/components/responses/Neautorizovano"
+        404:
+          $ref: "#/components/responses/Nenalezeno"
+        500:
+          $ref: "#/components/responses/InterniChyba"
+
+  /verejne_zakazky/hledat:
+    get:
+      summary: Hledá veřejné zakázky v databázi podle vyhledávacího parametru
+      tags:
+        - verejne_zakazky
+      parameters:
+        - $ref: "#/components/parameters/VyhledavaciParametr"
+        - $ref: "#/components/parameters/CisloStranky"
+        - $ref: "#/components/parameters/PocetVysledkuNaStranku"
+        - $ref: "#/components/parameters/RazeniParametr"
+        - $ref: "#/components/parameters/RazeniSmer"
+      responses:
+        200:
+          description: Úspěšně vrácen seznam veřejných zakázek
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - celkem
+                  - zakazky
+                properties:
+                  celkem:
+                    description: Celkový počet dokumentů v databázi, které odpovídají vyhledávacímu parametru
+                    type: integer
+                  zakazky:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/VerejnaZakazka"
+        400:
+          $ref: "#/components/responses/ChybneParametry"
+        401:
+          $ref: "#/components/responses/Neautorizovano"
+        500:
+          $ref: "#/components/responses/InterniChyba"
+
+  /verejne_zakazky/detail/{id}:
+    get:
+      summary: Zobrazí jednu veřejnou zakázku podle zadaného ID
+      tags:
+        - verejne_zakazky
+      parameters:
+        - name: id
+          in: path
+          description: unikátní ID veřejné zakázky, která se má zobrazit
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Úspěšně vrácena veřejná zakázka
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VerejnaZakazka"
+        400:
+          $ref: "#/components/responses/ChybneParametry"
+        401:
+          $ref: "#/components/responses/Neautorizovano"
+        404:
+          $ref: "#/components/responses/Nenalezeno"
+        500:
+          $ref: "#/components/responses/InterniChyba"
+
+  /datasety:
+    get:
+      summary: Zobrazí seznam všech datasetů. Vrátí se jen základní hodnoty (jméno a popis)
+      tags:
+        - datasety
+      responses:
+        200:
+          description: Úspěšně vrácen seznam datasetů
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/DatasetZakladniInfo"
+        401:
+          $ref: "#/components/responses/Neautorizovano"
+        500:
+          $ref: "#/components/responses/InterniChyba"
+
+  /datasety/{dataset_id}:
+    get:
+      summary: Zobrazí definici (existujícího) datasetu s určitým ID
+      tags:
+        - datasety
+      parameters:
+        - $ref: "#/components/parameters/DatasetID"
+      responses:
+        200:
+          description: Úspěšně vrácena definice datasetu
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DatasetDefinice"
+        400:
+          $ref: "#/components/responses/ChybneParametry"
+        401:
+          $ref: "#/components/responses/Neautorizovano"
+        404:
+          $ref: "#/components/responses/Nenalezeno"
+        500:
+          $ref: "#/components/responses/InterniChyba"
+
+    post:
+      summary: Aktualizuje definici stávajícího datasetu.
+      description: |
+        Pokud je v definici datasetu ``allowWriteAccess`` nastaveno na ``true``, pak tuto operaci může
+        provést kdokoliv. Jinak ji může provést jenom původní zakladatel datasetu.
+      tags:
+      - datasety
+      parameters:
+        - $ref: "#/components/parameters/DatasetID"
+      requestBody:
+        description: Nová definice datové sady. Není povoleno změnit ID datové sady a ``jsonSchema``.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DatasetDefinice"
+      responses:
+        200:
+          description: Dataset byl úspěšně aktualizován
+        400:
+          $ref: "#/components/responses/ChybneParametry"
+        401:
+          $ref: "#/components/responses/Neautorizovano"
+        403:
+          $ref: "#/components/responses/Nedovoleno"
+        404:
+          $ref: "#/components/responses/Nenalezeno"
+        500:
+          $ref: "#/components/responses/InterniChyba"
+
+    delete:
+      summary: Smaže datový zdroj včetně uložených záznamů. Může provést pouze uživatel, který ho založil.
+      tags:
+      - datasety
+      parameters:
+        - $ref: "#/components/parameters/DatasetID"
+      responses:
+        200:
+          description: Dataset byl úspěšně smazán
+        400:
+          $ref: "#/components/responses/ChybneParametry"
+        401:
+          $ref: "#/components/responses/Neautorizovano"
+        403:
+          $ref: "#/components/responses/Nedovoleno"
+        404:
+          $ref: "#/components/responses/Nenalezeno"
+        500:
+          $ref: "#/components/responses/InterniChyba"
+
+  /datasety/{dataset_id}/vytvorit:
+    post:
+      summary: Přidá nový dataset
+      tags:
+        - datasety
+      parameters:
+        - $ref: "#/components/parameters/DatasetID"
+      requestBody:
+        description: Definice nové datové sady
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DatasetDefinice"
+      responses:
+        200:
+          description: Dataset byl úspěšně vytvořen
+        400:
+          $ref: "#/components/responses/ChybneParametry"
+        401:
+          $ref: "#/components/responses/Neautorizovano"
+        409:
+          $ref: "#/components/responses/JizExistuje"
+        500:
+          $ref: "#/components/responses/InterniChyba"
+
+  /datasety/{dataset_id}/zaznamy/{zaznam_id}:
+    post:
+      summary: Přidá nový záznam nebo aktualizuje stávající záznam
+      tags:
+        - datasety
+      parameters:
+        - $ref: "#/components/parameters/DatasetID"
+        - $ref: "#/components/parameters/DatasetZaznamID"
+      requestBody:
+        description: Záznam, který se má přidat nebo aktualizovat. Musí odpovídat JSON schématu v definici datasetu.
+        required: true
+        content:
+          application/json:
+            schema: {}
+      responses:
+        200:
+          description: Záznam byl úspěšně vytvořen
+        400:
+          $ref: "#/components/responses/ChybneParametry"
+        401:
+          $ref: "#/components/responses/Neautorizovano"
+        403:
+          $ref: "#/components/responses/Nedovoleno"
+        404:
+          $ref: "#/components/responses/Nenalezeno"
+        500:
+          $ref: "#/components/responses/InterniChyba"
+
+    delete:
+      summary: Smaže existující záznam v datové sadě
+      tags:
+        - datasety
+      parameters:
+        - $ref: "#/components/parameters/DatasetID"
+        - $ref: "#/components/parameters/DatasetZaznamID"
+      responses:
+        200:
+          description: Záznam byl úspěšně smazán
+        400:
+          $ref: "#/components/responses/ChybneParametry"
+        401:
+          $ref: "#/components/responses/Neautorizovano"
+        403:
+          $ref: "#/components/responses/Nedovoleno"
+        404:
+          $ref: "#/components/responses/Nenalezeno"
+        500:
+          $ref: "#/components/responses/InterniChyba"
+
+    get:
+      summary: Vrátí záznam v datové sadě
+      tags:
+        - datasety
+      parameters:
+        - $ref: "#/components/parameters/DatasetID"
+        - $ref: "#/components/parameters/DatasetZaznamID"
+      responses:
+        200:
+          description: Záznam byl nalezen a vrácen
+          content:
+            application/json:
+              schema: {}
+        400:
+          $ref: "#/components/responses/ChybneParametry"
+        401:
+          $ref: "#/components/responses/Neautorizovano"
+        404:
+          $ref: "#/components/responses/Nenalezeno"
+        500:
+          $ref: "#/components/responses/InterniChyba"
+
+  /datasety/{dataset_id}/hledat:
+    get:
+      summary: Hledá záznamy v datové sadě podle vyhledávacího parametru
+      tags:
+        - datasety
+      parameters:
+        - $ref: "#/components/parameters/DatasetID"
+        - $ref: "#/components/parameters/VyhledavaciParametr"
+        - $ref: "#/components/parameters/CisloStranky"
+        - $ref: "#/components/parameters/PocetVysledkuNaStranku"
+        - $ref: "#/components/parameters/RazeniParametr"
+        - $ref: "#/components/parameters/RazeniSmer"
+      responses:
+        200:
+          description: Úspěšně vrácen seznam záznamů
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - celkem
+                  - zaznamy
+                properties:
+                  celkem:
+                    description: Celkový počet výsledků v databázi, které odpovídají vyhledávacímu parametru
+                    type: integer
+                  zaznamy:
+                    type: array
+                    description: Pole vrácených záznamů
+                    items: {}
+        400:
+          $ref: "#/components/responses/ChybneParametry"
+        401:
+          $ref: "#/components/responses/Neautorizovano"
+        404:
+          $ref: "#/components/responses/Nenalezeno"
+        500:
+          $ref: "#/components/responses/InterniChyba"
+
+  /datasety/{dataset_id}/notifikace:
+    post:
+      summary: Nastaví odesílání notifikace na e-mail o tom, že došlo k přidání nebo úpravě záznamů (vždy max jednou za 24 hodin).
+      tags:
+        - datasety
+      parameters:
+        - $ref: "#/components/parameters/DatasetID"
+        - name: zasilat
+          in: query
+          required: true
+          description: |
+            Zda se mají zasílat notifikace:
+            * ``vzdy``: pokud dojde k přidání, úpravě nebo smazání záznamu
+            * ``jen_pridani``: pokud dojde k přidání nového záznamu
+            * ``jen_uprava``: pokud dojde k úpravě nebo smazání stávajícího záznamu
+            * ``nikdy``: vypnout zasílání notifikací
+          schema:
+              type: string
+              description: |
+                Zda se mají zasílat notifikace:
+                * ``vzdy``: pokud dojde k přidání, úpravě nebo smazání záznamu
+                * ``jen_pridani``: pokud dojde k přidání nového záznamu
+                * ``jen_uprava``: pokud dojde k úpravě nebo smazání stávajícího záznamu
+                * ``nikdy``: vypnout zasílání notifikací
+      responses:
+        200:
+          description: Nové nastavení notifikací bylo uloženo
+        400:
+          $ref: "#/components/responses/ChybneParametry"
+        401:
+          $ref: "#/components/responses/Neautorizovano"
+        404:
+          $ref: "#/components/responses/Nenalezeno"
+        500:
+          $ref: "#/components/responses/InterniChyba"
+    get:
+      summary: Zjistí aktuální nastavení odesílání notifikace na e-mail o tom, že došlo k přidání nebo úpravě záznamů (vždy max jednou za 24 hodin).
+      tags:
+        - datasety
+      parameters:
+        - $ref: "#/components/parameters/DatasetID"
+      responses:
+        200:
+          description: Vráceno aktuální nastavení notifikací
+          content:
+            application/json:
+              schema:
+                type: string
+                description: |
+                  Zda se zasílají notifikace:
+                  * ``vzdy``: pokud dojde k přidání, úpravě nebo smazání záznamu
+                  * ``jen_pridani``: pokud dojde k přidání nového záznamu
+                  * ``jen_uprava``: pokud dojde k úpravě nebo smazání stávajícího záznamu
+                  * ``nikdy``: vypnuto
+        400:
+          $ref: "#/components/responses/ChybneParametry"
+        401:
+          $ref: "#/components/responses/Neautorizovano"
+        404:
+          $ref: "#/components/responses/Nenalezeno"
+        500:
+          $ref: "#/components/responses/InterniChyba"
+
+  /osoby/hledat_presne:
+    get:
+      summary: Podle správně zadaného jména, příjmení a data narození osoby dohledá identifikátor osoby v databázi Hlídače
+      description: |
+        ``OsobaId`` je pro Hlídač Státu primární identifikátor pro provázaní osob. Pokud zpracováváte datový zdroj, který
+        pracuje s osobami, dohledejte ID osoby před vložením záznamu do datasetu pomocí tohoto API. Pote ho pod názvem
+        vlastnosti ``OsobaId`` uložte do vaší datové struktury. Výrazně tím zlepšíte kvalitu dat v Datasetu.
+      tags:
+        - osoby
+      parameters:
+        - in: query
+          name: jmeno
+          description: Křestní jméno osoby
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: prijmeni
+          description: Příjmení osoby
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: narozeni
+          description: Datum narození osoby ve formátu YYYY-MM-DD
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Vše v pořádku, vrácen identifikátor
+          content:
+            application/json:
+              schema:
+                type: string
+        404:
+          description: Požadavek byl v pořádku, ale žádnou osobu odpovídající zadaným parametrům jsme nenašli
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Chyba"
+        400:
+          $ref: "#/components/responses/ChybneParametry"
+        401:
+          $ref: "#/components/responses/Neautorizovano"
+        500:
+          $ref: "#/components/responses/InterniChyba"
+
+  /subjekty/hledat_presne:
+    get:
+      summary: Podle správně zadaného jména firmy dohledá IČO a datové schránky
+      tags:
+        - subjekty
+      parameters:
+        - in: query
+          name: jmeno
+          description: Jméno firmy
+          required: true
+          schema:
+            type: string
+          # TODO v původním API se to kódovalo pomocí URL kódování, ale to je hovadina, ne?
+      responses:
+        200:
+          description: Vše v pořádku, vráceno IČO a seznam identifikátorů datových schránek
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - ICO
+                  - Jmeno
+                  - DatovaSchranka
+                properties:
+                  ICO:
+                    type: string
+                    description: IČO firmy
+                  Jmeno:
+                    type: string
+                    description: Jméno firmy
+                  DatovaSchranka:
+                    type: array
+                    description: Seznam identifikátorů datových stránek, které firmě náleží
+                    items:
+                      type: string
+        404:
+          description: Požadavek byl v pořádku, ale žádný subjekt odpovídající názvu jsme nenašli
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Chyba"
+        400:
+          $ref: "#/components/responses/ChybneParametry"
+        401:
+          $ref: "#/components/responses/Neautorizovano"
+        500:
+          $ref: "#/components/responses/InterniChyba"
+
+security:
+  - api_klic: []
+
+components:
+  responses:
+    Neautorizovano:
+      description: Nesprávný autorizační token
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Chyba"
+
+    Nedovoleno:
+      description: Operace není tomuto uživateli povolena
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Chyba"
+
+    InterniChyba:
+      description: Došlo k interní chybě na serveru
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Chyba"
+
+    ChybneParametry:
+      description: Některé z předaných parametrů byly zadané nesprávně
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Chyba"
+
+    Nenalezeno:
+      description: Požadovaný dokument nebyl nalezen
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Chyba"
+
+    JizExistuje:
+      description: Dokument, který chcete vytvořit, již existuje
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Chyba"
+
+  securitySchemes:
+    api_klic:
+      type: apiKey
+      description: Klíč je k dispozici každému zaregistrovanému a přihlášenému uživateli na <https://www.hlidacstatu.cz/api/v1/Index>
+      name: X-Auth-Token  # XXX zmena nazvu hlavicky
+      in: header
+
+  parameters:
+
+    DatasetZaznamID:
+      name: zaznam_id
+      in: path
+      description: Unikátní ID záznamu v datové sadě
+      required: true
+      schema:
+        type: string
+        description: Unikátní ID záznamu v datové sadě
+
+    DatasetID:
+      name: dataset_id
+      in: path
+      description: Unikátní ID datové sady
+      required: true
+      schema:
+        type: string
+        description: Unikátní ID datové sady
+
+    VyhledavaciParametr:
+      name: q
+      in: query
+      required: true
+      description: Vyhledávací parametr, viz <https://www.hlidacstatu.cz/napoveda>
+      schema:
+        type: string
+        description: Vyhledávací parametr, viz <https://www.hlidacstatu.cz/napoveda>
+
+    CisloStranky:
+      name: strana
+      in: query
+      required: false
+      description: Číslo stránky s výsledkem
+      schema:
+        type: integer
+        description: Číslo stránky s výsledkem
+
+    PocetVysledkuNaStranku:
+      name: pocet_vysledku
+      in: query
+      required: false
+      description: Počet výsledků na jednu stranu
+      schema:
+        type: integer
+        description: Počet výsledků na jednu stranu
+
+    RazeniParametr:
+      name: razeni
+      in: query
+      required: false
+      description: Podle kterého parametru v JSONu záznamu řadit výsledky. Pokud není uvedeno, řadí se podle relevance.
+      schema:
+        type: string
+        description: Podle kterého parametru v JSONu záznamu řadit výsledky. Pokud není uvedeno, řadí se podle relevance.
+
+    RazeniSmer:
+      name: smer_razeni
+      in: query
+      required: false
+      description: Směr řazení výsledků. Buď ``vzestupne``/``asc``, nebo ``sestupne``/``desc``. Default je vzestupně.
+      schema:
+        type: string
+        description: Směr řazení výsledků. Buď ``vzestupne``/``asc``, nebo ``sestupne``/``desc``. Default je vzestupně.
+
+  schemas:
+    Chyba:
+      type: object
+      required:
+        - chyba
+      properties:
+        chyba:
+          type: string
+
+    Smlouva:
+      type: object
+      required:
+      - identifikator
+      - Id
+      - odkaz
+      - casZverejneni
+      - schvalil
+      - hodnotaBezDph
+      - hodnotaVcetneDph
+      - ciziMena
+      - platnyZaznam
+      - PravniRamec
+      - predmet
+      - datumUzavreni
+      - cisloSmlouvy
+      - navazanyZaznam
+      - souvisejiciSmlouvy
+      - LastUpdate
+      - CalculatedPriceWithVATinCZK
+      - CalcutatedPriceQuality
+      - ConfidenceValue
+      - VkladatelDoRejstriku
+      - Platce
+      - Prijemce
+      - Classification
+      - Issues
+      - Enhancements
+      - Prilohy
+      properties:
+        identifikator:
+          type: object
+          required: ["idSmlouvy", "idVerze"]
+          properties:
+            idSmlouvy:
+              type: string
+              description: "ID smlouvy (z registru smluv)"
+            idVerze:
+              type: string
+              description: "ID verze smlouvy (z registru smluv), unikátní"
+        Id:
+          type: string
+          description: "ID verze smlouvy (z registru smluv), unikátní"
+        odkaz:
+          type: string
+          description: "odkaz na záznam v registru smluv"
+        casZverejneni:
+          type: string
+          description: "datum zveřejnění v registru smluv"
+        schvalil:
+          type: string
+          nullable: true
+          description: "jméno osoby (z registru smluv)"
+        hodnotaBezDph:
+          type: number
+          nullable: true
+        hodnotaVcetneDph:
+          type: number
+          nullable: true
+        ciziMena:
+          type: object
+          nullable: true
+          description: "je nenullové, pokud je cena určena v cizí měně"
+          required: ["hodnota", "mena"]
+          properties:
+            hodnota:
+              type: number
+            mena:
+              type: string
+              description: "např. EUR"
+        platnyZaznam:
+          type: boolean
+          description: "pokud je false, jde o zneplatnenou smlouvu"
+        PravniRamec:
+          type: integer
+          description: |
+            0 = neznámý
+
+            1 = do 1. 7. 2017: bez sankcí v případě neodeslání smlouvy do registru
+
+            2 = po 1. 7. 2017 včetně: možnost sankcí (zneplatnění) v případě neodeslání smlouvy do registru
+
+            3 = před zákonem o Registru smluv
+        predmet:
+          type: string
+        datumUzavreni:
+          type: string
+        cisloSmlouvy:
+          type: string
+        navazanyZaznam:
+          nullable: true
+          type: string
+          description: "ID verze smlouvy, která je na tento záznam navázaná (typicky předchozí verze)"
+        souvisejiciSmlouvy:
+          nullable: true
+          type: array
+          items:
+            type: string
+          description: "ID verze smluv, které se týkají stejných smluvních stran a podobných témat"
+        # SVazbouNaPolitiky:
+        #   nullable: true
+        #   description: "vždy null"
+        # SVazbouNaPolitikyNedavne:
+        #   nullable: true
+        #   description: "vždy null"
+        # SVazbouNaPolitikyAktualni:
+        #   nullable: true
+        #   description: "vždy null"
+        LastUpdate:
+          type: string
+        CalculatedPriceWithVATinCZK:
+          type: number
+        CalcutatedPriceQuality:
+          type: integer
+          description: |
+            přesnost výpočtu ceny s Kč s DPH
+
+            * 0 = cena neuvedena
+            * 1 = přesná
+            * 2 = spočítaný odhad
+        ConfidenceValue:
+          type: number
+          description: "míra chybovosti smlouvy"
+        VkladatelDoRejstriku:
+          "$ref": "#/components/schemas/SmlouvaSubjekt"
+        Platce:
+          "$ref": "#/components/schemas/SmlouvaSubjekt"
+        Prijemce:
+          "$ref": "#/components/schemas/SmlouvaSubjekty"
+
+        Classification:
+          description: "klasifikace smlouvy podle oboru. Beta verze"
+          type: object
+          nullable: true
+          required:
+            - LastUpdate
+            - Version
+            - Types
+          properties:
+            LastUpdate:
+              type: string
+            Version:
+              type: integer
+            Types:
+              type: array
+              items:
+                type: object
+                required:
+                - TypeValue
+                - ClassifProbability
+                properties:
+                  TypeValue:
+                    type: integer
+                    description: "viz https://github.com/HlidacStatu/HlidacStatu/blob/master/Lib/Data/Smlouva.SClassification.cs TODO"
+                  ClassifProbability:
+                    type: number
+        Issues:
+          description: "seznam problémů, které smlouva má"
+          type: array
+          items:
+            type: object
+            required:
+            - IssueTypeId
+            - Created
+            - Title
+            - TextDescription
+            - Public
+            - Permanent
+            - Importance
+            - AffectedParams
+            - AnalyzerType
+            properties:
+              IssueTypeId:
+                description: "ID problému; seznam ID zatím nezveřejněn"
+                type: integer
+              Created:
+                type: string
+                description: "kdy byl záznam o problému vytvořen"
+              Title:
+                type: string
+                description: "krátký popis problému"
+              TextDescription:
+                type: string
+                description: "dlouhý popis problému"
+              Public:
+                type: boolean
+                description: "neveřejná poznámka"
+              Permanent:
+                type: boolean
+                description: "problém je trvalý"
+              Importance:
+                type: integer
+                description: "problém je důležitý"
+              AffectedParams:
+                description: "dodatečná data analyzéru"
+                nullable: true
+              AnalyzerType:
+                type: string
+                description: "jméno použitého analyzéru"
+
+        Enhancements:
+          description: "provedené úpravy, doplnění smlouvy"
+          type: array
+          items:
+            type: object
+            required:
+            - Created
+            - Title
+            - Description
+            - Changed
+            - Public
+            - EnhancerType
+            properties:
+              Created:
+                type: string
+                description: "datum provedení úpravy"
+              Title:
+                type: string
+                description: "krátký popis úpravy"
+              Description:
+                description: "dlouhý popis úpravy"
+              Changed:
+                description: "parametr, který byl změněn"
+                type: object
+                required:
+                - ParameterName
+                - PreviousValue
+                - NewValue
+                properties:
+                  ParameterName:
+                    type: string
+                    description: "JSON cesta k parametru"
+                  PreviousValue:
+                    nullable: true
+                  NewValue:
+                    nullable: true
+              Public:
+                type: boolean
+                description: "zda je změna veřejná nebo ne"
+              EnhancerType:
+                type: string
+                description: "jméno třídy, která provedla změnu"
+        Prilohy:
+          type: array
+          items:
+            "$ref": "#/components/schemas/SmlouvaPriloha"
+
+
+    SmlouvaSubjekt:
+      type: object
+      required:
+      - datovaSchranka
+      - nazev
+      - ico
+      - adresa
+      - utvar
+      properties:
+        datovaSchranka:
+          type: string
+        nazev:
+          type: string
+        ico:
+          type: string
+        adresa:
+          type: string
+          nullable: true
+        utvar:
+          type: string
+          nullable: true
+
+    SmlouvaSubjekty:
+      type: array
+      items:
+        "$ref": "#/components/schemas/SmlouvaSubjekt"
+
+    SmlouvaPriloha:
+      type: object
+      required:
+      - FileMetadata
+      - nazevSouboru
+      - hash
+      - odkaz
+      - PlainTextContent
+      - PlainTextContentQuality
+      - LastUpdate
+      - ContentType
+      - Length
+      - WordCount
+      - Pages
+      - EnoughExtractedText
+      properties:
+        FileMetadata:
+          type: string
+          nullable: true
+          description: "metadata ze souboru"
+        # data:
+        #   type: string
+        #   nullable: true
+        #   description: nevíme, co to dělá
+        nazevSouboru:
+          type: string
+        hash:
+          type: object
+          required:
+          - algoritmus
+          - value
+          properties:
+            algoritmus:
+              type: string
+            value:
+              type: string
+        odkaz:
+          type: string
+          description: "odkaz na původní soubor"
+        # DatlClassification:
+        #   type: object
+        #   nullable: true
+        #   description: datlowe classification, teď se nepoužívá
+        PlainTextContent:
+          type: string
+          nullable: true
+        PlainTextContentQuality:
+          type: integer
+          nullable: true
+          description: |
+            * Unknown = 0,
+            * Exact = 1 - získáno z txt souboru, přesná podoba
+            * Calculated = 2,
+            * Parsed = 3,  - získáno strojově z dokumentu
+            * Estimated = 4,  - získáno pomocí OCR, nepřesné
+            * AddedManual = 5, - doplněno ručně
+        LastUpdate:
+          type: string
+          description: "čas poslední aktualizace souboru"
+        # LocalCopy:
+        #   type: string
+        #   nullable: true
+        #   description: local copy
+        ContentType:
+          type: string
+        Length:
+          type: integer
+        WordCount:
+          type: integer
+        Pages:
+          type: integer
+        EnoughExtractedText:
+          type: boolean
+          description: "zda bylo z přílohy vyxetrahováno dostatečně textu, abychom mohli prohlásit, že jsme z toho vyextrahovali nějaká data"
+
+    VerejnaZakazka:
+      type: object
+      # TODO required
+      # proc jsou verejne zakazky ruzne?
+      properties:
+          onlyOnProfile:
+            type: boolean
+            description: true, pokud se zakázka vyskytuje pouze na profilu zadavatele
+            # TODO
+          id:
+            type: string
+            description: unikátní identifikátor zakázky
+            # TODO vygenerované u nás?
+          evidencniCisloZakazky:
+            type: string
+            description: "evidenční číslo, použité ve zdrojové databázi"
+            # TODO fakt?
+          zakazkaNaProfiluId:
+            type: string
+            description: "evidenční číslo na profilu zadavatelů"
+            # TODO fakt?
+          # TODO formulare?
+          # TODO kriteria?
+          # TODO displayId?
+          dataset:
+            type: string
+            description: "web, ze kterého byla zakázka importována"
+          zadavatel:
+            type: object
+            required:
+              - iCO
+              - jmeno
+            properties:
+              iCO:
+                type: string
+                description: "IČO zadavatele"
+              jmeno:
+                type: string
+                description: "Název subjektu zadavatele"
+          dodavatele:
+            type: array
+            description: seznam dodavatelů, kteří vysoutěžili zakázku; pokud je pole prázdné, zakázka nebyla vysoutěžena
+            items:
+              type: object
+              required:
+                - iCO
+                - jmeno
+              properties:
+                iCO:
+                  type: string
+                  description: IČO dodavatele
+                jmeno:
+                  type: string
+                  description: Název subjektu dodavatele
+          nazevZakazky:
+            type: string
+          popisZakazky:
+            type: string
+          cPV:
+            # TODO tyhle pseudo camel-cases si swagger přeloží jako c_pv, což asi nechceme
+            description: |
+              Seznam CPV kódů, které určují zaměření zakázky (stavebnictví, IT, ...)
+              viz <http://www.isvz.cz/ISVZ/Ciselniky/ISVZ_klasifikace_ciselniky.aspx>
+            type: array
+            items:
+              type: string
+          datumUverejneni:
+            type: string
+            description: Datum uveřejnění zakázky
+          posledniZmena:
+            type: string
+            description: Datum poslední úpravy zakázky
+          # TODO stavVZ?
+          # TODO posledniZmena vs lastUpdated?
+          # odhadovanaHodnotaBezDPH
+            # TODO
+          konecnaHodnotaBezDPH: # TODO nemusí být vždycky
+            type: number
+          konecnaHodnotaMena": # TODO nemusí být vždycky
+            type: string
+            description: ve které měně je uvedená konečná hodnota
+          dokumenty:
+            type: array
+            description: Přílohy veřejné zakázky
+            items:
+              $ref: "#/components/schemas/VerejnaZakazkaPriloha"
+
+      example: {
+        "onlyOnProfile": true,
+        "id": "1814EE4BCB88D03776F3283D478E2D30",
+        "evidencniCisloZakazky": "P18V00000626",
+        "zakazkaNaProfiluId": "VVZ-2016-60050608",
+        "formulare": [ ],
+        "kriteria": [ ],
+        "displayId": 0,
+        "dataset": "http://www.ppe.cz/v2/profil/prostejov",
+        "zadavatel": {
+          "iCO": "00288659",
+          "jmeno": "Statutární město Prostějov"
+        },
+        "dodavatele": [ ],
+        "nazevZakazky": "Rekonstrukce ulice Plumlovská",
+        "popisZakazky": "",
+        "cPV": [ ],
+        "datumUverejneni": "2018-07-19T00:00:00+02:00",
+        "posledniZmena": "2018-10-26T08:04:19.618122",
+        "stavVZ": 100,
+        "lastUpdated": "2018-11-08T22:44:33.2992456+01:00",
+        "odhadovanaHodnotaBezDPH": 0,
+        "dokumenty": [
+          {
+            "oficialUrl": "https://www.ppe.cz/v2/DocDownload.aspx?ID=a0759e71-38e9-4cc5-871f-f0a37853c7b9",
+            "directUrl": "https://www.ppe.cz/v2/DocDownload.aspx?ID=a0759e71-38e9-4cc5-871f-f0a37853c7b9",
+            "typDokumentu": "Dokument",
+            "vlozenoNaProfil": "2018-02-15T07:50:13",
+            "plainText": "Centrální nákup elektrické energie",
+            "plainTextContentQuality": 1,
+            "lastUpdate": "2018-04-25T07:13:23.115",
+            "lastProcessed": "0001-01-01T00:00:00",
+            "contentType": "text/plain",
+            "lenght": 72231,
+            "wordCount": 9290,
+            "pages": 0,
+            "storageId": "25df87bfca4c678aac9857a3af9ebfffbef95987a98d8b3b7e7fb971a23db8a5",
+            "name": "zadavaci_podminky..pdf"
+          }
+        ]
+      }
+
+    DatasetZakladniInfo:
+      type: object
+      required:
+        - id
+        - name
+        - description
+      properties:
+        id:
+          $ref: "#/components/schemas/DatasetIdentifikator"
+        name:
+          type: string
+          description: Jméno datové sady
+        description:
+          type: string
+          description: Delší popis datové sady
+
+    DatasetIdentifikator:
+      type: string
+      description: Unikátní identifikátor datové sady, používá se v URL.
+
+    DatasetDefinice:
+      type: object
+      required:
+        - name
+        - origUrl
+        - sourcecodeUrl
+        - description
+        - jsonSchema
+        - createdBy
+        - betaversion
+        - allowWriteAccess
+        - searchResultTemplate
+        - detailTemplate
+        - orderList
+      properties:
+        name:
+          type: string
+          description: Jméno datové sady
+        origUrl:
+          type: string
+          description: URL, z něhož se čerpají data
+        sourcecodeUrl:
+          type: string
+          nullable: true
+          description: URL, kde jsou umístěné zdrojové kódy, pomocí kterých byly data extrahovány
+        description:
+          type: string
+          description: Delší popis datové sady
+        jsonSchema:
+          type: string
+          # možná bych ji povinně dal na null, ať rozpoznáme, co jsme ještě nerozpoznávali
+          description: |
+            JSON Schema (viz <https://json-schema.org/>) záznamu v datové sadě. **Musí se vložit jako serializovaný
+            JSON string.** Musí splňovat několik pravidel:
+            * Vlastnost ``Id`` v rootu objektu - unikátní identifikátor objektu. Musí být typu ``string``.
+            * Rezervované názvy vlastností, nepoužívejte ve schématu ani v objektech
+              * ``DbCreated``: obsahuje datum vložení objektu do databáze.
+              * ``db.DbCreatedBy``: obsahuje info o uživateli,
+                který objekt do db vložil. Tento údaj není poskytován veřejně.
+            * vlastnost ``ICO`` kdekoliv (i ve vložených objektech) - pokud je typu ``string``, pak Hlídač státu předpokládá,
+              že se jedná IČ subjektu a propojí záznam s firmami v Hlídači státu.
+            * vlastnost ``OsobaId`` kdekoliv (i ve vložených objektech) - pokud jde o ``string``, pak Hlídač
+              Státu předpokládá, že se jedná o identifikátor osoby z databáze Hlídače státu. Pro nalezení použijte
+              endpoint /osoby/hledat_presne.
+            * vlastnost ``Url`` v rootu objektu - pokud dává smysl, měl by odkazovat na zdrojový záznam.
+            * vlastnost ``HsProcessType`` kdekoliv, v kombinaci s dalšími atributy (viz dále),
+              zajistí následné zpracování záznamu na serveru a doplnění údajů na straně Hlídače.
+
+            Pokud libovolný objekt (v rootu, v poli či ve vložených objektech) obsahuje vlastnost ``HsProcessType``
+            s některou z definovaných hodnot, je takový objekt následně a asynchronně zpracován a doplněn o další
+            údaje na straně Hlídače.
+
+            ``"HsProcessType": "person"``: definuje, že se jedná o objekt obsahující údaje o osobě, kterou chcete
+            provázat s databází osob Hlídače. Tento typ předpokládá, že je uveden u objektu obsahující tyto atributy:
+            * ``Jmeno`` nebo ``Name`` (``string``)
+            * ``Prijmeni`` nebo ``Surname`` (string)
+              * místo ``Jmeno`` a ``Prijmeni`` pouze jeden atribut ``CeleJmeno`` nebo ``Fullname``
+            * ``Narozeni`` nebo ``Birthdate`` (``string`` ve tvaru ``YYYY-MM-DD``)
+            * ``OsobaId``
+
+            Hodnota ``OsobaId`` nemusí být vyplněna. Při vložení záznamu do datasetu, pokud ``OsobaId`` není vyplněna,
+            Hlídač automaticky doplní ``OsobaId`` a prováže tak záznam s databází osob Hlídače. Všechny uvedené
+            atributy **včetně** OsobaId musí být uvedeny v JSONSchema datasetu.
+
+            ``"HsProcessType": "document"``: definuje, že se jedná o objekt obsahující odkaz na dokument, který je
+            potřeba stáhnout a umožnit jeho fulltextové prohledávání. Tento typ předpokládá, že je uveden u objektu
+            obsahující tyto atributy:
+
+            * ``DocumentUrl`` (``string``)
+            * ``DocumentPlainText`` (``string``)
+
+            Hodnota ``DocumentPlainText`` nemusí být vyplněna. Po vložení záznamu do Datasetu Hlídač
+            automaticky dokument stáhne, vydoluje data a doplní ``DocumentPlainText``. Tato operace se provede
+            asynchronně během několika minut až hodin. Všechny uvedené atributy včetně DocumentPlainText musí být
+            uvedeny v JSONSchema datasetu.
+
+        createdBy:
+          type: string
+          description: E-mailová adresa toho, kdo dataset vytvořil a spravuje ho
+        created:
+          type: string
+          description: Datum a čas vytvoření datové sady. Při zakládání nové datové sady se doplní automaticky.
+          nullable: true
+        betaversion:
+          type: boolean
+          description: |
+            Pokud je ``true``, pak se nezobrazuje v seznamu datových zdrojů na <https://www.hlidacstatu.cz/data>.
+            (Na <https://www.hlidacstatu.cz/data?beta=1> se zobrazí všechny datové zdroje.)
+        allowWriteAccess:
+          type: boolean
+          description: |
+            Pokud je ``true``, pak data v datasetu může kdokoliv přepsat nebo smazat; stejně tak může měni definici
+            datové sady.
+            Pokud je ``false``, pak kdokoliv může data přidat, ale nemůže je přepsat či smazat.
+            Nemůže také měnit parametry registrace datasetu.
+        hidden:
+          type: boolean
+          description: |
+            Ve výchozí hodnotě vždy ``false``. Některé interní datasety jsou skryté, pak se nikdy nezobrazí. Může
+            nastavit pouze administrátor.
+        searchResultTemplate:
+          allOf:
+            - $ref: "#/components/schemas/DatasetTemplate"
+            - type: object
+              description: HTML šablona výsledku vyhledávání. Podrobnější popis na <TODO>.
+        detailTemplate:
+          allOf:
+            - $ref: "#/components/schemas/DatasetTemplate"
+            - type: object
+              description: HTML šablona, použitá při zobrazení detailu záznamu. Podrobnější popis na <TODO>.
+        orderList:
+          type: object
+          description: Seznam parametrů, podle kterých je možné řadit výsledky.
+          # TODO upravit definici, teď to není specifikovatelné
+
+      example: {
+        "name": "Rozhodnutí UOHS",
+        "origUrl": "http://www.uohs.cz/cs/verejne-zakazky/sbirky-rozhodnuti/",
+        "sourcecodeUrl": null,
+        "description": "Sbírka rozhodnutí Úřadu pro ochranu hospodářské soutěže od roku 1999 v oblastech hospodářská soutěž, veřejné zakázky, veřejná podpora a významná tržní síla.",
+        "jsonSchema": ".... JSON Schema, viz ukázka na odkazu výše ",
+        "createdBy": "michal@michalblaha.cz",
+        "created": "2018-09-22T10:44:38.7784317+02:00",
+        "betaversion": false,
+        "allowWriteAccess": false,
+        "hidden": false,
+        "searchResultTemplate": {
+          "header": "",
+          "body": "<!-- scriban {{ date.now }} --> .... scriban/liquid template",
+          "footer": "",
+          "title": null,
+          "properties": null
+        },
+        "detailTemplate": {
+          "header": "",
+          "body": "<!-- scriban {{ date.now }} --> .... scriban/liquid template",
+          "footer": "",
+          "title": "@item.Vec",
+          "properties": null
+        },
+        "orderList": [["Nabytí právní moci", "PravniMoc"], ["Účastníci", "Ucastnici.Jmeno.keyword"]]
+      }
+
+    DatasetTemplate:
+      type: object
+      properties:
+        header:
+          type: string
+        body:
+          type: string
+        footer:
+          type: string
+        title:
+          type: string
+          nullable: true
+        properties:
+          type: string
+          nullable: true
+        # TODO prý se zatím používá jen body, tak ostatní smazat?
+
+    VerejnaZakazkaPriloha:
+      type: object
+      required:
+        - oficialUrl
+        - directUrl
+        - typDokumentu
+        - vlozenoNaProfil
+        - plainText
+        - plainTextContentQuality
+        - lastUpdate
+        - lastProcessed
+        - contentType
+        - lenght # TODO chyba
+        - wordCount
+        - pages
+        - storageId
+        - name
+      properties:
+        oficialUrl:
+          type: string
+        # TODO rozdil mezi oficial a direct
+        # TODO oddelit prilohu smlouvy a zakazky
+        typDokumentu:
+          type: string
+          description: např. "Dokument", "Projektový plán", "Dodatečné informace" atd.
+        vlozenoNaProfil:
+          type: string
+          description: datum, kdy byl dokument připojen k zakázce
+        plainText:
+          type: string
+          description: extrahovaný prostý text z přílohy
+          # TODO nebyl k dispozici a přitom quality = 1
+        plainTextContentQuality:
+          type: integer
+          nullable: true
+          description: |
+            * Unknown = 0,
+            * Exact = 1 - získáno z txt souboru, přesná podoba
+            * Calculated = 2,
+            * Parsed = 3,  - získáno strojově z dokumentu
+            * Estimated = 4,  - získáno pomocí OCR, nepřesné
+            * AddedManual = 5, - doplněno ručně
+        lastUpdate:
+          type: string
+          description: datum poslední aktualizace přílohy
+        lastProcessed:
+          type: object
+          # TODO?
+        contentType:
+          type: string
+          description: MIME typ přílohy
+        lenght:  # TODO chyba
+          type: integer
+          description: Délka extrahovaného prostého textu # TODO fakt?
+        wordCount:
+          type: integer
+          description: Počet slov v extrahovaném textu
+        pages:  # TODO co má být tohle? je to snad všude nulové
+          type: object
+        storageId:  # TODO co má být tohle?
+          type: object
+        name:
+          type: string
+          description: Původní jméno souboru

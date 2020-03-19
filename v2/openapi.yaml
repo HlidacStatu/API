@@ -1,25 +1,25 @@
-openapi: "3.0.2"
+openapi: "3.0.0"
 info:
   title: "REST API Hlídače státu"
   description: "REST API Hlídače státu"
-  version: "2.0.0"
+  version: "2"
   contact:
     email: "podpora@hlidacstatu.cz"
 
 servers:
-- url: "http://www.hlidacstatu.cz/api/v2.0.0"
+- url: "https://www.hlidacstatu.cz/api/v2"
   description: "hlidacstatu.cz"
 
 tags:
 - name: smlouvy
   description: Práce s registrem smluv
-- name: verejne_zakazky
+- name: verejnezakazky
   description: Práce s registrem veřejných zakázek
 - name: datasety
   description: Datasety tvořené uživateli Hlídače
 - name: osoby
   description: Databáze osob
-- name: subjekty
+- name: firmy
   description: Databáze subjektů (osoby, úřady, firmy...)
 
 paths:
@@ -31,9 +31,24 @@ paths:
       parameters:
         - $ref: "#/components/parameters/VyhledavaciParametr"
         - $ref: "#/components/parameters/CisloStranky"
-        - $ref: "#/components/parameters/PocetVysledkuNaStranku"
-        - $ref: "#/components/parameters/RazeniParametr"
-        - $ref: "#/components/parameters/RazeniSmer"
+        - name: razeni
+          in: query
+          schema:
+            type: integer
+            enum: [1, 2, 3] 
+          description: >
+            Řazení výsledků:
+              * 0 - podle relevance
+              * 1 - nově zveřejněné první
+              * 2 - nově zveřejněné poslední
+              * 3 - nejlevnější první
+              * 4 - nejdražší první
+              * 5 - nově uzavřené první
+              * 6 - nově uzavřené poslední
+              * 7 - nejvíce chybové první
+              * 8 - podle odběratele
+              * 9 - podle dodavatele
+              * 666 - vypnuté řazení
       responses:
         200:
           description: Úspěšně vrácen seznam smluv
@@ -59,7 +74,7 @@ paths:
         500:
           $ref: "#/components/responses/InterniChyba"
 
-  /smlouvy/detail/{id}:
+  /smlouvy/{id}:
     get:
       summary: Zobrazí jednu smlouvu podle zadaného ID (ID verze)
       tags:
@@ -87,17 +102,31 @@ paths:
         500:
           $ref: "#/components/responses/InterniChyba"
 
-  /verejne_zakazky/hledat:
+  /verejnezakazky/hledat:
     get:
       summary: Hledá veřejné zakázky v databázi podle vyhledávacího parametru
       tags:
-        - verejne_zakazky
+        - verejnezakazky
       parameters:
         - $ref: "#/components/parameters/VyhledavaciParametr"
         - $ref: "#/components/parameters/CisloStranky"
-        - $ref: "#/components/parameters/PocetVysledkuNaStranku"
-        - $ref: "#/components/parameters/RazeniParametr"
-        - $ref: "#/components/parameters/RazeniSmer"
+        - name: razeni
+          in: query
+          schema:
+            type: integer
+            enum: [1, 2, 3] 
+          description: >
+            Řazení výsledků:
+              * 0 - podle relevance
+              * 1 - nově zveřejněné první
+              * 2 - nově zveřejněné poslední
+              * 3 - nejlevnější první
+              * 4 - nejdražší první
+              * 5 - nově uzavřené první
+              * 6 - nově uzavřené poslední
+              * 8 - podle odběratele
+              * 9 - podle dodavatele
+              * 666 - vypnuté řazení
       responses:
         200:
           description: Úspěšně vrácen seznam veřejných zakázek
@@ -123,11 +152,11 @@ paths:
         500:
           $ref: "#/components/responses/InterniChyba"
 
-  /verejne_zakazky/detail/{id}:
+  /verejnezakazky/{id}:
     get:
       summary: Zobrazí jednu veřejnou zakázku podle zadaného ID
       tags:
-        - verejne_zakazky
+        - verejnezakazky
       parameters:
         - name: id
           in: path
@@ -169,8 +198,63 @@ paths:
           $ref: "#/components/responses/Neautorizovano"
         500:
           $ref: "#/components/responses/InterniChyba"
+          
+    post:
+      summary: Přidání nového datasetu
+      description: |
+        Pokud je v definici datasetu ``allowWriteAccess`` nastaveno na ``true``, pak tuto operaci může
+        provést kdokoliv. Jinak ji může provést jenom původní zakladatel datasetu.
+      tags:
+      - datasety
+      requestBody:
+        description: Nová definice datové sady. Je zapotřebí mít správně definované ``jsonSchema``.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DatasetDefinice"
+      responses:
+        200:
+          description: Dataset byl úspěšně aktualizován
+        400:
+          $ref: "#/components/responses/ChybneParametry"
+        401:
+          $ref: "#/components/responses/Neautorizovano"
+        403:
+          $ref: "#/components/responses/Nedovoleno"
+        404:
+          $ref: "#/components/responses/Nenalezeno"
+        500:
+          $ref: "#/components/responses/InterniChyba"
+          
+    put:
+      summary: Modifikace současného datasetu
+      description: |
+        Není možné změnit hodnoty `jsonSchema` a `datasetId`. Pokud je potřebuješ změnit, musíš datovou sadu smazat a zaregistrovat znovu.
+      tags:
+      - datasety
+      requestBody:
+        description: Editace definice datové sady. Není povoleno změnit ID datové sady a ``jsonSchema``.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DatasetDefinice"
+      responses:
+        200:
+          description: Dataset byl úspěšně aktualizován
+        400:
+          $ref: "#/components/responses/ChybneParametry"
+        401:
+          $ref: "#/components/responses/Neautorizovano"
+        403:
+          $ref: "#/components/responses/Nedovoleno"
+        404:
+          $ref: "#/components/responses/Nenalezeno"
+        500:
+          $ref: "#/components/responses/InterniChyba"
 
-  /datasety/{dataset_id}:
+  /datasety/{datasetId}:
     get:
       summary: Zobrazí definici (existujícího) datasetu s určitým ID
       tags:
@@ -188,36 +272,6 @@ paths:
           $ref: "#/components/responses/ChybneParametry"
         401:
           $ref: "#/components/responses/Neautorizovano"
-        404:
-          $ref: "#/components/responses/Nenalezeno"
-        500:
-          $ref: "#/components/responses/InterniChyba"
-
-    post:
-      summary: Aktualizuje definici stávajícího datasetu.
-      description: |
-        Pokud je v definici datasetu ``allowWriteAccess`` nastaveno na ``true``, pak tuto operaci může
-        provést kdokoliv. Jinak ji může provést jenom původní zakladatel datasetu.
-      tags:
-      - datasety
-      parameters:
-        - $ref: "#/components/parameters/DatasetID"
-      requestBody:
-        description: Nová definice datové sady. Není povoleno změnit ID datové sady a ``jsonSchema``.
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/DatasetDefinice"
-      responses:
-        200:
-          description: Dataset byl úspěšně aktualizován
-        400:
-          $ref: "#/components/responses/ChybneParametry"
-        401:
-          $ref: "#/components/responses/Neautorizovano"
-        403:
-          $ref: "#/components/responses/Nedovoleno"
         404:
           $ref: "#/components/responses/Nenalezeno"
         500:
@@ -243,33 +297,29 @@ paths:
         500:
           $ref: "#/components/responses/InterniChyba"
 
-  /datasety/{dataset_id}/vytvorit:
-    post:
-      summary: Přidá nový dataset
+  /datasety/{datasetId}/zaznamy/{itemId}:
+    get:
+      summary: Vrátí záznam v datové sadě
       tags:
         - datasety
       parameters:
         - $ref: "#/components/parameters/DatasetID"
-      requestBody:
-        description: Definice nové datové sady
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/DatasetDefinice"
+        - $ref: "#/components/parameters/DatasetZaznamID"
       responses:
         200:
-          description: Dataset byl úspěšně vytvořen
+          description: Záznam byl nalezen a vrácen
+          content:
+            application/json:
+              schema: {}
         400:
           $ref: "#/components/responses/ChybneParametry"
         401:
           $ref: "#/components/responses/Neautorizovano"
-        409:
-          $ref: "#/components/responses/JizExistuje"
+        404:
+          $ref: "#/components/responses/Nenalezeno"
         500:
           $ref: "#/components/responses/InterniChyba"
-
-  /datasety/{dataset_id}/zaznamy/{zaznam_id}:
+    
     post:
       summary: Přidá nový záznam nebo aktualizuje stávající záznam
       tags:
@@ -297,29 +347,9 @@ paths:
         500:
           $ref: "#/components/responses/InterniChyba"
 
-    delete:
-      summary: Smaže existující záznam v datové sadě
-      tags:
-        - datasety
-      parameters:
-        - $ref: "#/components/parameters/DatasetID"
-        - $ref: "#/components/parameters/DatasetZaznamID"
-      responses:
-        200:
-          description: Záznam byl úspěšně smazán
-        400:
-          $ref: "#/components/responses/ChybneParametry"
-        401:
-          $ref: "#/components/responses/Neautorizovano"
-        403:
-          $ref: "#/components/responses/Nedovoleno"
-        404:
-          $ref: "#/components/responses/Nenalezeno"
-        500:
-          $ref: "#/components/responses/InterniChyba"
-
+  /datasety/{datasetId}/zaznamy/{itemId}/existuje:
     get:
-      summary: Vrátí záznam v datové sadě
+      summary: Zkontroluje, jestli záznam v datové sadě existuje
       tags:
         - datasety
       parameters:
@@ -327,10 +357,15 @@ paths:
         - $ref: "#/components/parameters/DatasetZaznamID"
       responses:
         200:
-          description: Záznam byl nalezen a vrácen
+          description: Záznam existuje
           content:
             application/json:
-              schema: {}
+              schema: 
+                type: object
+                properties:
+                  itemExists:
+                    type: boolean
+                    description: Informace jestli existuje záznam v daném datasetu.
         400:
           $ref: "#/components/responses/ChybneParametry"
         401:
@@ -340,7 +375,7 @@ paths:
         500:
           $ref: "#/components/responses/InterniChyba"
 
-  /datasety/{dataset_id}/hledat:
+  /datasety/{datasetId}/hledat:
     get:
       summary: Hledá záznamy v datové sadě podle vyhledávacího parametru
       tags:
@@ -349,9 +384,16 @@ paths:
         - $ref: "#/components/parameters/DatasetID"
         - $ref: "#/components/parameters/VyhledavaciParametr"
         - $ref: "#/components/parameters/CisloStranky"
-        - $ref: "#/components/parameters/PocetVysledkuNaStranku"
-        - $ref: "#/components/parameters/RazeniParametr"
-        - $ref: "#/components/parameters/RazeniSmer"
+        - name: sort
+          in: query
+          description: Název pole podle kterého se mají řadit výsledky.
+          schema:
+            type: string
+        - name: desc
+          in: query
+          description: Směr řazení. Pokud je hodnota `0`, řadí vzestupně. Pokud je hodnota `1`, řadí sestupně.
+          schema:
+            type: string
       responses:
         200:
           description: Úspěšně vrácen seznam záznamů
@@ -379,100 +421,25 @@ paths:
         500:
           $ref: "#/components/responses/InterniChyba"
 
-  /datasety/{dataset_id}/notifikace:
-    post:
-      summary: Nastaví odesílání notifikace na e-mail o tom, že došlo k přidání nebo úpravě záznamů (vždy max jednou za 24 hodin).
-      tags:
-        - datasety
-      parameters:
-        - $ref: "#/components/parameters/DatasetID"
-        - name: zasilat
-          in: query
-          required: true
-          description: |
-            Zda se mají zasílat notifikace:
-            * ``vzdy``: pokud dojde k přidání, úpravě nebo smazání záznamu
-            * ``jen_pridani``: pokud dojde k přidání nového záznamu
-            * ``jen_uprava``: pokud dojde k úpravě nebo smazání stávajícího záznamu
-            * ``nikdy``: vypnout zasílání notifikací
-          schema:
-              type: string
-              description: |
-                Zda se mají zasílat notifikace:
-                * ``vzdy``: pokud dojde k přidání, úpravě nebo smazání záznamu
-                * ``jen_pridani``: pokud dojde k přidání nového záznamu
-                * ``jen_uprava``: pokud dojde k úpravě nebo smazání stávajícího záznamu
-                * ``nikdy``: vypnout zasílání notifikací
-      responses:
-        200:
-          description: Nové nastavení notifikací bylo uloženo
-        400:
-          $ref: "#/components/responses/ChybneParametry"
-        401:
-          $ref: "#/components/responses/Neautorizovano"
-        404:
-          $ref: "#/components/responses/Nenalezeno"
-        500:
-          $ref: "#/components/responses/InterniChyba"
+  /osoby/{osobaId}:
     get:
-      summary: Zjistí aktuální nastavení odesílání notifikace na e-mail o tom, že došlo k přidání nebo úpravě záznamů (vždy max jednou za 24 hodin).
-      tags:
-        - datasety
-      parameters:
-        - $ref: "#/components/parameters/DatasetID"
-      responses:
-        200:
-          description: Vráceno aktuální nastavení notifikací
-          content:
-            application/json:
-              schema:
-                type: string
-                description: |
-                  Zda se zasílají notifikace:
-                  * ``vzdy``: pokud dojde k přidání, úpravě nebo smazání záznamu
-                  * ``jen_pridani``: pokud dojde k přidání nového záznamu
-                  * ``jen_uprava``: pokud dojde k úpravě nebo smazání stávajícího záznamu
-                  * ``nikdy``: vypnuto
-        400:
-          $ref: "#/components/responses/ChybneParametry"
-        401:
-          $ref: "#/components/responses/Neautorizovano"
-        404:
-          $ref: "#/components/responses/Nenalezeno"
-        500:
-          $ref: "#/components/responses/InterniChyba"
-
-  /osoby/hledat_presne:
-    get:
-      summary: Podle správně zadaného jména, příjmení a data narození osoby dohledá identifikátor osoby v databázi Hlídače
+      summary: Načte detaily o osobě
       description: |
-        ``OsobaId`` je pro Hlídač Státu primární identifikátor pro provázaní osob. Pokud zpracováváte datový zdroj, který
+        ``OsobaId`` je pro Hlídač Státu primární identifikátor osob. Pokud zpracováváte datový zdroj, který
         pracuje s osobami, dohledejte ID osoby před vložením záznamu do datasetu pomocí tohoto API. Pote ho pod názvem
         vlastnosti ``OsobaId`` uložte do vaší datové struktury. Výrazně tím zlepšíte kvalitu dat v Datasetu.
       tags:
         - osoby
       parameters:
-        - in: query
-          name: jmeno
-          description: Křestní jméno osoby
-          required: true
-          schema:
-            type: string
-        - in: query
-          name: prijmeni
-          description: Příjmení osoby
-          required: true
-          schema:
-            type: string
-        - in: query
-          name: narozeni
-          description: Datum narození osoby ve formátu YYYY-MM-DD
+        - in: path
+          name: osobaId
+          description: Identifikátor osoby
           required: true
           schema:
             type: string
       responses:
         200:
-          description: Vše v pořádku, vrácen identifikátor
+          description: Vše v pořádku, vrátí se objekt osoby
           content:
             application/json:
               schema:
@@ -490,19 +457,18 @@ paths:
         500:
           $ref: "#/components/responses/InterniChyba"
 
-  /subjekty/hledat_presne:
+  /firmy/hledat_presne:
     get:
       summary: Podle správně zadaného jména firmy dohledá IČO a datové schránky
       tags:
-        - subjekty
+        - firmy
       parameters:
-        - in: query
-          name: jmeno
+        - in: path
+          name: jmenoFirmy
           description: Jméno firmy
           required: true
           schema:
             type: string
-          # TODO v původním API se to kódovalo pomocí URL kódování, ale to je hovadina, ne?
       responses:
         200:
           description: Vše v pořádku, vráceno IČO a seznam identifikátorů datových schránek
@@ -596,7 +562,7 @@ components:
   parameters:
 
     DatasetZaznamID:
-      name: zaznam_id
+      name: itemId
       in: path
       description: Unikátní ID záznamu v datové sadě
       required: true
@@ -605,7 +571,7 @@ components:
         description: Unikátní ID záznamu v datové sadě
 
     DatasetID:
-      name: dataset_id
+      name: datasetId
       in: path
       description: Unikátní ID datové sady
       required: true
@@ -614,7 +580,7 @@ components:
         description: Unikátní ID datové sady
 
     VyhledavaciParametr:
-      name: q
+      name: query
       in: query
       required: true
       description: Vyhledávací parametr, viz <https://www.hlidacstatu.cz/napoveda>
@@ -630,33 +596,6 @@ components:
       schema:
         type: integer
         description: Číslo stránky s výsledkem
-
-    PocetVysledkuNaStranku:
-      name: pocet_vysledku
-      in: query
-      required: false
-      description: Počet výsledků na jednu stranu
-      schema:
-        type: integer
-        description: Počet výsledků na jednu stranu
-
-    RazeniParametr:
-      name: razeni
-      in: query
-      required: false
-      description: Podle kterého parametru v JSONu záznamu řadit výsledky. Pokud není uvedeno, řadí se podle relevance.
-      schema:
-        type: string
-        description: Podle kterého parametru v JSONu záznamu řadit výsledky. Pokud není uvedeno, řadí se podle relevance.
-
-    RazeniSmer:
-      name: smer_razeni
-      in: query
-      required: false
-      description: Směr řazení výsledků. Buď ``vzestupne``/``asc``, nebo ``sestupne``/``desc``. Default je vzestupně.
-      schema:
-        type: string
-        description: Směr řazení výsledků. Buď ``vzestupne``/``asc``, nebo ``sestupne``/``desc``. Default je vzestupně.
 
   schemas:
     Chyba:

@@ -332,3 +332,5 @@ ASALocalRun/
 
 # Local History for Visual Studio
 .localhistory/
+v2/Playground/App.Release.config
+v2/Playground/App.Debug.config

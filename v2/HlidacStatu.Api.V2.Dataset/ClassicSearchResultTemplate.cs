@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using HlidacStatu.Api.V2.CoreApi.Model;
+
 namespace HlidacStatu.Api.V2.Dataset
 {
     public partial class ClassicTemplate

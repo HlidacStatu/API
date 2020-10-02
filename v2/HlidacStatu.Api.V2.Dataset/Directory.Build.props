@@ -1,0 +1,13 @@
+<Project>
+  <PropertyGroup>
+    <Company>Devmasters s.r.o.</Company>
+    <Copyright>Copyright (c) Devmasters, Michal Bláha</Copyright>
+    <PackageProjectUrl></PackageProjectUrl>
+    <Authors>Michal Bláha</Authors>
+
+  </PropertyGroup>
+  <PropertyGroup>
+    <PackageOutputPath>$(MSBuildThisFileDirectory)\$(OutDir)\nupkgs</PackageOutputPath>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
+</Project>

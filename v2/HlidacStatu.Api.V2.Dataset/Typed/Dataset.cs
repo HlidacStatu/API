@@ -106,7 +106,8 @@ namespace HlidacStatu.Api.V2.Dataset.Typed
             conf.AddDefaultHeader("Authorization", apiToken);
             var api = new V2.CoreApi.DatasetyApi(conf);
             var res = api.ApiV2DatasetyDetail(datasetNameId);
-
+            if (res == null)
+                return null;
             var dataset = new Dataset<TData>(res.DatasetId, api);
 
             return dataset;

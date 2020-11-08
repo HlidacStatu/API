@@ -10,7 +10,7 @@ namespace HlidacStatu.Api.V2.Dataset.Typed
 {
 
     public enum ItemInsertMode
-    { 
+    {
         skip,
         merge,
         rewrite
@@ -30,7 +30,7 @@ namespace HlidacStatu.Api.V2.Dataset.Typed
                 throw new ArgumentNullException("api");
             if (string.IsNullOrEmpty(datasetNameId))
                 throw new ArgumentNullException("datasetNameId");
-            this.Api =api;
+            this.Api = api;
             this.DatasetId = datasetNameId;
 
             //check Type
@@ -45,9 +45,9 @@ namespace HlidacStatu.Api.V2.Dataset.Typed
                 idPropertyName = "Id";
             else if (myType.GetProperty("iD") != null)
                 idPropertyName = "iD";
-                
+
             if (idPropertyName == null)
-                    throw new ArgumentNullException("Class Type","Class must containt property 'Id' or 'id'");
+                throw new ArgumentNullException("Class Type", "Class must containt property 'Id' or 'id'");
 
         }
         public Result<TData> Search(string query, int page, string sort = null, bool desc = false)
@@ -59,7 +59,7 @@ namespace HlidacStatu.Api.V2.Dataset.Typed
                 Total = resObj.Total,
                 Page = resObj.Page,
                 Results = resObj.Results
-                    .Select(m=>((Newtonsoft.Json.Linq.JObject)m).ToObject<TData>())
+                    .Select(m => ((Newtonsoft.Json.Linq.JObject)m).ToObject<TData>())
                     .ToArray()
             };
 
@@ -78,16 +78,21 @@ namespace HlidacStatu.Api.V2.Dataset.Typed
         public string[] AddOrRewriteItems(IEnumerable<TData> items)
         {
             var res = this.Api.ApiV2DatasetyDatasetItemBulkInsert(this.DatasetId, items);
-            return res.Select(m=>m.Id).ToArray();
+            return res.Select(m => m.Id).ToArray();
         }
 
         public void UpdateRegistration(V2.CoreApi.Model.Registration registration)
         {
-            var res = this.Api.ApiV2DatasetyUpdate(registration);         
-            
+            var res = this.Api.ApiV2DatasetyUpdate(registration);
+
 
         }
 
+        /// <summary>
+        /// Pokud zaznam neexistuje, vraci exception
+        /// </summary>
+        /// <param name="itemId"></param>
+        /// <returns></returns>
         public TData GetItem(string itemId)
         {
             //string idValue = myType.GetProperty(idPropertyName).GetValue(item) as string;
@@ -96,7 +101,40 @@ namespace HlidacStatu.Api.V2.Dataset.Typed
             return obj;
         }
 
+        /// <summary>
+        /// Pokud zaznam neexistuje, vrati NULL
+        /// </summary>
+        /// <param name="itemId"></param>
+        /// <returns></returns>
+        public TData GetItemSafe(string itemId)
+        {
+            //string idValue = myType.GetProperty(idPropertyName).GetValue(item) as string;
+            try
+            {
+                var res = this.Api.ApiV2DatasetyDatasetItemGet(this.DatasetId, itemId);
+                TData obj = ((Newtonsoft.Json.Linq.JObject)res).ToObject<TData>();
+                return obj;
 
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+        }
+
+            public bool ItemExists(string itemId)
+        {
+            //string idValue = myType.GetProperty(idPropertyName).GetValue(item) as string;
+            try
+            {
+                var res = this.Api.ApiV2DatasetyDatasetItemExists(this.DatasetId, itemId);
+                return res;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
 
         #region Static 
 
@@ -120,14 +158,14 @@ namespace HlidacStatu.Api.V2.Dataset.Typed
             conf.AddDefaultHeader("Authorization", apiToken);
             var api = new V2.CoreApi.DatasetyApi(conf);
             registration.DatasetId = registration.DatasetId;
-            var res= api.ApiV2DatasetyCreate(registration);
+            var res = api.ApiV2DatasetyCreate(registration);
 
             var dataset = new Dataset<TData>(res.DatasetId, api);
 
             return dataset;
         }
 
-        public static Dataset<TData> CreateDataset(string apiToken, string name, string datasetId, string origUrl, string description = "", string sourceCodeUrl = "", bool betaVersion = true, bool allowWriteAccess = false, string[,] orderList = null, 
+        public static Dataset<TData> CreateDataset(string apiToken, string name, string datasetId, string origUrl, string description = "", string sourceCodeUrl = "", bool betaVersion = true, bool allowWriteAccess = false, string[,] orderList = null,
             V2.CoreApi.Model.Template searchResultTemplate = null, V2.CoreApi.Model.Template detailTemplate = null, bool hidden = false)
         {
             var jsonGen = new JSchemaGenerator

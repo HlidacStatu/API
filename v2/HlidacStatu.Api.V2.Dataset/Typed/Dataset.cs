@@ -138,10 +138,12 @@ namespace HlidacStatu.Api.V2.Dataset.Typed
 
         #region Static 
 
-        public static Dataset<TData> OpenDataset(string apiToken, string datasetNameId)
+        public static Dataset<TData> OpenDataset(string apiToken, string datasetNameId, string anotherBaseUrl = null)
         {
             CoreApi.Client.Configuration conf = new CoreApi.Client.Configuration();
             conf.AddDefaultHeader("Authorization", apiToken);
+            if (!string.IsNullOrEmpty(anotherBaseUrl))
+                conf.BasePath = anotherBaseUrl;
             var api = new V2.CoreApi.DatasetyApi(conf);
             var res = api.ApiV2DatasetyDetail(datasetNameId);
             if (res == null)
@@ -151,11 +153,14 @@ namespace HlidacStatu.Api.V2.Dataset.Typed
             return dataset;
         }
 
-        public static Dataset<TData> CreateDataset(string apiToken, V2.CoreApi.Model.Registration registration)
+        public static Dataset<TData> CreateDataset(string apiToken, V2.CoreApi.Model.Registration registration, string anotherBaseUrl = null)
         {
 
             CoreApi.Client.Configuration conf = new CoreApi.Client.Configuration();
             conf.AddDefaultHeader("Authorization", apiToken);
+            if (!string.IsNullOrEmpty(anotherBaseUrl))
+                conf.BasePath = anotherBaseUrl;
+
             var api = new V2.CoreApi.DatasetyApi(conf);
             registration.DatasetId = registration.DatasetId;
             var res = api.ApiV2DatasetyCreate(registration);

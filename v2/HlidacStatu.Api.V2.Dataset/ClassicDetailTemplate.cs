@@ -35,10 +35,20 @@ namespace HlidacStatu.Api.V2.Dataset
                 sb.AppendLine(@"<table class=""table table-hover""><tbody>");
                 foreach (var c in columns)
                 {
-                    sb.Append($"<tr><td>{c.header}</td><td ");
-                    if (!string.IsNullOrEmpty(c.style))
-                        sb.Append($"style=\"{c.style}\" ");
-                    sb.AppendLine($">{c.content}</td></tr>");
+                    if (c.header == null)
+                    {
+                        sb.Append($"<tr><td colspan=\"2\" ");
+                        if (!string.IsNullOrEmpty(c.style))
+                            sb.Append($"style=\"{c.style}\" ");
+                        sb.AppendLine($">{c.content}</td></tr>");
+                    }
+                    else
+                    {
+                        sb.Append($"<tr><td>{c.header}</td><td ");
+                        if (!string.IsNullOrEmpty(c.style))
+                            sb.Append($"style=\"{c.style}\" ");
+                        sb.AppendLine($">{c.content}</td></tr>");
+                    }
                 }
                 sb.Append(@"</table>");
                 return sb.ToString();

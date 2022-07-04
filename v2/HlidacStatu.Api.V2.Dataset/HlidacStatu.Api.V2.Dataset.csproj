@@ -5,7 +5,7 @@
     <AssemblyName>HlidacStatu.Api.V2.Dataset</AssemblyName>
     <RootNamespace>HlidacStatu.Api.V2.Dataset</RootNamespace>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>2.2.0</Version>
+    <Version>2.3.0</Version>
     <PackageProjectUrl>https://github.com/HlidacStatu/API/tree/master/v2/HlidacStatu.Api.V2.Dataset</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Description>Simple library for Hlídač státu Datasets</Description>
@@ -13,7 +13,7 @@
     <PackageIcon>android-chrome-192x192.png</PackageIcon>
     <RepositoryUrl>https://github.com/HlidacStatu/API/tree/master/v2/HlidacStatu.Api.V2.Dataset</RepositoryUrl>
     <PackageTags>Hlídač státu, API, Dataset</PackageTags>
-    <PackageReleaseNotes>ClassicDetailTemplate supports no header row</PackageReleaseNotes>
+    <PackageReleaseNotes>API endpoint api.hlidacstatu.cz</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
@@ -43,7 +43,7 @@
       <Generator>OpenApiCodeGenerator</Generator>
       <LastGenOutput>swagger.cs</LastGenOutput>
     </None>
-    <None Include="..\..\..\..\HlidacStatu\Web.Statu\Content\icons\android-chrome-192x192.png">
+    <None Include="..\..\..\..\Hlidac-Statu\Web\wwwroot\Content\icons\android-chrome-192x192.png">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>

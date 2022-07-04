@@ -1944,11 +1944,11 @@ namespace HlidacStatu.Api.V2.CoreApi.Client
         public ApiClient()
         {
             Configuration = HlidacStatu.Api.V2.CoreApi.Client.Configuration.Default;
-            RestClient = new RestClient("https://www.hlidacstatu.cz");
+            RestClient = new RestClient("https://api.hlidacstatu.cz");
         }
         /// <summary>
         /// Initializes a new instance of the <see cref="ApiClient" /> class
-        /// with default base path (https://www.hlidacstatu.cz).
+        /// with default base path (https://api.hlidacstatu.cz).
         /// </summary>
         /// <param name="config">An instance of Configuration.</param>
         public ApiClient(Configuration config)
@@ -1961,7 +1961,7 @@ namespace HlidacStatu.Api.V2.CoreApi.Client
         /// with default configuration.
         /// </summary>
         /// <param name="basePath">The base path.</param>
-        public ApiClient(String basePath = "https://www.hlidacstatu.cz")
+        public ApiClient(String basePath = "https://api.hlidacstatu.cz")
         {
            if (String.IsNullOrEmpty(basePath))
                 throw new ArgumentException("basePath cannot be empty");
@@ -2559,7 +2559,7 @@ namespace HlidacStatu.Api.V2.CoreApi.Client
         public Configuration()
         {
             UserAgent = "OpenAPI-Generator/1.0.0/csharp";
-            BasePath = "https://www.hlidacstatu.cz";
+            BasePath = "https://api.hlidacstatu.cz";
             DefaultHeader = new ConcurrentDictionary<string, string>();
             ApiKey = new ConcurrentDictionary<string, string>();
             ApiKeyPrefix = new ConcurrentDictionary<string, string>();
@@ -2573,7 +2573,7 @@ namespace HlidacStatu.Api.V2.CoreApi.Client
             IDictionary<string, string> defaultHeader,
             IDictionary<string, string> apiKey,
             IDictionary<string, string> apiKeyPrefix,
-            string basePath = "https://www.hlidacstatu.cz") : this()
+            string basePath = "https://api.hlidacstatu.cz") : this()
         {
             if (string.IsNullOrWhiteSpace(basePath))
                 throw new ArgumentException("The provided basePath is invalid.", "basePath");

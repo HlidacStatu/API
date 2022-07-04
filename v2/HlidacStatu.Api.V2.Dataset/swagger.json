@@ -4,15 +4,15 @@
     "description" : "REST API Hlídače státu",
     "version" : "v2",
     "title" : "HlidacStatu_ApiV2",
-    "termsOfService" : "https://www.hlidacstatu.cz/texty/provoznipodminky/",
+    "termsOfService" : "https://api.hlidacstatu.cz/texty/provoznipodminky/",
     "contact" : {
       "name" : "Hlídač státu",
-      "url" : "https://www.hlidacstatu.cz/texty/kontakt/",
+      "url" : "https://api.hlidacstatu.cz/texty/kontakt/",
       "email" : "podpora@hlidacstatu.cz"
     },
     "license" : {
       "name" : "CC BY 3.0 CZ",
-      "url" : "https://www.hlidacstatu.cz/texty/licence/"
+      "url" : "https://api.hlidacstatu.cz/texty/licence/"
     }
   },
   "host" : "www.hlidacstatu.cz",

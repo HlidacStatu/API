@@ -15,7 +15,7 @@
       "url" : "https://api.hlidacstatu.cz/texty/licence/"
     }
   },
-  "host" : "www.hlidacstatu.cz",
+  "host" : "api.hlidacstatu.cz",
   "schemes" : [ "https" ],
   "paths" : {
     "/api/v2/ping/{text}" : {

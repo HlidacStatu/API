@@ -32,7 +32,7 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Newtonsoft.Json.Schema" Version="3.0.15" />
     <PackageReference Include="Polly" Version="8.1.0" />
-    <PackageReference Include="RestSharp" Version="106.15.0" />
+    <PackageReference Include="RestSharp" Version="106.15.0" allowedVersions="[106.15,106.16)" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
     <PackageReference Include="System.Runtime.Serialization.Primitives" Version="4.3.0" />
   </ItemGroup>

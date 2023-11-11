@@ -1,11 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net472;net48</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net6;net7;net472;net48</TargetFrameworks>
     <AssemblyName>HlidacStatu.Api.V2.Dataset</AssemblyName>
     <RootNamespace>HlidacStatu.Api.V2.Dataset</RootNamespace>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>2.3.0</Version>
+    <Version>2.3.0.2</Version>
     <PackageProjectUrl>https://github.com/HlidacStatu/API/tree/master/v2/HlidacStatu.Api.V2.Dataset</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Description>Simple library for Hlídač státu Datasets</Description>
@@ -17,25 +17,24 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="src\**" />
+    <EmbeddedResource Remove="src\**" />
+    <None Remove="src\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Template.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="JsonSubTypes" Version="1.8.0" />
+    <PackageReference Include="JsonSubTypes" Version="2.0.1" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-    <PackageReference Include="Newtonsoft.Json.Schema" Version="3.0.13" />
-    <PackageReference Include="RestSharp" Version="106.11.7" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Newtonsoft.Json.Schema" Version="3.0.15" />
+    <PackageReference Include="Polly" Version="8.1.0" />
+    <PackageReference Include="RestSharp" Version="106.15.0" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
     <PackageReference Include="System.Runtime.Serialization.Primitives" Version="4.3.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="swagger.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>swagger.json</DependentUpon>
-    </Compile>
   </ItemGroup>
 
   <ItemGroup>

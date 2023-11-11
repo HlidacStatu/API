@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30128.74
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34024.191
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HlidacStatu.Api.V2.Dataset", "HlidacStatu.Api.V2.Dataset.csproj", "{52F8B5FF-54EA-40CA-927B-9DD0AA4050C4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Playground", "..\Playground\Playground.csproj", "{781ADB54-BBF4-411F-831C-4E806A667D33}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlaygroundCore", "..\PlaygroundCore\PlaygroundCore.csproj", "{4AD5A4C6-C4E8-48AD-B103-6876A4C7C771}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{781ADB54-BBF4-411F-831C-4E806A667D33}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{781ADB54-BBF4-411F-831C-4E806A667D33}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{781ADB54-BBF4-411F-831C-4E806A667D33}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4AD5A4C6-C4E8-48AD-B103-6876A4C7C771}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4AD5A4C6-C4E8-48AD-B103-6876A4C7C771}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4AD5A4C6-C4E8-48AD-B103-6876A4C7C771}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4AD5A4C6-C4E8-48AD-B103-6876A4C7C771}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,0 +1,667 @@
+openapi: 3.0.1
+info:
+  contact:
+    email: podpora@hlidacstatu.cz
+    name: Hlídač státu
+    url: https://api.hlidacstatu.cz/texty/kontakt/
+  description: REST API Hlídače státu
+  license:
+    name: CC BY 3.0 CZ
+    url: https://api.hlidacstatu.cz/texty/licence/
+  termsOfService: https://api.hlidacstatu.cz/texty/provoznipodminky/
+  title: HlidacStatu_ApiV2
+  version: v2
+servers:
+- url: https://api.hlidacstatu.cz/
+paths:
+  /api/v2/ping/{text}:
+    get:
+      operationId: ApiV2_Ping
+      parameters:
+      - in: path
+        name: text
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: string
+            text/json:
+              schema:
+                type: string
+            application/xml:
+              schema:
+                type: string
+            text/xml:
+              schema:
+                type: string
+          description: OK
+      tags:
+      - Core
+  /api/v2/datasety:
+    get:
+      operationId: ApiV2Datasety_GetAll
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SearchResultDTO[Registration]"
+            text/json:
+              schema:
+                $ref: "#/components/schemas/SearchResultDTO[Registration]"
+          description: OK
+      summary: Načte seznam datasetů
+      tags:
+      - Datasety
+    post:
+      description: "Ukázkový požadavek:\r\nhttps://raw.githubusercontent.com/HlidacStatu/API/master/v2/create_dataset.example.json"
+      operationId: ApiV2Datasety_Create
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Registration'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/Registration'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Registration'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/Registration'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Registration'
+        description: Objekt typu Registration
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DSCreatedDTO'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/DSCreatedDTO'
+          description: Dataset vytvořen
+        "400":
+          content: {}
+          description: Chyba v datech
+      summary: Vytvoří nový dataset
+      tags:
+      - Datasety
+      x-codegen-request-body-name: data
+    put:
+      description: "Není možné změnit hodnoty jsonSchema a datasetId. Pokud je potř\
+        ebuješ změnit, \r\nmusíš datovou sadu smazat a zaregistrovat znovu.\r\n\r\n\
+        Ukázkový požadavek:\r\nhttps://raw.githubusercontent.com/HlidacStatu/API/master/v2/create_dataset.example.json"
+      operationId: ApiV2Datasety_Update
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Registration'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/Registration'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Registration'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/Registration'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Registration'
+        description: Objekt typu Registration
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Registration'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Registration'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Registration'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/Registration'
+          description: OK
+      summary: Update datasetu.
+      tags:
+      - Datasety
+      x-codegen-request-body-name: data
+  /api/v2/datasety/{datasetId}:
+    delete:
+      operationId: ApiV2Datasety_Delete
+      parameters:
+      - description: Id datasetu (můžeme ho získat ze seznamu datasetů)
+        in: path
+        name: datasetId
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: boolean
+            text/json:
+              schema:
+                type: boolean
+            application/xml:
+              schema:
+                type: boolean
+            text/xml:
+              schema:
+                type: boolean
+          description: OK
+      summary: Smazání datasetu
+      tags:
+      - Datasety
+    get:
+      operationId: ApiV2Datasety_Detail
+      parameters:
+      - description: Id datasetu (můžeme ho získat ze seznamu datasetů)
+        in: path
+        name: datasetId
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Registration'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Registration'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Registration'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/Registration'
+          description: OK
+      summary: Detail konkrétního datasetu
+      tags:
+      - Datasety
+  /api/v2/datasety/{datasetId}/hledat:
+    get:
+      operationId: ApiV2Datasety_DatasetSearch
+      parameters:
+      - description: Id datasetu (můžeme ho získat ze seznamu datasetů)
+        in: path
+        name: datasetId
+        required: true
+        schema:
+          type: string
+      - description: Hledaný výraz
+        in: query
+        name: dotaz
+        schema:
+          type: string
+      - description: Stránkování
+        in: query
+        name: strana
+        schema:
+          format: int32
+          type: integer
+      - description: Název pole pro řazení
+        in: query
+        name: sort
+        schema:
+          type: string
+      - description: "Řazení: 0 - Vzestupně; 1 - Sestupně"
+        in: query
+        name: desc
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SearchResultDTO[Object]"
+            text/json:
+              schema:
+                $ref: "#/components/schemas/SearchResultDTO[Object]"
+          description: OK
+      summary: Vyhledávání v položkách datasetu
+      tags:
+      - Datasety
+  /api/v2/datasety/{datasetId}/zaznamy/{itemId}:
+    get:
+      operationId: ApiV2Datasety_DatasetItem_Get
+      parameters:
+      - description: Id datasetu (můžeme ho získat ze seznamu datasetů)
+        in: path
+        name: datasetId
+        required: true
+        schema:
+          type: string
+      - description: "Id položky v datasetu, kterou chceme načíst"
+        in: path
+        name: itemId
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+            application/xml:
+              schema:
+                type: object
+            text/xml:
+              schema:
+                type: object
+          description: OK
+      summary: Detail konkrétní položky z datasetu
+      tags:
+      - Datasety
+    post:
+      operationId: ApiV2Datasety_DatasetItem_Update
+      parameters:
+      - description: Id datasetu
+        in: path
+        name: datasetId
+        required: true
+        schema:
+          type: string
+      - description: Id záznamu
+        in: path
+        name: itemId
+        required: true
+        schema:
+          type: string
+      - description: "\"skip\" (default) - pokud záznam existuje, nic se na něm nezmě\
+          ní.\r\n            \"merge\" - snaží se spojit data z obou záznamů.\r\n\
+          \            \"rewrite\" - pokud záznam existuje, je bez milosti přepsán"
+        in: query
+        name: mode
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+          text/json:
+            schema:
+              type: object
+          application/xml:
+            schema:
+              type: object
+          text/xml:
+            schema:
+              type: object
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+        description: "Objekt, který se má vložit, nebo updatovat"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DSItemResponseDTO'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/DSItemResponseDTO'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/DSItemResponseDTO'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/DSItemResponseDTO'
+          description: OK
+      summary: Vloží nebo updatuje záznam v datasetu
+      tags:
+      - Datasety
+      x-codegen-request-body-name: data
+  /api/v2/datasety/{datasetId}/zaznamy:
+    post:
+      description: "Pokud záznamy s daným ID existují, tak budou přepsány.\r\n\r\n\
+        \    Ukázkový požadavek:  \r\n    \r\n    [\r\n    \t{\r\n    \t\t\"HsProcessType\"\
+        : \"person\",\r\n    \t\t\"Id\": \"2\",\r\n    \t\t\"jmeno\": \"Ferda\",\r\
+        \n    \t\t\"prijmeni\": \"Mravenec\",\r\n    \t\t\"narozeni\": \"2018-11-13T20:20:39+00:00\"\
+        \r\n    \t},\r\n    \t{\r\n    \t\t\"HsProcessType\": \"document\",\r\n  \
+        \  \t\t\"Id\": \"broukpytlik\",\r\n    \t\t\"jmeno\": \"Brouk\",\r\n    \t\
+        \t\"prijmeni\": \"Pytlík\",\r\n    \t\t\"narozeni\": \"2017-12-10T00:00:00+00:00\"\
+        ,\r\n    \t\t\"DocumentUrl\": \"www.hlidacstatu.cz\",\r\n    \t\t\"DocumentPlainText\"\
+        : null\r\n    \t}\r\n    ]"
+      operationId: ApiV2Datasety_DatasetItem_BulkInsert
+      parameters:
+      - description: "Id datasetu, kam chceme záznamy nahrát"
+        in: path
+        name: datasetId
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+          text/json:
+            schema:
+              type: object
+          application/xml:
+            schema:
+              type: object
+          text/xml:
+            schema:
+              type: object
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+        description: Pole JSON objektů
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/DSItemResponseDTO'
+                type: array
+            text/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/DSItemResponseDTO'
+                type: array
+            application/xml:
+              schema:
+                items:
+                  $ref: '#/components/schemas/DSItemResponseDTO'
+                type: array
+            text/xml:
+              schema:
+                items:
+                  $ref: '#/components/schemas/DSItemResponseDTO'
+                type: array
+          description: OK
+      summary: Hromadné vkládání záznamů
+      tags:
+      - Datasety
+      x-codegen-request-body-name: data
+  /api/v2/datasety/{datasetId}/zaznamy/{itemId}/existuje:
+    get:
+      operationId: ApiV2Datasety_DatasetItem_Exists
+      parameters:
+      - description: Id datasetu
+        in: path
+        name: datasetId
+        required: true
+        schema:
+          type: string
+      - description: Id záznamu
+        in: path
+        name: itemId
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: boolean
+            text/json:
+              schema:
+                type: boolean
+            application/xml:
+              schema:
+                type: boolean
+            text/xml:
+              schema:
+                type: boolean
+          description: OK
+      summary: "Kontrola, jestli záznam existuje v datasetu"
+      tags:
+      - Datasety
+components:
+  schemas:
+    SearchResultDTO[Registration]:
+      example:
+        Results:
+        - hidden: true
+          detailTemplate:
+            footer: footer
+            header: header
+            body: body
+            title: title
+            properties:
+            - properties
+            - properties
+          defaultOrderBy: defaultOrderBy
+          created: 2000-01-23T04:56:07.000+00:00
+          betaversion: true
+          description: description
+          allowWriteAccess: true
+          orderList:
+          - orderList
+          - orderList
+          sourcecodeUrl: sourcecodeUrl
+          jsonSchema: jsonSchema
+          createdBy: createdBy
+          name: name
+          datasetId: datasetId
+          searchResultTemplate:
+            footer: footer
+            header: header
+            body: body
+            title: title
+            properties:
+            - properties
+            - properties
+          id: id
+          origUrl: origUrl
+        - hidden: true
+          detailTemplate:
+            footer: footer
+            header: header
+            body: body
+            title: title
+            properties:
+            - properties
+            - properties
+          defaultOrderBy: defaultOrderBy
+          created: 2000-01-23T04:56:07.000+00:00
+          betaversion: true
+          description: description
+          allowWriteAccess: true
+          orderList:
+          - orderList
+          - orderList
+          sourcecodeUrl: sourcecodeUrl
+          jsonSchema: jsonSchema
+          createdBy: createdBy
+          name: name
+          datasetId: datasetId
+          searchResultTemplate:
+            footer: footer
+            header: header
+            body: body
+            title: title
+            properties:
+            - properties
+            - properties
+          id: id
+          origUrl: origUrl
+        Total: 0
+        Page: 6
+      properties:
+        Total:
+          format: int64
+          type: integer
+        Page:
+          format: int32
+          type: integer
+        Results:
+          items:
+            $ref: '#/components/schemas/Registration'
+          type: array
+      type: object
+    Registration:
+      example:
+        hidden: true
+        detailTemplate:
+          footer: footer
+          header: header
+          body: body
+          title: title
+          properties:
+          - properties
+          - properties
+        defaultOrderBy: defaultOrderBy
+        created: 2000-01-23T04:56:07.000+00:00
+        betaversion: true
+        description: description
+        allowWriteAccess: true
+        orderList:
+        - orderList
+        - orderList
+        sourcecodeUrl: sourcecodeUrl
+        jsonSchema: jsonSchema
+        createdBy: createdBy
+        name: name
+        datasetId: datasetId
+        searchResultTemplate:
+          footer: footer
+          header: header
+          body: body
+          title: title
+          properties:
+          - properties
+          - properties
+        id: id
+        origUrl: origUrl
+      properties:
+        id:
+          readOnly: true
+          type: string
+        name:
+          type: string
+        datasetId:
+          type: string
+        origUrl:
+          type: string
+        sourcecodeUrl:
+          type: string
+        description:
+          type: string
+        jsonSchema:
+          type: string
+        createdBy:
+          type: string
+        created:
+          format: date-time
+          type: string
+        betaversion:
+          type: boolean
+        allowWriteAccess:
+          type: boolean
+        hidden:
+          type: boolean
+        searchResultTemplate:
+          $ref: '#/components/schemas/Template'
+        detailTemplate:
+          $ref: '#/components/schemas/Template'
+        defaultOrderBy:
+          type: string
+        orderList:
+          items:
+            type: string
+          type: array
+      type: object
+    Template:
+      example:
+        footer: footer
+        header: header
+        body: body
+        title: title
+        properties:
+        - properties
+        - properties
+      properties:
+        header:
+          type: string
+        body:
+          type: string
+        footer:
+          type: string
+        title:
+          type: string
+        properties:
+          items:
+            type: string
+          type: array
+      type: object
+    DSCreatedDTO:
+      example:
+        DatasetId: DatasetId
+      properties:
+        DatasetId:
+          type: string
+      type: object
+    SearchResultDTO[Object]:
+      example:
+        Results:
+        - "{}"
+        - "{}"
+        Total: 0
+        Page: 6
+      properties:
+        Total:
+          format: int64
+          type: integer
+        Page:
+          format: int32
+          type: integer
+        Results:
+          items:
+            properties: {}
+            type: object
+          type: array
+      type: object
+    DSItemResponseDTO:
+      example:
+        id: id
+      properties:
+        id:
+          type: string
+      type: object
+    tHash:
+      properties:
+        algoritmus:
+          type: string
+        Value:
+          type: string
+      type: object
+  securitySchemes:
+    apiKey:
+      description: API Key Authentication
+      in: header
+      name: Authorization
+      type: apiKey
+x-original-swagger-version: "2.0"
+

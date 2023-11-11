@@ -35,7 +35,7 @@ namespace Playground
         {
             string apikey = System.Configuration.ConfigurationManager.AppSettings["apikey"];
 
-            var ds = Dataset<kvalifikovany_dodavatel>.OpenDataset(apikey,"kvalifikovanidodavatele");
+            var ds = HlidacStatu.Api.V2.Dataset.Typed.Dataset<kvalifikovany_dodavatel>.OpenDataset(apikey,"kvalifikovanidodavatele");
             var s = ds.Search("*", 1);
         }
     }

@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-
+using HlidacStatu.Api.V2.Dataset.Api;
+using HlidacStatu.Api.V2.Dataset.Model;
 using Newtonsoft.Json.Schema.Generation;
 
 namespace HlidacStatu.Api.V2.Dataset.Typed
@@ -23,8 +24,8 @@ namespace HlidacStatu.Api.V2.Dataset.Typed
         private string idPropertyName { get; set; } = null;
         private Type myType = typeof(TData);
 
-        public CoreApi.DatasetyApi Api = null;
-        protected Dataset(string datasetNameId, CoreApi.DatasetyApi api)
+        public DatasetyApi Api = null;
+        protected Dataset(string datasetNameId, DatasetyApi api)
         {
             if (api == null)
                 throw new ArgumentNullException("api");
@@ -81,7 +82,7 @@ namespace HlidacStatu.Api.V2.Dataset.Typed
             return res.Select(m => m.Id).ToArray();
         }
 
-        public void UpdateRegistration(V2.CoreApi.Model.Registration registration)
+        public void UpdateRegistration(Model.Registration registration)
         {
             var res = this.Api.ApiV2DatasetyUpdate(registration);
 
@@ -140,11 +141,12 @@ namespace HlidacStatu.Api.V2.Dataset.Typed
 
         public static Dataset<TData> OpenDataset(string apiToken, string datasetNameId, string anotherBaseUrl = null)
         {
-            CoreApi.Client.Configuration conf = new CoreApi.Client.Configuration();
-            conf.AddDefaultHeader("Authorization", apiToken);
+            Client.Configuration conf = new Client.Configuration();
+            conf.DefaultHeaders.Add("Authorization", apiToken);
+
             if (!string.IsNullOrEmpty(anotherBaseUrl))
                 conf.BasePath = anotherBaseUrl;
-            var api = new V2.CoreApi.DatasetyApi(conf);
+            var api = new DatasetyApi(conf);
             var res = api.ApiV2DatasetyDetail(datasetNameId);
             if (res == null)
                 return null;
@@ -153,15 +155,17 @@ namespace HlidacStatu.Api.V2.Dataset.Typed
             return dataset;
         }
 
-        public static Dataset<TData> CreateDataset(string apiToken, V2.CoreApi.Model.Registration registration, string anotherBaseUrl = null)
+        public static Dataset<TData> CreateDataset(string apiToken, Registration registration, string anotherBaseUrl = null)
         {
 
-            CoreApi.Client.Configuration conf = new CoreApi.Client.Configuration();
-            conf.AddDefaultHeader("Authorization", apiToken);
+            Client.Configuration conf = new Client.Configuration();
+            //conf.AddDefaultHeader("Authorization", apiToken);
+            conf.AddApiKey("Authorization", apiToken);
+
             if (!string.IsNullOrEmpty(anotherBaseUrl))
                 conf.BasePath = anotherBaseUrl;
 
-            var api = new V2.CoreApi.DatasetyApi(conf);
+            var api = new DatasetyApi(conf);
             registration.DatasetId = registration.DatasetId;
             var res = api.ApiV2DatasetyCreate(registration);
 
@@ -171,13 +175,13 @@ namespace HlidacStatu.Api.V2.Dataset.Typed
         }
 
         public static Dataset<TData> CreateDataset(string apiToken, string name, string datasetId, string origUrl, string description = "", string sourceCodeUrl = "", bool betaVersion = true, bool allowWriteAccess = false, string[,] orderList = null,
-            V2.CoreApi.Model.Template searchResultTemplate = null, V2.CoreApi.Model.Template detailTemplate = null, bool hidden = false)
+            Model.Template searchResultTemplate = null, Model.Template detailTemplate = null, bool hidden = false)
         {
             var jsonGen = new JSchemaGenerator
             {
                 DefaultRequired = Newtonsoft.Json.Required.Default
             };
-            var reg = new V2.CoreApi.Model.Registration()
+            var reg = new Model.Registration()
             {
                 Name = name,
                 DatasetId = datasetId,

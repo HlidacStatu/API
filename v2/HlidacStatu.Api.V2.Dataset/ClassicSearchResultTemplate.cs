@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
-using HlidacStatu.Api.V2.CoreApi.Model;
+using HlidacStatu.Api.V2.Dataset.Model;
 
 namespace HlidacStatu.Api.V2.Dataset
 {

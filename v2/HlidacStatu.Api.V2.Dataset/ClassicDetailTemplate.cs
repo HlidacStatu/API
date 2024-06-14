@@ -4,7 +4,7 @@ namespace HlidacStatu.Api.V2.Dataset
 {
     public partial class ClassicTemplate
     {
-        public class ClassicDetailTemplate : V2.CoreApi.Model.Template
+        public class ClassicDetailTemplate : Model.Template
         {
             public List<column> columns { get; set; } = new List<column>();
 

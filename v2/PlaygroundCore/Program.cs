@@ -1,11 +1,13 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
+System.Net.Http.HttpClient.DefaultProxy = new System.Net.WebProxy("127.0.0.1", 8888);
+
 string apikey = args[0];
 
 var ds = HlidacStatu.Api.V2.Dataset.Typed.Dataset<kvalifikovany_dodavatel>.OpenDataset(apikey, "kvalifikovanidodavatele");
 var s = ds.Search("*", 1);
 
-
+Console.WriteLine(s);
 
 public class kvalifikovany_dodavatel
 {

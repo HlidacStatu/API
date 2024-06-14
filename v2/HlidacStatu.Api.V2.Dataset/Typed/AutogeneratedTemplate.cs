@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
+using HlidacStatu.Api.V2.Dataset.Api;
 using Newtonsoft.Json.Schema;
 using Newtonsoft.Json.Schema.Generation;
 
@@ -20,8 +20,8 @@ namespace HlidacStatu.Api.V2.Dataset.Typed
             generate();
         }
 
-        public V2.CoreApi.Model.Template Detail() => detail;
-        public V2.CoreApi.Model.Template Search() => search;
+        public Model.Template Detail() => detail;
+        public Model.Template Search() => search;
 
 
 

@@ -4,8 +4,17 @@ System.Net.Http.HttpClient.DefaultProxy = new System.Net.WebProxy("127.0.0.1", 8
 
 string apikey = args[0];
 
+var httpCl = new HttpClient();
+httpCl.DefaultRequestHeaders.Add("Authorization", apikey);
+
+var apiCl = new HlidacStatu.Api.V2.swaggerClient("https://api.hlidacstatu.cz/", httpCl);
+var sml = await apiCl.SmlouvyAsync("10117850");
+
+
 var ds = HlidacStatu.Api.V2.Dataset.Typed.Dataset<kvalifikovany_dodavatel>.OpenDataset(apikey, "kvalifikovanidodavatele");
 var s = ds.Search("*", 1);
+
+
 
 Console.WriteLine(s);
 

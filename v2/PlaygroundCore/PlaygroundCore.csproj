@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\HlidacStatu.Api.V2.Dataset\HlidacStatu.Api.V2.Dataset.csproj" />
+    <ProjectReference Include="..\HlidacStatu.Api.V2\HlidacStatu.Api.V2.csproj" />
   </ItemGroup>
 
 </Project>

@@ -55,7 +55,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -98,7 +98,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -132,7 +132,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -175,7 +175,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -219,7 +219,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -272,7 +272,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -335,7 +335,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -381,7 +381,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -427,7 +427,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -473,7 +473,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -525,7 +525,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -589,7 +589,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -636,7 +636,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -677,7 +677,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -765,7 +765,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -799,7 +799,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -845,7 +845,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -918,7 +918,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -992,7 +992,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -1046,7 +1046,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -1109,7 +1109,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -1155,7 +1155,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -1199,7 +1199,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -1260,7 +1260,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -1304,7 +1304,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -1359,7 +1359,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -1410,7 +1410,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -1444,7 +1444,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -1517,7 +1517,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -1545,7 +1545,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -1589,7 +1589,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -1631,7 +1631,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -1665,7 +1665,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -1717,7 +1717,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -1791,7 +1791,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -1838,7 +1838,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -1902,7 +1902,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -1945,7 +1945,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -1979,7 +1979,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -2032,7 +2032,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -2086,7 +2086,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -3134,10 +3134,12 @@
             "nullable": true
           },
           "ciziMena": {
-            "$ref": "#/components/schemas/HlidacStatu.Entities.XSD.tSmlouvaCiziMena"
+            "$ref": "#/components/schemas/HlidacStatu.Entities.XSD.tSmlouvaCiziMena",
+            "nullable": true
           },
           "classification": {
-            "$ref": "#/components/schemas/HlidacStatu.Entities.Smlouva+SClassification"
+            "$ref": "#/components/schemas/HlidacStatu.Entities.Smlouva+SClassification",
+            "nullable": true
           },
           "confidenceValue": {
             "type": "number",
@@ -3206,7 +3208,8 @@
             "type": "boolean"
           },
           "pravniRamec": {
-            "$ref": "#/components/schemas/HlidacStatu.Entities.Smlouva+PravniRamce"
+            "$ref": "#/components/schemas/HlidacStatu.Entities.Smlouva+PravniRamce",
+            "nullable": true
           },
           "predmet": {
             "type": "string",
@@ -3253,10 +3256,12 @@
             "nullable": true
           },
           "hint": {
-            "$ref": "#/components/schemas/HlidacStatu.Entities.HintSmlouva"
+            "$ref": "#/components/schemas/HlidacStatu.Entities.HintSmlouva",
+            "nullable": true
           },
           "vkladatelDoRejstriku": {
-            "$ref": "#/components/schemas/HlidacStatu.Entities.Smlouva+Subjekt"
+            "$ref": "#/components/schemas/HlidacStatu.Entities.Smlouva+Subjekt",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -3275,14 +3280,16 @@
         "type": "object",
         "properties": {
           "blurredPages": {
-            "$ref": "#/components/schemas/HlidacStatu.Entities.Smlouva+Priloha+BlurredPagesStats"
+            "$ref": "#/components/schemas/HlidacStatu.Entities.Smlouva+Priloha+BlurredPagesStats",
+            "nullable": true
           },
           "plainTextContent": {
             "type": "string",
             "nullable": true
           },
           "plainTextContentQuality": {
-            "$ref": "#/components/schemas/HlidacStatu.Entities.DataQualityEnum"
+            "$ref": "#/components/schemas/HlidacStatu.Entities.DataQualityEnum",
+            "nullable": true
           },
           "lastUpdate": {
             "type": "string",
@@ -3320,6 +3327,27 @@
           "enoughExtractedText": {
             "type": "boolean",
             "readOnly": true
+          },
+          "hash": {
+            "type": "object",
+            "properties": {
+              "algoritmus": {
+                "type": "string",
+                "nullable": true
+              },
+              "Value": {
+                "type": "string",
+                "nullable": true
+              }
+            }
+          },
+          "nazevSouboru": {
+            "type": "string",
+            "nullable": true
+          },
+          "odkaz": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -3380,13 +3408,16 @@
             "format": "int32"
           },
           "class1": {
-            "$ref": "#/components/schemas/HlidacStatu.Entities.Smlouva+SClassification+Classification"
+            "$ref": "#/components/schemas/HlidacStatu.Entities.Smlouva+SClassification+Classification",
+            "nullable": true
           },
           "class2": {
-            "$ref": "#/components/schemas/HlidacStatu.Entities.Smlouva+SClassification+Classification"
+            "$ref": "#/components/schemas/HlidacStatu.Entities.Smlouva+SClassification+Classification",
+            "nullable": true
           },
           "class3": {
-            "$ref": "#/components/schemas/HlidacStatu.Entities.Smlouva+SClassification+Classification"
+            "$ref": "#/components/schemas/HlidacStatu.Entities.Smlouva+SClassification+Classification",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -4585,7 +4616,7 @@
           },
           "results": {
             "type": "array",
-            "items": { },
+            "items": {},
             "nullable": true
           }
         },
@@ -4682,14 +4713,14 @@
           },
           "properties": {
             "type": "object",
-            "additionalProperties": { },
+            "additionalProperties": {},
             "nullable": true,
             "readOnly": true,
             "deprecated": true
           },
           "options": {
             "type": "object",
-            "additionalProperties": { },
+            "additionalProperties": {},
             "nullable": true,
             "readOnly": true
           }

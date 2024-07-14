@@ -8,7 +8,7 @@ var httpCl = new HttpClient();
 httpCl.DefaultRequestHeaders.Add("Authorization", apikey);
 
 var apiCl = new HlidacStatu.Api.V2.swaggerClient("https://api.hlidacstatu.cz/", httpCl);
-var sml = await apiCl.SmlouvyAsync("10117850");
+var sml = await apiCl.SmlouvyAsync("28548131");
 
 
 var ds = HlidacStatu.Api.V2.Dataset.Typed.Dataset<kvalifikovany_dodavatel>.OpenDataset(apikey, "kvalifikovanidodavatele");

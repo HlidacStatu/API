@@ -7,10 +7,10 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<Nullable>enable</Nullable>
-		<Version>2.0.0.2</Version>
+		<Version>2.4.0.1</Version>
 		<PackageProjectUrl>https://github.com/HlidacStatu/API/tree/master/v2/HlidacStatu.Api.V2</PackageProjectUrl>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<Description>Simple library for Hlídač státu API</Description>
+		<Description>Simple library for Hlídač státu API 2.4.</Description>
 		<Company>Hlídač státu z.ú.</Company>
 		<RepositoryUrl>https://github.com/HlidacStatu/API/tree/master/v2/HlidacStatu.Api.V2</RepositoryUrl>
 		<PackageTags>Hlídač státu, API, V2</PackageTags>
@@ -24,7 +24,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.Extensions.ApiDescription.Client" Version="8.0.7">
+		<PackageReference Include="Microsoft.Extensions.ApiDescription.Client" Version="8.0.14">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>

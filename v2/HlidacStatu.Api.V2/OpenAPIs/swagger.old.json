@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "title": "HlidacStatu Api 2.4.0.0",
+    "title": "HlidacStatu Api 2.3.7.0",
     "description": "REST API Hlídače státu",
     "termsOfService": "https://www.hlidacstatu.cz/texty/provoznipodminky/",
     "contact": {
@@ -55,7 +55,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -98,7 +98,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -132,7 +132,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -175,12 +175,12 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
     },
-    "/api/v2/dumpItems/{datatype}": {
+    "/api/v2/dump/{datatype}": {
       "get": {
         "tags": [
           "ApiV2"
@@ -195,48 +195,12 @@
             }
           },
           {
-            "name": "date",
+            "name": "unzip",
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string",
-              "default": "null"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        },
-        "security": [
-          {
-            "apiKey": [ ]
-          }
-        ]
-      }
-    },
-    "/api/v2/dumpZip/{datatype}/{date}": {
-      "get": {
-        "tags": [
-          "ApiV2"
-        ],
-        "parameters": [
-          {
-            "name": "datatype",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "date",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "default": "null"
+              "type": "bool",
+              "default": "false"
             }
           }
         ],
@@ -246,20 +210,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "type": "string",
-                  "format": "byte"
+                  "$ref": "#/components/schemas/System.Net.Http.HttpResponseMessage"
                 }
               },
               "application/json": {
                 "schema": {
-                  "type": "string",
-                  "format": "byte"
+                  "$ref": "#/components/schemas/System.Net.Http.HttpResponseMessage"
                 }
               },
               "text/json": {
                 "schema": {
-                  "type": "string",
-                  "format": "byte"
+                  "$ref": "#/components/schemas/System.Net.Http.HttpResponseMessage"
                 }
               }
             }
@@ -267,7 +228,69 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
+          }
+        ]
+      }
+    },
+    "/api/v2/dump/{datatype}/{date}": {
+      "get": {
+        "tags": [
+          "ApiV2"
+        ],
+        "parameters": [
+          {
+            "name": "datatype",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "date",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "null"
+            }
+          },
+          {
+            "name": "unzip",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "bool",
+              "default": "false"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/System.Net.Http.HttpResponseMessage"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/System.Net.Http.HttpResponseMessage"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/System.Net.Http.HttpResponseMessage"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": []
           }
         ]
       }
@@ -312,17 +335,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/HlidacStatuApi.Models.SearchResultDTO`1[[HlidacStatu.Entities.Dotace, HlidacStatu.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+                  "$ref": "#/components/schemas/HlidacStatuApi.Models.SearchResultDTO`1[[HlidacStatu.Entities.Dotace.Dotace, HlidacStatu.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HlidacStatuApi.Models.SearchResultDTO`1[[HlidacStatu.Entities.Dotace, HlidacStatu.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+                  "$ref": "#/components/schemas/HlidacStatuApi.Models.SearchResultDTO`1[[HlidacStatu.Entities.Dotace.Dotace, HlidacStatu.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HlidacStatuApi.Models.SearchResultDTO`1[[HlidacStatu.Entities.Dotace, HlidacStatu.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+                  "$ref": "#/components/schemas/HlidacStatuApi.Models.SearchResultDTO`1[[HlidacStatu.Entities.Dotace.Dotace, HlidacStatu.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
                 }
               }
             }
@@ -330,7 +353,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -340,12 +363,12 @@
         "tags": [
           "ApiV2Dotace"
         ],
-        "summary": "Vrátí detail jedné Dotace.",
+        "summary": "Vrátí detail jedné dotace.",
         "parameters": [
           {
             "name": "id",
             "in": "path",
-            "description": "id Dotace",
+            "description": "id dotace",
             "required": true,
             "schema": {
               "type": "string"
@@ -358,17 +381,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/HlidacStatu.Entities.Dotace"
+                  "$ref": "#/components/schemas/HlidacStatu.Entities.Dotace.Dotace"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HlidacStatu.Entities.Dotace"
+                  "$ref": "#/components/schemas/HlidacStatu.Entities.Dotace.Dotace"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HlidacStatu.Entities.Dotace"
+                  "$ref": "#/components/schemas/HlidacStatu.Entities.Dotace.Dotace"
                 }
               }
             }
@@ -376,7 +399,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -422,7 +445,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -468,7 +491,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -520,7 +543,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -584,7 +607,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -631,7 +654,170 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
+          }
+        ]
+      }
+    },
+    "/api/v2/ocr/Save": {
+      "post": {
+        "tags": [
+          "ApiV2OCR"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/HlidacStatu.DS.Api.OcrWork+Task"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/HlidacStatu.DS.Api.OcrWork+Task"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/HlidacStatu.DS.Api.OcrWork+Task"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/HlidacStatu.DS.Api.OcrWork+Task"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    },
+    "/api/v2/ocr/AddTask": {
+      "get": {
+        "tags": [
+          "ApiV2OCR"
+        ],
+        "parameters": [
+          {
+            "name": "itemType",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/HlidacStatu.DS.Api.OcrWork+DocTypes"
+            }
+          },
+          {
+            "name": "itemId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "itemSubType",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "priority",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/HlidacStatu.DS.Api.OcrWork+TaskPriority"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/HlidacStatu.DS.Api.OcrWork+TaskOptions"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/HlidacStatu.DS.Api.OcrWork+TaskOptions"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/HlidacStatu.DS.Api.OcrWork+TaskOptions"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/HlidacStatu.DS.Api.OcrWork+TaskOptions"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "boolean"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    },
+    "/api/v2/ocr/Stats": {
+      "get": {
+        "tags": [
+          "ApiV2OCR"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/HlidacStatu.Entities.OCRStatistics"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HlidacStatu.Entities.OCRStatistics"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HlidacStatu.Entities.OCRStatistics"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": []
           }
         ]
       }
@@ -677,7 +863,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -750,59 +936,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
-          }
-        ]
-      }
-    },
-    "/api/v2/osoby/PolitikFromText": {
-      "get": {
-        "tags": [
-          "ApiV2Osoby"
-        ],
-        "parameters": [
-          {
-            "name": "text",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        },
-        "security": [
-          {
-            "apiKey": [ ]
-          }
-        ]
-      }
-    },
-    "/api/v2/osoby/PoliticiFromText": {
-      "get": {
-        "tags": [
-          "ApiV2Osoby"
-        ],
-        "parameters": [
-          {
-            "name": "text",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        },
-        "security": [
-          {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -876,7 +1010,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -930,7 +1064,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -993,7 +1127,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -1039,7 +1173,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -1083,7 +1217,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -1144,7 +1278,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -1188,7 +1322,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -1243,7 +1377,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -1294,7 +1428,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -1328,7 +1462,354 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
+          }
+        ]
+      }
+    },
+    "/api/v2/voice2text/CreateTask": {
+      "post": {
+        "tags": [
+          "ApiV2Voice2Text"
+        ],
+        "summary": "Vytvori task a ulozi do fronty. Vrati id tasku",
+        "parameters": [
+          {
+            "name": "addDuplicated",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Cislo id taasku",
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/HlidacStatu.DS.Api.Voice2Text.Task"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/HlidacStatu.DS.Api.Voice2Text.Task"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/HlidacStatu.DS.Api.Voice2Text.Task"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/HlidacStatu.DS.Api.Voice2Text.Task"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int64"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int64"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int64"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    },
+    "/api/v2/voice2text/Check": {
+      "get": {
+        "tags": [
+          "ApiV2Voice2Text"
+        ],
+        "parameters": [
+          {
+            "name": "returnStatus",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 200
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    },
+    "/api/v2/voice2text/GetNextTask": {
+      "get": {
+        "tags": [
+          "ApiV2Voice2Text"
+        ],
+        "summary": "Vrátí taskID pro Voice2Text Docker image",
+        "parameters": [
+          {
+            "name": "processEngine",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/HlidacStatu.DS.Api.Voice2Text.Task"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HlidacStatu.DS.Api.Voice2Text.Task"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HlidacStatu.DS.Api.Voice2Text.Task"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    },
+    "/api/v2/voice2text/TaskDone": {
+      "post": {
+        "tags": [
+          "ApiV2Voice2Text"
+        ],
+        "summary": "Potvrdí ukončení Voice2Text operace",
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/HlidacStatu.DS.Api.Voice2Text.Task"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/HlidacStatu.DS.Api.Voice2Text.Task"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/HlidacStatu.DS.Api.Voice2Text.Task"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/HlidacStatu.DS.Api.Voice2Text.Task"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    },
+    "/api/v2/voice2text/SetTaskStatus": {
+      "get": {
+        "tags": [
+          "ApiV2Voice2Text"
+        ],
+        "parameters": [
+          {
+            "name": "qId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/HlidacStatu.DS.Api.Voice2Text.Task+CheckState"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    },
+    "/api/v2/voice2text/RestartTask": {
+      "get": {
+        "tags": [
+          "ApiV2Voice2Text"
+        ],
+        "parameters": [
+          {
+            "name": "qId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "withPriority",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    },
+    "/api/v2/voice2text/GetTasks": {
+      "get": {
+        "tags": [
+          "ApiV2Voice2Text"
+        ],
+        "parameters": [
+          {
+            "name": "maxItems",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "callerId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "callerTaskId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/HlidacStatu.DS.Api.Voice2Text.Task+CheckState"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/HlidacStatu.DS.Api.Voice2Text.Task"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/HlidacStatu.DS.Api.Voice2Text.Task"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/HlidacStatu.DS.Api.Voice2Text.Task"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": []
           }
         ]
       }
@@ -1375,7 +1856,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -1439,7 +1920,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -1482,7 +1963,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -1516,7 +1997,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -1569,7 +2050,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -1623,7 +2104,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -1678,101 +2159,292 @@
         "type": "integer",
         "format": "int32"
       },
-      "HlidacStatu.Datasets.Registration": {
+      "HlidacStatu.DS.Api.OcrWork+DocTypes": {
+        "enum": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
+      "HlidacStatu.DS.Api.OcrWork+Result": {
         "type": "object",
         "properties": {
           "id": {
             "type": "string",
-            "nullable": true,
-            "readOnly": true
+            "nullable": true
           },
-          "name": {
+          "documents": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/HlidacStatu.DS.Api.OcrWork+Result+Document"
+            },
+            "nullable": true
+          },
+          "server": {
             "type": "string",
             "nullable": true
           },
-          "datasetId": {
-            "type": "string",
-            "nullable": true
-          },
-          "origUrl": {
-            "type": "string",
-            "nullable": true
-          },
-          "sourcecodeUrl": {
-            "type": "string",
-            "nullable": true
-          },
-          "description": {
-            "type": "string",
-            "nullable": true
-          },
-          "jsonSchema": {
-            "type": "string",
-            "nullable": true
-          },
-          "createdBy": {
-            "type": "string",
-            "nullable": true
-          },
-          "created": {
+          "started": {
             "type": "string",
             "format": "date-time"
           },
-          "betaversion": {
-            "type": "boolean"
-          },
-          "allowWriteAccess": {
-            "type": "boolean"
-          },
-          "hidden": {
-            "type": "boolean"
-          },
-          "searchResultTemplate": {
-            "$ref": "#/components/schemas/HlidacStatu.Datasets.Registration+Template"
-          },
-          "detailTemplate": {
-            "$ref": "#/components/schemas/HlidacStatu.Datasets.Registration+Template"
-          },
-          "defaultOrderBy": {
+          "ends": {
             "type": "string",
-            "nullable": true
+            "format": "date-time"
           },
-          "orderList": {
-            "type": "array",
-            "items": { },
+          "isValid": {
+            "$ref": "#/components/schemas/HlidacStatu.DS.Api.OcrWork+Result+ResultStatus"
+          },
+          "error": {
+            "type": "string",
             "nullable": true
           }
         },
         "additionalProperties": false
       },
-      "HlidacStatu.Datasets.Registration+Template": {
+      "HlidacStatu.DS.Api.OcrWork+Result+Document": {
         "type": "object",
         "properties": {
-          "header": {
+          "contentType": {
             "type": "string",
             "nullable": true
           },
-          "body": {
+          "filename": {
             "type": "string",
             "nullable": true
           },
-          "footer": {
+          "text": {
             "type": "string",
             "nullable": true
           },
-          "title": {
+          "confidence": {
+            "type": "number",
+            "format": "float"
+          },
+          "usedOCR": {
+            "type": "boolean"
+          },
+          "pages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "remainsInSec": {
+            "type": "number",
+            "format": "double"
+          },
+          "usedTool": {
             "type": "string",
             "nullable": true
           },
-          "properties": {
+          "server": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "HlidacStatu.DS.Api.OcrWork+Result+ResultStatus": {
+        "enum": [
+          0,
+          1,
+          3,
+          -1
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
+      "HlidacStatu.DS.Api.OcrWork+Task": {
+        "type": "object",
+        "properties": {
+          "taskId": {
+            "type": "string",
+            "nullable": true
+          },
+          "parentDocId": {
+            "type": "string",
+            "nullable": true
+          },
+          "docs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/HlidacStatu.DS.Api.OcrWork+Task+Doc"
+            },
+            "nullable": true
+          },
+          "options": {
+            "$ref": "#/components/schemas/HlidacStatu.DS.Api.OcrWork+TaskOptions"
+          },
+          "type": {
+            "$ref": "#/components/schemas/HlidacStatu.DS.Api.OcrWork+DocTypes"
+          }
+        },
+        "additionalProperties": false
+      },
+      "HlidacStatu.DS.Api.OcrWork+Task+Doc": {
+        "type": "object",
+        "properties": {
+          "prilohaId": {
+            "type": "string",
+            "nullable": true
+          },
+          "url": {
+            "type": "string",
+            "nullable": true
+          },
+          "origFilename": {
+            "type": "string",
+            "nullable": true
+          },
+          "result": {
+            "$ref": "#/components/schemas/HlidacStatu.DS.Api.OcrWork+Result"
+          }
+        },
+        "additionalProperties": false
+      },
+      "HlidacStatu.DS.Api.OcrWork+TaskOptions": {
+        "type": "object",
+        "properties": {
+          "forceOCR": {
+            "type": "boolean"
+          },
+          "ocrMissingOnly": {
+            "type": "boolean"
+          },
+          "ocrLengthLessThan": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "forceClassification": {
+            "type": "boolean"
+          },
+          "forceTablesMining": {
+            "type": "boolean"
+          },
+          "forceBlurredPages": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "HlidacStatu.DS.Api.OcrWork+TaskPriority": {
+        "enum": [
+          0,
+          5,
+          10,
+          20,
+          100,
+          999
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
+      "HlidacStatu.DS.Api.Voice2Text.Options": {
+        "type": "object",
+        "properties": {
+          "vocabulary": {
             "type": "array",
             "items": {
               "type": "string"
             },
             "nullable": true
+          },
+          "diarization": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "language": {
+            "type": "string",
+            "nullable": true
+          },
+          "deleteFileAfterProcess": {
+            "type": "boolean"
+          },
+          "datasetName": {
+            "type": "string",
+            "nullable": true
+          },
+          "itemId": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
+      },
+      "HlidacStatu.DS.Api.Voice2Text.Task": {
+        "type": "object",
+        "properties": {
+          "qId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "priority": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "callerId": {
+            "type": "string",
+            "nullable": true
+          },
+          "callerTaskId": {
+            "type": "string",
+            "nullable": true
+          },
+          "source": {
+            "type": "string",
+            "nullable": true
+          },
+          "sourceOptions": {
+            "$ref": "#/components/schemas/HlidacStatu.DS.Api.Voice2Text.Options"
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "done": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "started": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "result": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Devmasters.SpeechToText.Term"
+            },
+            "nullable": true
+          },
+          "exception": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "$ref": "#/components/schemas/HlidacStatu.DS.Api.Voice2Text.Task+CheckState"
+          },
+          "processEngine": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "HlidacStatu.DS.Api.Voice2Text.Task+CheckState": {
+        "enum": [
+          0,
+          1,
+          2,
+          100,
+          -1
+        ],
+        "type": "integer",
+        "format": "int32"
       },
       "HlidacStatu.Entities.BlurredPageAPIStatistics": {
         "type": "object",
@@ -1865,274 +2537,134 @@
         "type": "integer",
         "format": "int32"
       },
-      "HlidacStatu.Entities.Dotace": {
+      "HlidacStatu.Entities.Dotace.Cerpani": {
+        "type": "object",
+        "properties": {
+          "castkaSpotrebovana": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "rok": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "guessedYear": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "HlidacStatu.Entities.Dotace.Dotace": {
+        "type": "object",
+        "properties": {
+          "idDotace": {
+            "type": "string",
+            "nullable": true
+          },
+          "datumPodpisu": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "datumAktualizace": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "kodProjektu": {
+            "type": "string",
+            "nullable": true
+          },
+          "nazevProjektu": {
+            "type": "string",
+            "nullable": true
+          },
+          "zdroj": {
+            "$ref": "#/components/schemas/HlidacStatu.Entities.Dotace.Zdroj"
+          },
+          "prijemce": {
+            "$ref": "#/components/schemas/HlidacStatu.Entities.Dotace.Prijemce"
+          },
+          "program": {
+            "$ref": "#/components/schemas/HlidacStatu.Entities.Dotace.DotacniProgram"
+          },
+          "dotaceCelkem": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "pujckaCelkem": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "rozhodnuti": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/HlidacStatu.Entities.Dotace.Rozhodnuti"
+            },
+            "nullable": true
+          },
+          "duplicita": {
+            "type": "string",
+            "nullable": true
+          },
+          "chyba": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "HlidacStatu.Entities.Dotace.DotacniProgram": {
         "type": "object",
         "properties": {
           "id": {
             "type": "string",
             "nullable": true
           },
-          "sourceIds": {
-            "uniqueItems": true,
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "nullable": true
-          },
-          "primaryDataSource": {
+          "nazev": {
             "type": "string",
             "nullable": true
           },
-          "processedDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "modifiedDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "assumedAmount": {
-            "type": "number",
-            "format": "double",
-            "readOnly": true
-          },
-          "category": {
+          "kod": {
             "type": "string",
             "nullable": true
           },
-          "recipient": {
-            "$ref": "#/components/schemas/HlidacStatu.Entities.Dotace+SubsidyRecipient"
-          },
-          "subsidyAmount": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
-          },
-          "payedAmount": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
-          },
-          "returnedAmount": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
-          },
-          "projectCode": {
+          "url": {
             "type": "string",
-            "nullable": true
-          },
-          "projectName": {
-            "type": "string",
-            "nullable": true
-          },
-          "projectDescription": {
-            "type": "string",
-            "nullable": true
-          },
-          "programCode": {
-            "type": "string",
-            "nullable": true
-          },
-          "programName": {
-            "type": "string",
-            "nullable": true
-          },
-          "approvedYear": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "subsidyProvider": {
-            "type": "string",
-            "nullable": true
-          },
-          "subsidyProviderIco": {
-            "type": "string",
-            "nullable": true
-          },
-          "displayProject": {
-            "type": "string",
-            "nullable": true,
-            "readOnly": true
-          },
-          "rozhodnuti": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/HlidacStatu.Entities.Dotace+RozhodnutiItem"
-            },
-            "nullable": true
-          },
-          "cerpani": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/HlidacStatu.Entities.Dotace+CerpaniItem"
-            },
-            "nullable": true
-          },
-          "hints": {
-            "$ref": "#/components/schemas/HlidacStatu.Entities.Dotace+Hint"
-          }
-        },
-        "additionalProperties": false
-      },
-      "HlidacStatu.Entities.Dotace+CerpaniItem": {
-        "type": "object",
-        "properties": {
-          "year": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "amount": {
-            "type": "number",
-            "format": "double",
             "nullable": true
           }
         },
         "additionalProperties": false
       },
-      "HlidacStatu.Entities.Dotace+Hint": {
-        "type": "object",
-        "properties": {
-          "tags": {
-            "uniqueItems": true,
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "nullable": true
-          },
-          "category1": {
-            "$ref": "#/components/schemas/HlidacStatu.Entities.Dotace+Hint+Category"
-          },
-          "category2": {
-            "$ref": "#/components/schemas/HlidacStatu.Entities.Dotace+Hint+Category"
-          },
-          "category3": {
-            "$ref": "#/components/schemas/HlidacStatu.Entities.Dotace+Hint+Category"
-          },
-          "isOriginal": {
-            "type": "boolean"
-          },
-          "originalSubsidyId": {
-            "type": "string",
-            "nullable": true
-          },
-          "duplicates": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "nullable": true
-          },
-          "hiddenDuplicates": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "nullable": true
-          },
-          "hasDuplicates": {
-            "type": "boolean",
-            "readOnly": true
-          },
-          "hasHiddenDuplicates": {
-            "type": "boolean",
-            "readOnly": true
-          },
-          "subsidyType": {
-            "$ref": "#/components/schemas/HlidacStatu.Entities.Dotace+Hint+Type"
-          },
-          "duplicateCalculated": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "recipientTypSubjektu": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "recipientStatus": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "recipientPolitickyAngazovanySubjekt": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "recipientPocetLetOdZalozeni": {
-            "type": "integer",
-            "format": "int32"
-          }
-        },
-        "additionalProperties": false
-      },
-      "HlidacStatu.Entities.Dotace+Hint+Category": {
-        "type": "object",
-        "properties": {
-          "typeValue": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "probability": {
-            "type": "number",
-            "format": "double"
-          },
-          "created": {
-            "type": "string",
-            "format": "date-time"
-          }
-        },
-        "additionalProperties": false
-      },
-      "HlidacStatu.Entities.Dotace+Hint+Type": {
-        "enum": [
-          0,
-          1,
-          2,
-          3,
-          4
-        ],
-        "type": "integer",
-        "format": "int32"
-      },
-      "HlidacStatu.Entities.Dotace+RozhodnutiItem": {
-        "type": "object",
-        "properties": {
-          "financniZdroj": {
-            "type": "string",
-            "nullable": true
-          },
-          "amount": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "HlidacStatu.Entities.Dotace+SubsidyRecipient": {
+      "HlidacStatu.Entities.Dotace.Prijemce": {
         "type": "object",
         "properties": {
           "ico": {
             "type": "string",
             "nullable": true
           },
-          "name": {
+          "obchodniJmeno": {
             "type": "string",
             "nullable": true
           },
-          "hlidacName": {
+          "hlidacJmeno": {
             "type": "string",
             "nullable": true
           },
-          "hlidacNameId": {
+          "jmeno": {
             "type": "string",
             "nullable": true
           },
-          "yearOfBirth": {
+          "rokNarozeni": {
             "type": "integer",
             "format": "int32",
             "nullable": true
@@ -2149,10 +2681,77 @@
             "type": "string",
             "nullable": true
           },
+          "ulice": {
+            "type": "string",
+            "nullable": true
+          },
           "displayName": {
             "type": "string",
             "nullable": true,
             "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "HlidacStatu.Entities.Dotace.Rozhodnuti": {
+        "type": "object",
+        "properties": {
+          "castkaPozadovana": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "castkaRozhodnuta": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "cerpanoCelkem": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "jePujcka": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "icoPoskytovatele": {
+            "type": "string",
+            "nullable": true
+          },
+          "poskytovatel": {
+            "type": "string",
+            "nullable": true
+          },
+          "rok": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "zdrojFinanci": {
+            "type": "string",
+            "nullable": true
+          },
+          "cerpani": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/HlidacStatu.Entities.Dotace.Cerpani"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "HlidacStatu.Entities.Dotace.Zdroj": {
+        "type": "object",
+        "properties": {
+          "nazev": {
+            "type": "string",
+            "nullable": true
+          },
+          "url": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -2553,10 +3152,12 @@
             "nullable": true
           },
           "ciziMena": {
-            "$ref": "#/components/schemas/HlidacStatu.Entities.XSD.tSmlouvaCiziMena"
+            "$ref": "#/components/schemas/HlidacStatu.Entities.XSD.tSmlouvaCiziMena",
+            "nullable": true
           },
           "classification": {
-            "$ref": "#/components/schemas/HlidacStatu.Entities.Smlouva+SClassification"
+            "$ref": "#/components/schemas/HlidacStatu.Entities.Smlouva+SClassification",
+            "nullable": true
           },
           "confidenceValue": {
             "type": "number",
@@ -2625,7 +3226,8 @@
             "type": "boolean"
           },
           "pravniRamec": {
-            "$ref": "#/components/schemas/HlidacStatu.Entities.Smlouva+PravniRamce"
+            "$ref": "#/components/schemas/HlidacStatu.Entities.Smlouva+PravniRamce",
+            "nullable": true
           },
           "predmet": {
             "type": "string",
@@ -2672,10 +3274,12 @@
             "nullable": true
           },
           "hint": {
-            "$ref": "#/components/schemas/HlidacStatu.Entities.HintSmlouva"
+            "$ref": "#/components/schemas/HlidacStatu.Entities.HintSmlouva",
+            "nullable": true
           },
           "vkladatelDoRejstriku": {
-            "$ref": "#/components/schemas/HlidacStatu.Entities.Smlouva+Subjekt"
+            "$ref": "#/components/schemas/HlidacStatu.Entities.Smlouva+Subjekt",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -2694,14 +3298,16 @@
         "type": "object",
         "properties": {
           "blurredPages": {
-            "$ref": "#/components/schemas/HlidacStatu.Entities.Smlouva+Priloha+BlurredPagesStats"
+            "$ref": "#/components/schemas/HlidacStatu.Entities.Smlouva+Priloha+BlurredPagesStats",
+            "nullable": true
           },
           "plainTextContent": {
             "type": "string",
             "nullable": true
           },
           "plainTextContentQuality": {
-            "$ref": "#/components/schemas/HlidacStatu.Entities.DataQualityEnum"
+            "$ref": "#/components/schemas/HlidacStatu.Entities.DataQualityEnum",
+            "nullable": true
           },
           "lastUpdate": {
             "type": "string",
@@ -2739,6 +3345,27 @@
           "enoughExtractedText": {
             "type": "boolean",
             "readOnly": true
+          },
+          "hash": {
+            "type": "object",
+            "properties": {
+              "algoritmus": {
+                "type": "string",
+                "nullable": true
+              },
+              "Value": {
+                "type": "string",
+                "nullable": true
+              }
+            }
+          },
+          "nazevSouboru": {
+            "type": "string",
+            "nullable": true
+          },
+          "odkaz": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -2799,13 +3426,16 @@
             "format": "int32"
           },
           "class1": {
-            "$ref": "#/components/schemas/HlidacStatu.Entities.Smlouva+SClassification+Classification"
+            "$ref": "#/components/schemas/HlidacStatu.Entities.Smlouva+SClassification+Classification",
+            "nullable": true
           },
           "class2": {
-            "$ref": "#/components/schemas/HlidacStatu.Entities.Smlouva+SClassification+Classification"
+            "$ref": "#/components/schemas/HlidacStatu.Entities.Smlouva+SClassification+Classification",
+            "nullable": true
           },
           "class3": {
-            "$ref": "#/components/schemas/HlidacStatu.Entities.Smlouva+SClassification+Classification"
+            "$ref": "#/components/schemas/HlidacStatu.Entities.Smlouva+SClassification+Classification",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -3219,17 +3849,14 @@
         "properties": {
           "id": {
             "type": "string",
-            "description": "Unikátní ID zakázky. Nevyplňujte, ID vygeneruje Hlídač Státu.",
             "nullable": true
           },
           "vvzInternalId": {
             "type": "string",
-            "description": "Interní ID na věstníku veřejných zakázek",
             "nullable": true
           },
           "hasIssues": {
-            "type": "boolean",
-            "description": "Označuje problematickou VZ. Tyto zakázky nezobrazovat. Chyby je potřeba opravit"
+            "type": "boolean"
           },
           "zdroje": {
             "uniqueItems": true,
@@ -3237,7 +3864,6 @@
             "items": {
               "$ref": "#/components/schemas/HlidacStatu.Entities.VZ.VerejnaZakazka+Zdroj"
             },
-            "description": "Seznam datasetů a evidenčních čísel v datasetech, kde se VZ vyskytuje. Hodnota 'VVZ-2006' pro zakázky z VVZ od 2006-2016, 'VVZ-2016' pro nové dle zákona o VZ z 2016",
             "nullable": true
           },
           "changelog": {
@@ -3253,7 +3879,6 @@
             "items": {
               "type": "string"
             },
-            "description": "Externí ID. Seznam dalších různých ID, např. ze systému Rozza",
             "nullable": true
           },
           "formulare": {
@@ -3262,12 +3887,10 @@
             "items": {
               "$ref": "#/components/schemas/HlidacStatu.Entities.VZ.VerejnaZakazka+Formular"
             },
-            "description": "Všechny formuláře spojené se zakázkou",
             "nullable": true
           },
           "displayId": {
             "type": "integer",
-            "description": "Nepouzito",
             "format": "int32"
           },
           "zadavatel": {
@@ -3278,22 +3901,18 @@
             "items": {
               "$ref": "#/components/schemas/HlidacStatu.Entities.VZ.VerejnaZakazka+Subject"
             },
-            "description": "Dodavatele",
             "nullable": true
           },
           "nazevZakazky": {
             "type": "string",
-            "description": "Název zakázky",
             "nullable": true
           },
           "popisZakazky": {
             "type": "string",
-            "description": "Popis zakázky z VVZ",
             "nullable": true
           },
           "popisZakazkyRozza": {
             "type": "string",
-            "description": "Popis zakázky z Rozza",
             "nullable": true
           },
           "dokumenty": {
@@ -3301,7 +3920,6 @@
             "items": {
               "$ref": "#/components/schemas/HlidacStatu.Entities.VZ.VerejnaZakazka+Document"
             },
-            "description": "Zadávací dokumentace a další dokumenty spojené se zakázkou",
             "nullable": true
           },
           "cpv": {
@@ -3310,42 +3928,35 @@
             "items": {
               "type": "string"
             },
-            "description": "CPV kódy určující oblast VZ",
             "nullable": true
           },
           "datumUverejneni": {
             "type": "string",
-            "description": "Datum uveřejnění",
             "format": "date-time",
             "nullable": true
           },
           "lhutaDoruceni": {
             "type": "string",
-            "description": "Lhůta pro doručení nabídek",
             "format": "date-time",
             "nullable": true
           },
           "lhutaPrihlaseni": {
             "type": "string",
-            "description": "Lhůta pro doručení přihlášky k účasti na VZ",
             "format": "date-time",
             "nullable": true
           },
           "datumUzavreniSmlouvy": {
             "type": "string",
-            "description": "Datum uzavření smlouvy u ukončené zakázky",
             "format": "date-time",
             "nullable": true
           },
           "posledniZmena": {
             "type": "string",
-            "description": "Poslední změna VZ podle poslední změny formuláře.",
             "format": "date-time",
             "nullable": true
           },
           "stavVZ": {
             "type": "integer",
-            "description": "Číselná hodnota odvozeného stavu zakázky z enumerace 'StavyZakazky'.",
             "format": "int32"
           },
           "stavZakazky": {
@@ -3353,35 +3964,29 @@
           },
           "origin": {
             "type": "string",
-            "description": "Prvotní zdroj, kde jsme se o VZ dozvěděli",
             "nullable": true
           },
           "lastUpdated": {
             "type": "string",
-            "description": "",
             "format": "date-time",
             "nullable": true
           },
           "odhadovanaHodnotaBezDPH": {
             "type": "number",
-            "description": "Odhadovaná hodnota zakázky bez DPH.",
             "format": "double",
             "nullable": true
           },
           "konecnaHodnotaBezDPH": {
             "type": "number",
-            "description": "Konečná (vysoutěžená) hodnota zakázky bez DPH.",
             "format": "double",
             "nullable": true
           },
           "odhadovanaHodnotaMena": {
             "type": "string",
-            "description": "Měna odhadovaná hodnoty zakázky.",
             "nullable": true
           },
           "konecnaHodnotaMena": {
             "type": "string",
-            "description": "Měna konečné hodnoty zakázky.",
             "nullable": true
           },
           "urlZakazky": {
@@ -3390,12 +3995,10 @@
             "items": {
               "type": "string"
             },
-            "description": "Seznam známých url odkazů na umístění zakázky na webu.",
             "nullable": true
           },
           "rawHtml": {
             "type": "string",
-            "description": "HTML stránky zakázky, pokud bylo parsováno z HTML",
             "nullable": true
           }
         },
@@ -3406,12 +4009,10 @@
         "properties": {
           "sha256Checksum": {
             "type": "string",
-            "description": "Kontrolní součet SHA256 souboru pro ověření unikátnosti.",
             "nullable": true
           },
           "sizeInBytes": {
             "type": "integer",
-            "description": "Velikost souboru v Bytech",
             "format": "int64"
           },
           "oficialUrls": {
@@ -3420,7 +4021,6 @@
             "items": {
               "type": "string"
             },
-            "description": "URL odkazy uvedené v profilu zadavatele",
             "nullable": true
           },
           "directUrls": {
@@ -3429,28 +4029,23 @@
             "items": {
               "type": "string"
             },
-            "description": "Přímé URL na tento dokument.",
             "nullable": true
           },
           "typDokumentu": {
             "type": "string",
-            "description": "Popis obsahu dokumentu, z XML na profilu z pole dokument/typ_dokumentu.",
             "nullable": true
           },
           "vlozenoNaProfil": {
             "type": "string",
-            "description": "Datum vložení, uveřejnění dokumentu.",
             "format": "date-time",
             "nullable": true
           },
           "cisloVerze": {
             "type": "string",
-            "description": "Číslo verze",
             "nullable": true
           },
           "plainText": {
             "type": "string",
-            "description": "Neuvádět, obsah dokumentu v plain textu pro ftx vyhledávání",
             "nullable": true
           },
           "plainTextContentQuality": {
@@ -3458,34 +4053,28 @@
           },
           "lastUpdate": {
             "type": "string",
-            "description": "Neuvádět",
             "format": "date-time",
             "nullable": true
           },
           "lastProcessed": {
             "type": "string",
-            "description": "Neuvádět",
             "format": "date-time",
             "nullable": true
           },
           "contentType": {
             "type": "string",
-            "description": "Neuvádět",
             "nullable": true
           },
           "lenght": {
             "type": "integer",
-            "description": "Neuvádět",
             "format": "int32"
           },
           "wordCount": {
             "type": "integer",
-            "description": "Neuvádět",
             "format": "int32"
           },
           "pages": {
             "type": "integer",
-            "description": "Neuvádět",
             "format": "int32"
           },
           "storageIds": {
@@ -3520,38 +4109,31 @@
         "properties": {
           "cislo": {
             "type": "string",
-            "description": "Číslo formuláře",
             "nullable": true
           },
           "druh": {
             "type": "string",
-            "description": "Druh formuláře (F01-F31, CZ01-CZ02)",
             "nullable": true
           },
           "typFormulare": {
             "type": "string",
-            "description": "Typ formuláře (řádný/opravný), nebo nevyplněno (pak je řádný)",
             "nullable": true
           },
           "limitVZ": {
             "type": "string",
-            "description": "Limit VZ (nadlimitní/podlimitní/VZMR)",
             "nullable": true
           },
           "druhRizeni": {
             "type": "string",
-            "description": "Druh řízení dle ZVZ",
             "nullable": true
           },
           "zverejnen": {
             "type": "string",
-            "description": "Datum zveřejnění.",
             "format": "date-time",
             "nullable": true
           },
           "url": {
             "type": "string",
-            "description": "URL formuláře, může být prázdné",
             "nullable": true
           }
         },
@@ -3574,17 +4156,14 @@
         "properties": {
           "ico": {
             "type": "string",
-            "description": "IC subjektu",
             "nullable": true
           },
           "jmeno": {
             "type": "string",
-            "description": "Obchodní jméno",
             "nullable": true
           },
           "profilZadavatele": {
             "type": "string",
-            "description": "Profil zadavatele",
             "nullable": true
           }
         },
@@ -3667,6 +4246,21 @@
       },
       "HlidacStatu.Entities.XSD.tSmlouvaCiziMena": {
         "type": "object",
+        "nullable": true,
+        "properties": {
+          "url": {
+            "type": "string",
+            "nullable": true
+          },
+          "mena": {
+            "type": "string",
+            "nullable": true
+          },
+          "hodnota": {
+            "type": "number",
+            "format": "double"
+          }
+        },
         "additionalProperties": false
       },
       "HlidacStatuApi.Models.DSCreatedDTO": {
@@ -3849,10 +4443,6 @@
             "type": "string",
             "nullable": true
           },
-          "politickaStrana": {
-            "type": "string",
-            "nullable": true
-          },
           "sponzoring": {
             "type": "array",
             "items": {
@@ -3947,7 +4537,7 @@
         },
         "additionalProperties": false
       },
-      "HlidacStatuApi.Models.SearchResultDTO`1[[HlidacStatu.Datasets.Registration, HlidacStatu.Datasets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]": {
+      "HlidacStatuApi.Models.SearchResultDTO`1[[HlidacStatu.Entities.Dotace.Dotace, HlidacStatu.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]": {
         "type": "object",
         "properties": {
           "total": {
@@ -3961,28 +4551,7 @@
           "results": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/HlidacStatu.Datasets.Registration"
-            },
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "HlidacStatuApi.Models.SearchResultDTO`1[[HlidacStatu.Entities.Dotace, HlidacStatu.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]": {
-        "type": "object",
-        "properties": {
-          "total": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "page": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "results": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/HlidacStatu.Entities.Dotace"
+              "$ref": "#/components/schemas/HlidacStatu.Entities.Dotace.Dotace"
             },
             "nullable": true
           }
@@ -4065,7 +4634,7 @@
           },
           "results": {
             "type": "array",
-            "items": { },
+            "items": {},
             "nullable": true
           }
         },
@@ -4089,6 +4658,211 @@
           }
         },
         "additionalProperties": false
+      },
+      "System.Collections.Generic.KeyValuePair`2[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Collections.Generic.IEnumerable`1[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "nullable": true
+          },
+          "value": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "System.Net.Http.HttpContent": {
+        "type": "object",
+        "properties": {
+          "headers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/System.Collections.Generic.KeyValuePair`2[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Collections.Generic.IEnumerable`1[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]"
+            },
+            "nullable": true,
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "System.Net.Http.HttpMethod": {
+        "type": "object",
+        "properties": {
+          "method": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "System.Net.Http.HttpRequestMessage": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "string",
+            "nullable": true
+          },
+          "versionPolicy": {
+            "$ref": "#/components/schemas/System.Net.Http.HttpVersionPolicy"
+          },
+          "content": {
+            "$ref": "#/components/schemas/System.Net.Http.HttpContent"
+          },
+          "method": {
+            "$ref": "#/components/schemas/System.Net.Http.HttpMethod"
+          },
+          "requestUri": {
+            "type": "string",
+            "format": "uri",
+            "nullable": true
+          },
+          "headers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/System.Collections.Generic.KeyValuePair`2[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Collections.Generic.IEnumerable`1[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]"
+            },
+            "nullable": true,
+            "readOnly": true
+          },
+          "properties": {
+            "type": "object",
+            "additionalProperties": {},
+            "nullable": true,
+            "readOnly": true,
+            "deprecated": true
+          },
+          "options": {
+            "type": "object",
+            "additionalProperties": {},
+            "nullable": true,
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "System.Net.Http.HttpResponseMessage": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "string",
+            "nullable": true
+          },
+          "content": {
+            "$ref": "#/components/schemas/System.Net.Http.HttpContent"
+          },
+          "statusCode": {
+            "$ref": "#/components/schemas/System.Net.HttpStatusCode"
+          },
+          "reasonPhrase": {
+            "type": "string",
+            "nullable": true
+          },
+          "headers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/System.Collections.Generic.KeyValuePair`2[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Collections.Generic.IEnumerable`1[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]"
+            },
+            "nullable": true,
+            "readOnly": true
+          },
+          "trailingHeaders": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/System.Collections.Generic.KeyValuePair`2[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Collections.Generic.IEnumerable`1[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]"
+            },
+            "nullable": true,
+            "readOnly": true
+          },
+          "requestMessage": {
+            "$ref": "#/components/schemas/System.Net.Http.HttpRequestMessage"
+          },
+          "isSuccessStatusCode": {
+            "type": "boolean",
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "System.Net.Http.HttpVersionPolicy": {
+        "enum": [
+          0,
+          1,
+          2
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
+      "System.Net.HttpStatusCode": {
+        "enum": [
+          100,
+          101,
+          102,
+          103,
+          200,
+          201,
+          202,
+          203,
+          204,
+          205,
+          206,
+          207,
+          208,
+          226,
+          300,
+          301,
+          302,
+          303,
+          304,
+          305,
+          306,
+          307,
+          308,
+          400,
+          401,
+          402,
+          403,
+          404,
+          405,
+          406,
+          407,
+          408,
+          409,
+          410,
+          411,
+          412,
+          413,
+          414,
+          415,
+          416,
+          417,
+          421,
+          422,
+          423,
+          424,
+          426,
+          428,
+          429,
+          431,
+          451,
+          500,
+          501,
+          502,
+          503,
+          504,
+          505,
+          506,
+          507,
+          508,
+          510,
+          511
+        ],
+        "type": "integer",
+        "format": "int32"
       }
     },
     "securitySchemes": {

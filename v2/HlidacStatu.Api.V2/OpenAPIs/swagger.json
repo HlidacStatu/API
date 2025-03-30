@@ -55,7 +55,35 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
+          }
+        ]
+      }
+    },
+    "/api/v2/Check": {
+      "get": {
+        "tags": [
+          "ApiV2Voice2Text"
+        ],
+        "parameters": [
+          {
+            "name": "returnStatus",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 200
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "apiKey": []
           }
         ]
       }
@@ -98,7 +126,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -132,7 +160,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -175,7 +203,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -211,7 +239,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -267,7 +295,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -330,7 +358,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -376,7 +404,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -422,7 +450,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -468,7 +496,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -520,7 +548,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -584,7 +612,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -631,7 +659,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -677,7 +705,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -750,7 +778,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -776,7 +804,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -802,7 +830,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -876,7 +904,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -930,7 +958,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -993,7 +1021,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -1039,7 +1067,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -1083,7 +1111,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -1144,7 +1172,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -1188,7 +1216,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -1243,7 +1271,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -1294,7 +1322,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -1328,7 +1356,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -1375,7 +1403,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -1439,7 +1467,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -1482,7 +1510,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -1516,7 +1544,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -1569,7 +1597,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -1623,7 +1651,7 @@
         },
         "security": [
           {
-            "apiKey": [ ]
+            "apiKey": []
           }
         ]
       }
@@ -1739,7 +1767,7 @@
           },
           "orderList": {
             "type": "array",
-            "items": { },
+            "items": {},
             "nullable": true
           }
         },
@@ -2694,14 +2722,16 @@
         "type": "object",
         "properties": {
           "blurredPages": {
-            "$ref": "#/components/schemas/HlidacStatu.Entities.Smlouva+Priloha+BlurredPagesStats"
+            "$ref": "#/components/schemas/HlidacStatu.Entities.Smlouva+Priloha+BlurredPagesStats",
+            "nullable": true
           },
           "plainTextContent": {
             "type": "string",
             "nullable": true
           },
           "plainTextContentQuality": {
-            "$ref": "#/components/schemas/HlidacStatu.Entities.DataQualityEnum"
+            "$ref": "#/components/schemas/HlidacStatu.Entities.DataQualityEnum",
+            "nullable": true
           },
           "lastUpdate": {
             "type": "string",
@@ -2739,6 +2769,27 @@
           "enoughExtractedText": {
             "type": "boolean",
             "readOnly": true
+          },
+          "hash": {
+            "type": "object",
+            "properties": {
+              "algoritmus": {
+                "type": "string",
+                "nullable": true
+              },
+              "Value": {
+                "type": "string",
+                "nullable": true
+              }
+            }
+          },
+          "nazevSouboru": {
+            "type": "string",
+            "nullable": true
+          },
+          "odkaz": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -2799,13 +2850,16 @@
             "format": "int32"
           },
           "class1": {
-            "$ref": "#/components/schemas/HlidacStatu.Entities.Smlouva+SClassification+Classification"
+            "$ref": "#/components/schemas/HlidacStatu.Entities.Smlouva+SClassification+Classification",
+            "nullable": true
           },
           "class2": {
-            "$ref": "#/components/schemas/HlidacStatu.Entities.Smlouva+SClassification+Classification"
+            "$ref": "#/components/schemas/HlidacStatu.Entities.Smlouva+SClassification+Classification",
+            "nullable": true
           },
           "class3": {
-            "$ref": "#/components/schemas/HlidacStatu.Entities.Smlouva+SClassification+Classification"
+            "$ref": "#/components/schemas/HlidacStatu.Entities.Smlouva+SClassification+Classification",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -3692,7 +3746,11 @@
       "HlidacStatuApi.Models.DumpInfoModel": {
         "type": "object",
         "properties": {
-          "url": {
+          "urlJson": {
+            "type": "string",
+            "nullable": true
+          },
+          "urlZip": {
             "type": "string",
             "nullable": true
           },
@@ -4065,7 +4123,7 @@
           },
           "results": {
             "type": "array",
-            "items": { },
+            "items": {},
             "nullable": true
           }
         },
